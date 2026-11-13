@@ -1,0 +1,162 @@
+<script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    label23251?: string
+    label?: string
+    variant?: 'primary' | 'secondary' | 'ghost'
+    state?: 'default' | 'hover' | 'focus' | 'disabled'
+    disabled?: boolean
+    type?: 'button' | 'submit' | 'reset'
+    fullWidth?: boolean
+  }>(),
+  {
+    label23251: 'Кнопка',
+    variant: 'primary',
+    state: 'default',
+    disabled: false,
+    type: 'button',
+    fullWidth: false
+  }
+)
+
+const emit = defineEmits<{
+  (e: 'click', event: MouseEvent): void
+}>()
+
+const isDisabled = computed(() => props.disabled || props.state === 'disabled')
+const displayText = computed(() => props.label || props.label23251)
+
+const handleClick = (event: MouseEvent) => {
+  if (isDisabled.value) {
+    event.preventDefault()
+    return
+  }
+  emit('click', event)
+}
+</script>
+
+<template>
+  <button
+    :type="type"
+    :disabled="isDisabled"
+    :aria-disabled="isDisabled"
+    class="octagon-btn"
+    :class="[
+      `variant-${variant}`,
+      state !== 'default' ? `state-${state}` : '',
+      { 'is-full-width': fullWidth }
+    ]"
+    @click="handleClick"
+  >
+    <span class="btn-label">
+      <slot>{{ displayText }}</slot>
+    </span>
+  </button>
+</template>
+
+<style scoped>
+.octagon-btn {
+  height: 40px;
+  display: inline-flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 0px 16px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.octagon-btn.is-full-width {
+  width: 100%;
+  display: flex;
+}
+
+.btn-label {
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.octagon-btn.variant-primary {
+  background: linear-gradient(90deg, #635BFF 0%, #C548AB 100%);
+  color: var(--color-text-inverse, #FFFFFF);
+}
+
+.octagon-btn.variant-primary:hover:not(:disabled),
+.octagon-btn.variant-primary.state-hover {
+  background: linear-gradient(90deg, #635BFF 0%, #C548AB 100%);
+  filter: brightness(1.06);
+}
+
+.octagon-btn.variant-primary:focus-visible,
+.octagon-btn.variant-primary.state-focus {
+  background: linear-gradient(90deg, #635BFF 0%, #C548AB 100%);
+  box-shadow: 0px 0px 0px 4px #635BFF, 0px 0px 0px 2px #FFFFFF;
+}
+
+.octagon-btn.variant-primary:disabled,
+.octagon-btn.variant-primary.state-disabled {
+  background: var(--color-bg-subtle, #2F2A6A);
+  color: var(--color-text-disabled, #8E88A8);
+  cursor: not-allowed;
+  filter: none;
+}
+
+.octagon-btn.variant-secondary {
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-strong, #615B94);
+  color: var(--color-text-primary, #E8E7EC);
+}
+
+.octagon-btn.variant-secondary:hover:not(:disabled),
+.octagon-btn.variant-secondary.state-hover {
+  background: var(--color-bg-subtle, #2F2A6A);
+  border: 1px solid var(--color-border-strong, #615B94);
+}
+
+.octagon-btn.variant-secondary:focus-visible,
+.octagon-btn.variant-secondary.state-focus {
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-strong, #615B94);
+  box-shadow: 0px 0px 0px 4px #635BFF, 0px 0px 0px 2px #FFFFFF;
+}
+
+.octagon-btn.variant-secondary:disabled,
+.octagon-btn.variant-secondary.state-disabled {
+  background: var(--color-bg-subtle, #2F2A6A);
+  border: 1px solid var(--color-border-default, #413E74);
+  color: var(--color-text-disabled, #8E88A8);
+  cursor: not-allowed;
+}
+
+.octagon-btn.variant-ghost {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text-accent, #79CEE8);
+}
+
+.octagon-btn.variant-ghost:hover:not(:disabled),
+.octagon-btn.variant-ghost.state-hover {
+  background: var(--color-bg-accent-soft, #302B69);
+}
+
+.octagon-btn.variant-ghost:focus-visible,
+.octagon-btn.variant-ghost.state-focus {
+  background: var(--color-bg-surface, #23204D);
+  box-shadow: 0px 0px 0px 4px #635BFF, 0px 0px 0px 2px #FFFFFF;
+}
+
+.octagon-btn.variant-ghost:disabled,
+.octagon-btn.variant-ghost.state-disabled {
+  background: transparent;
+  color: var(--color-text-disabled, #8E88A8);
+  cursor: not-allowed;
+}
+</style>
