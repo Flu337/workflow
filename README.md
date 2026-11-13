@@ -54,8 +54,7 @@ app/
 ## Запуск проекта локально
 
 ```bash
-npm install
-npm run dev
+npm install && npm run dev
 ```
 
 Приложение будет доступно по адресу `http://localhost:3000`.
