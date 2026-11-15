@@ -3,7 +3,11 @@ import type {
   UserDirectoryItemDto,
   CustomerDirectoryItemDto,
   CategoryDirectoryItemDto
-} from '~/types/workflow'
+} from '../../shared/types/workflow'
+
+export interface ServerUserRecord extends UserDirectoryItemDto {
+  password: string
+}
 
 // серверные данные заявок включая запись 1038 без необязательных полей
 export const SERVER_REQUESTS_DB: RequestItemDto[] = [
@@ -19,6 +23,14 @@ export const SERVER_REQUESTS_DB: RequestItemDto[] = [
     createdAt: 'Создана 5 октября, 09:14',
     dueAt: 'Сегодня, 13:14',
     description: 'После обновления не удаётся войти в CRM. При попытке входа появляется сообщение «Доступ запрещён». Проблема затрагивает отдел продаж.',
+    resolutionSummary: 'Восстановлены права группы отдела продаж. Доступ к CRM проверен, ошибка больше не воспроизводится.',
+    attachments: [
+      {
+        id: 'att-1042-1',
+        fileName: 'error-login.png',
+        fileSizeLabel: '245 КБ'
+      }
+    ],
     comments: [
       {
         id: 'c-1042-1',
@@ -700,45 +712,85 @@ export const SERVER_REQUESTS_DB: RequestItemDto[] = [
   }
 ]
 
-export const SERVER_USERS_DB: UserDirectoryItemDto[] = [
+export const SERVER_USERS_DB: ServerUserRecord[] = [
   {
     id: 'u-1',
     name: 'Анна Кузнецова',
     shortName: 'Анна К.',
-    role: 'Оператор',
+    role: 'Operator',
+    roleLabel: 'Оператор',
     email: '0000@mail.demo',
-    initials: 'АК'
+    password: 'demo1234',
+    initials: 'АК',
+    company: 'WorkFlow Support',
+    isActive: true
   },
   {
     id: 'u-2',
     name: 'Брунгильда Брунгильдовна',
     shortName: 'Брунгильда Б.',
-    role: 'Инженер поддержки',
-    email: 'brungilda@workflow.demo',
-    initials: 'ББ'
+    role: 'Agent',
+    roleLabel: 'Исполнитель',
+    email: 'agent@mail.demo',
+    password: 'demo1234',
+    initials: 'ББ',
+    company: 'WorkFlow Support',
+    isActive: true
   },
   {
     id: 'u-3',
     name: 'Олег Соколов',
     shortName: 'Олег С.',
-    role: 'Системный инженер',
-    email: 'oleg@workflow.demo',
-    initials: 'ОС'
+    role: 'Agent',
+    roleLabel: 'Исполнитель',
+    email: 'oleg@mail.demo',
+    password: 'demo1234',
+    initials: 'ОС',
+    company: 'WorkFlow Support',
+    isActive: false
   },
   {
     id: 'u-4',
+    name: 'Мария Смирнова',
+    shortName: 'Мария С.',
+    role: 'Client',
+    roleLabel: 'Клиент',
+    email: 'client@mail.demo',
+    password: 'demo1234',
+    initials: 'МС',
+    company: 'АО «Вектор»',
+    isActive: true
+  },
+  {
+    id: 'u-5',
+    name: 'Кирилл Серёгин',
+    shortName: 'Кирилл С.',
+    role: 'Admin',
+    roleLabel: 'Администратор',
+    email: 'admin@mail.demo',
+    password: 'demo1234',
+    initials: 'КС',
+    company: 'WorkFlow Support',
+    isActive: true
+  },
+  {
+    id: 'u-6',
     name: 'Александра Константиновна Рождественская-Соколова',
     shortName: 'Александра Константиновна Рождественская-Соколова',
-    role: 'Старший специалист',
-    email: 'aleksandra@workflow.demo',
-    initials: 'АР'
+    role: 'Agent',
+    roleLabel: 'Исполнитель',
+    email: 'aleksandra@mail.demo',
+    password: 'demo1234',
+    initials: 'АР',
+    company: 'WorkFlow Support',
+    isActive: true
   }
 ]
 
 export const SERVER_CUSTOMERS_DB: CustomerDirectoryItemDto[] = [
-  { id: 'cust-1', name: 'АО «Вектор»', inn: '7701234567' },
-  { id: 'cust-2', name: 'ООО «Сфера»', inn: '7709876543' },
-  { id: 'cust-3', name: 'ООО «Пульс»', inn: '7723456789' }
+  { id: 'cust-1', name: 'АО «Вектор»', inn: '7701234567', contactPerson: 'Мария Смирнова' },
+  { id: 'cust-2', name: 'ООО «Сфера»', inn: '7709876543', contactPerson: 'Игорь Петров' },
+  { id: 'cust-3', name: 'ООО «Пульс»', inn: '7723456789', contactPerson: 'Елена Волкова' }
 ]
 
 export const SERVER_CATEGORIES_DB: CategoryDirectoryItemDto[] = [

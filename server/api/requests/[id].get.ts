@@ -1,7 +1,10 @@
 import { SERVER_REQUESTS_DB } from '../../utils/db'
-import type { RequestDetailResponseDto, RequestItemDto } from '~/types/workflow'
+import { requireAuthUser } from '../../utils/auth'
+import { canUserAccessRequest } from '../../../shared/utils/permissions'
+import type { RequestDetailResponseDto, RequestItemDto } from '../../../shared/types/workflow'
 
 export default defineEventHandler((event): RequestDetailResponseDto => {
+  const user = requireAuthUser(event)
   const rawId = String(getRouterParam(event, 'id') || '').replace(/^#/, '')
   const query = getQuery(event)
   const simulateError = String(query.simulateError || '').trim()
@@ -37,11 +40,11 @@ export default defineEventHandler((event): RequestDetailResponseDto => {
 
   const itemCopy: RequestItemDto = {
     ...found,
+    attachments: found.attachments ? [...found.attachments] : [],
     comments: found.comments ? [...found.comments] : [],
     timeline: found.timeline ? [...found.timeline] : []
   }
 
-  // в карточке 1042 по макету 3 этапа статус в работе и полное имя исполнителя
   if (itemCopy.id === '1042') {
     if (itemCopy.status === 'new') {
       itemCopy.status = 'in-progress'
@@ -51,7 +54,15 @@ export default defineEventHandler((event): RequestDetailResponseDto => {
     }
   }
 
-  // режим проверки длинного названия и длинного имени исполнителя из макета
+  // запрет клиенту получать чужую заявку прямым вызовом api
+  if (!canUserAccessRequest(user, itemCopy)) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Forbidden',
+      message: 'Эта страница недоступна вашей роли. Клиент не может просматривать чужую заявку.'
+    })
+  }
+
   if (longMode === '1' || longMode === 'true') {
     itemCopy.title =
       'После обновления корпоративной CRM сотрудники отдела продаж не могут войти в систему и открыть карточки клиентов'

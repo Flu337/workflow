@@ -1,28 +1,70 @@
 <script setup lang="ts">
+import { useAuthStore } from '~/stores/auth'
+
 definePageMeta({
   layout: 'public'
 })
 
+const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const email = ref('0000@mail.demo')
 const password = ref('••••••••••')
 const errorMessage = ref('')
+const isSubmitting = ref(false)
+const showExpiredBanner = ref<boolean>(
+  route.query.expired === '1' || authStore.expired
+)
 
-const handleLogin = () => {
-  if (!email.value.includes('@')) {
-    errorMessage.value = 'Введите корректный адрес электронной почты.'
+watch(
+  () => route.query.expired,
+  (val) => {
+    showExpiredBanner.value = val === '1' || authStore.expired
+  }
+)
+
+const isFormDisabled = computed(() => !email.value.trim() || !password.value.trim() || isSubmitting.value)
+
+const handleLogin = async () => {
+  errorMessage.value = ''
+  if (!email.value.trim() || !email.value.includes('@')) {
+    errorMessage.value = 'Укажите корректный адрес электронной почты'
     return
   }
-  errorMessage.value = ''
-  router.push('/dashboard')
+  if (password.value.trim().length < 4) {
+    errorMessage.value = 'Пароль должен содержать не менее 4 символов'
+    return
+  }
+
+  isSubmitting.value = true
+  try {
+    const res = await authStore.login({
+      email: email.value.trim(),
+      password: password.value
+    })
+    showExpiredBanner.value = false
+    if (res.user?.role === 'Client') {
+      await router.push('/requests')
+    } else {
+      await router.push('/dashboard')
+    }
+  } catch (err) {
+    errorMessage.value =
+      (err as { data?: { message?: string }; message?: string })?.data?.message ||
+      'Неверный логин или пароль'
+  } finally {
+    isSubmitting.value = false
+  }
 }
 </script>
 
 <template>
   <div class="layer-1-02-vkhod">
     <header class="shapka">
-      <NuxtLink to="/" class="workflow">WorkFlow</NuxtLink>
+      <NuxtLink to="/" class="workflow ui-nav-link-logo">
+        WorkFlow
+      </NuxtLink>
     </header>
 
     <div class="avtorizatsiia">
@@ -30,13 +72,20 @@ const handleLogin = () => {
         <p class="s-vozvrashcheniem">С возвращением</p>
         <p class="voidite-dlia-raboty-s-zaiavkami">Войдите для работы с заявками</p>
 
+        <!-- плашка истекшей сессии из макета 1txt -->
+        <div v-if="showExpiredBanner" class="soobshchenie-ob-izmenenii">
+          <p class="sessiia-istekla-voidite-snova-chtoby">
+            Сессия истекла. Войдите снова, чтобы продолжить работу.
+          </p>
+        </div>
+
         <div class="wf-gpt-field">
           <WFGPTField
             v-model="email"
             label23270="Электронная почта"
             value="0000@mail.demo"
             :state="errorMessage ? 'error' : 'default'"
-            :error-message="errorMessage"
+            :error-text="errorMessage"
           />
         </div>
 
@@ -52,11 +101,13 @@ const handleLogin = () => {
         <div class="octagon-button">
           <OctagonButton
             type="submit"
+            :state="isFormDisabled ? 'disabled' : 'default'"
+            :disabled="isFormDisabled"
             label23251="Войти"
           />
         </div>
 
-        <NuxtLink to="/dashboard" class="net-akkaunta-zaregistrirovat-sia">
+        <NuxtLink to="/register" class="net-akkaunta-zaregistrirovat-sia">
           Нет аккаунта? Зарегистрироваться
         </NuxtLink>
       </form>
@@ -76,11 +127,11 @@ const handleLogin = () => {
   padding: 0px;
   justify-content: flex-start;
   align-items: flex-start;
-  background: radial-gradient(29.3% 64.65% at 54.55% 50%, #201D47 0%, #17153A 100%);
 }
 
 .shapka {
-  width: 154px;
+  align-self: stretch;
+  width: 100%;
   display: flex;
   flex-direction: row;
   gap: 16px;
@@ -140,6 +191,29 @@ const handleLogin = () => {
   line-height: 20px;
 }
 
+.soobshchenie-ob-izmenenii {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+}
+
+.sessiia-istekla-voidite-snova-chtoby {
+  align-self: stretch;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
 .wf-gpt-field,
 .wf-gpt-field-2 {
   align-self: stretch;
@@ -157,37 +231,20 @@ const handleLogin = () => {
   font-size: 12px;
   font-weight: 500;
   line-height: 16px;
-  outline: none;
-  border-radius: 4px;
+  text-decoration: none;
 }
 
 .net-akkaunta-zaregistrirovat-sia:hover {
-  color: #8F85FF;
-}
-
-.net-akkaunta-zaregistrirovat-sia:focus-visible {
-  box-shadow: 0 0 0 2px #635BFF;
+  text-decoration: underline;
 }
 
 @media (max-width: 1023px) {
-  .layer-1-02-vkhod {
-    max-width: 768px;
-    min-height: 1024px;
-    background: radial-gradient(55.56% 34.09% at 54.55% 50%, #201D47 0%, #17153A 100%);
-  }
-
   .avtorizatsiia {
     padding: 64px 32px;
   }
 }
 
 @media (max-width: 639px) {
-  .layer-1-02-vkhod {
-    max-width: 360px;
-    min-height: 780px;
-    background: radial-gradient(90.28% 20.98% at 54.55% 50%, #201D47 0%, #17153A 100%);
-  }
-
   .avtorizatsiia {
     padding: 64px 16px;
   }

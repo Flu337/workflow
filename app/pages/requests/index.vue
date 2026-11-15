@@ -5,16 +5,18 @@ import type {
   UserDirectoryItemDto,
   CustomerDirectoryItemDto,
   CategoryDirectoryItemDto
-} from '~/types/workflow'
+} from '../../../shared/types/workflow'
 import { normalizeRequestsListResponse } from '~/utils/normalizeRequests'
 import { useDebounce } from '~/composables/useDebounce'
 import { usePreferencesStore } from '~/stores/preferences'
 import { useRequestUiStore } from '~/stores/requestUi'
+import { useAuthStore } from '~/stores/auth'
 
 const route = useRoute()
 const router = useRouter()
 const preferencesStore = usePreferencesStore()
 const requestUiStore = useRequestUiStore()
+const authStore = useAuthStore()
 
 const {
   searchQuery,
@@ -34,12 +36,10 @@ const {
   resetFilters
 } = useRequests()
 
-// восстановление состояния фильтров из query при открытии ссылки
 initFiltersFromRoute(route.query as Record<string, string | (string | null)[] | null | undefined>)
 
 const debouncedSearch = useDebounce(searchQuery, 300)
 
-// загрузка справочников через usefetch
 const { data: usersDirectory } = await useFetch<UserDirectoryItemDto[]>('/api/users', {
   key: 'wf-users-directory',
   default: () => []
@@ -55,7 +55,6 @@ await useFetch<CategoryDirectoryItemDto[]>('/api/categories', {
   default: () => []
 })
 
-// реактивный запрос списка заявок с параметрами фильтрации и пагинации
 const apiQuery = computed(() => ({
   search: debouncedSearch.value.trim() || undefined,
   status: statusFilter.value !== 'all' ? statusFilter.value : undefined,
@@ -64,7 +63,8 @@ const apiQuery = computed(() => ({
   sort: sortOrder.value,
   page: currentPage.value,
   limit: pageSize,
-  simulateError: simulateError.value || undefined
+  simulateError: simulateError.value || undefined,
+  role: authStore.currentRole
 }))
 
 const {
@@ -78,7 +78,6 @@ const {
   watch: [apiQuery]
 })
 
-// единая нормализация ответа списка заявок и наложение оптимистичных обновлений из pinia
 const normalizedList = computed(() => normalizeRequestsListResponse(rawRequestsResponse.value))
 
 const displayedRequests = computed(() =>
@@ -87,6 +86,12 @@ const displayedRequests = computed(() =>
 const totalFiltered = computed(() => normalizedList.value.total)
 const totalPages = computed(() => normalizedList.value.totalPages)
 const hasIncompleteData = computed(() => normalizedList.value.hasIncompleteData)
+
+const isClientRole = computed(() => authStore.currentRole === 'Client')
+const isAgentRole = computed(() => authStore.currentRole === 'Agent')
+const isOperatorOrAdmin = computed(
+  () => authStore.currentRole === 'Operator' || authStore.currentRole === 'Admin'
+)
 
 const kpiItems = computed(() => [
   {
@@ -136,7 +141,7 @@ const assigneeOptions = computed(() => {
     { label: 'Не назначен', value: 'unassigned' }
   ]
   const fromUsers = (usersDirectory.value || [])
-    .filter(u => u.role !== 'Оператор')
+    .filter(u => u.role === 'Agent')
     .map(u => ({
       label: u.shortName,
       value: u.shortName
@@ -162,7 +167,6 @@ watch([debouncedSearch, statusFilter, priorityFilter, assigneeFilter, sortOrder]
   currentPage.value = 1
 })
 
-// синхронизация состояния фильтров и пагинации с параметрами адресной строки
 watch(
   [debouncedSearch, statusFilter, priorityFilter, assigneeFilter, sortOrder, currentPage, simulateError],
   () => {
@@ -231,37 +235,6 @@ const openCreateModal = () => {
   isCreateModalOpen.value = true
 }
 
-const setDemoState = async (state: ListViewState, errCode = '') => {
-  requestUiStore.clearBanners()
-  simulateError.value = errCode
-  viewState.value = state
-  if (state === 'ready' || errCode) {
-    await refreshRequests()
-  }
-}
-
-// демонстрация баннера успешного изменения приоритета и кнопки отмены из макета 4txt
-const triggerDemoPriorityUndo = async () => {
-  simulateError.value = ''
-  viewState.value = 'ready'
-  const firstReq = displayedRequests.value[0]
-  if (!firstReq) return
-  await requestUiStore.changePriorityOptimistic(firstReq, 'high', preferencesStore.name)
-  await refreshRequests()
-}
-
-// демонстрация конфликта 409 и отката к предыдущему значению из макета 5txt
-const triggerDemoConflictRollback = async () => {
-  simulateError.value = ''
-  viewState.value = 'ready'
-  const firstReq = displayedRequests.value[0]
-  if (!firstReq) return
-  await requestUiStore.changePriorityOptimistic(firstReq, 'critical', preferencesStore.name, '409')
-}
-
-const toggleCompactDensityDemo = () => {
-  preferencesStore.setDensity(preferencesStore.isCompact ? 'comfortable' : 'compact')
-}
 
 const handleUndoFromList = async () => {
   await requestUiStore.undoLastChange(preferencesStore.name)
@@ -290,19 +263,29 @@ const handleResetAllFilters = () => {
 
 <template>
   <div class="soderzhanie">
-    <!-- при отображении баннера изменения или конфликта заголовок перестраивается как в макетах 4txt и 5txt -->
-    <template v-if="effectiveState === 'ready' && !isMutationBannerView">
+    <!-- представление для роли клиент из макета 2.txt -->
+    <template v-if="isClientRole && effectiveState === 'ready' && !isMutationBannerView">
+      <p class="moi-zaiavki">Мои заявки</p>
+      <p class="vse-obrashcheniia-v-odnom-meste">Все обращения в одном месте</p>
+    </template>
+
+    <!-- представление для роли исполнитель из макета 4.txt -->
+    <template v-else-if="isAgentRole && effectiveState === 'ready' && !isMutationBannerView">
+      <p class="zaiavki-state-heading">Заявки</p>
+      <p class="naznachennye-vam-obrashcheniia">Назначенные вам обращения</p>
+    </template>
+
+    <!-- представление для оператора и администратора -->
+    <template v-else-if="effectiveState === 'ready' && !isMutationBannerView">
       <p class="rabochii-den-pod-kontrolem">Рабочий день под контролем</p>
       <p class="zaiavki-kotorye-trebuiut-vashego">
         Заявки, которые требуют вашего внимания
       </p>
 
-      <!-- плашка компактного представления списка из макета 10txt -->
       <div v-if="preferencesStore.isCompact" class="soobshchenie-ob-izmenenii">
         <p class="plotnost-spiska-kompaktnaia">Плотность списка: компактная</p>
       </div>
 
-      <!-- баннер результатов активного поиска из макета 202 -->
       <div v-if="debouncedSearch.trim()" class="soobshchenie-ob-izmenenii">
         <p class="po-zaprosu-crm-naideno-1">
           По запросу «{{ debouncedSearch.trim() }}» найдено: {{ totalFiltered }}
@@ -314,7 +297,6 @@ const handleResetAllFilters = () => {
         />
       </div>
 
-      <!-- предупреждающая плашка при неполных данных из макета 206 -->
       <div v-if="hasIncompleteData" class="soobshchenie-ob-izmenenii">
         <p class="chast-dannykh-zaiavki-nedostupna-ostal">
           Часть данных заявки недоступна. Остальные обращения отображаются.
@@ -332,7 +314,6 @@ const handleResetAllFilters = () => {
       <p class="zaiavki-state-heading">Заявки</p>
       <p class="vse-obrashcheniia-v-odnom-meste">Все обращения в одном месте</p>
 
-      <!-- плашка конфликта 409 500 и отката изменения из макета 5txt -->
       <div v-if="requestUiStore.rollbackError" class="soobshchenie-ob-izmenenii">
         <p class="izmenenie-ne-sokhraneno">{{ requestUiStore.rollbackError.title }}</p>
         <p class="zaiavka-byla-izmenena-drugim">
@@ -345,7 +326,6 @@ const handleResetAllFilters = () => {
         />
       </div>
 
-      <!-- плашка успешного изменения и кнопки отмены undo из макета 4txt -->
       <div v-else-if="requestUiStore.feedbackBanner" class="soobshchenie-ob-izmenenii">
         <p class="prioritet-izmenion-na-vysokii">
           {{ requestUiStore.feedbackBanner.message }}
@@ -360,89 +340,13 @@ const handleResetAllFilters = () => {
     </template>
 
     <div class="actions-and-demo-bar">
-      <div class="octagon-button">
+      <!-- у роли исполнитель кнопка создания заявки скрыта по макету 4.txt -->
+      <div v-if="!isAgentRole" class="octagon-button">
         <OctagonButton
           label23251="Создать заявку"
           @click="openCreateModal"
         />
-      </div>
-
-      <!-- переключатель состояний списка и сценариев 2 и 3 этапов -->
-      <div class="demo-state-switcher" role="group" aria-label="Демонстрация состояний списка">
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': effectiveState === 'ready' && !simulateError && !isMutationBannerView }"
-          @click="setDemoState('ready', '')"
-        >
-          Список
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': Boolean(requestUiStore.feedbackBanner) }"
-          @click="triggerDemoPriorityUndo"
-        >
-          Успех и Undo
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': Boolean(requestUiStore.rollbackError) }"
-          @click="triggerDemoConflictRollback"
-        >
-          Конфликт 409
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': preferencesStore.isCompact }"
-          @click="toggleCompactDensityDemo"
-        >
-          Компактно
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': effectiveState === 'loading' }"
-          @click="setDemoState('loading', '')"
-        >
-          Загрузка
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': effectiveState === 'empty' }"
-          @click="setDemoState('empty', '')"
-        >
-          Пустой список
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': effectiveState === 'no-results' }"
-          @click="setDemoState('no-results', '')"
-        >
-          Нет результатов
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': simulateError === '429' }"
-          @click="setDemoState('ready', '429')"
-        >
-          Ошибка 429
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': simulateError === '500' || viewState === 'error' }"
-          @click="setDemoState('ready', '500')"
-        >
-          Ошибка 500
-        </button>
-      </div>
-    </div>
+      </div>    </div>
 
     <div class="fil-try" :class="{ 'is-state-compact': effectiveState !== 'ready' || isMutationBannerView }">
       <div class="wf-gpt-field search-field">
@@ -474,7 +378,8 @@ const handleResetAllFilters = () => {
         />
       </div>
 
-      <div v-if="effectiveState === 'ready' && !isMutationBannerView" class="fil-tr-naznachenie filter-field">
+      <!-- фильтр по назначению отображается только для оператора и админа -->
+      <div v-if="effectiveState === 'ready' && !isMutationBannerView && isOperatorOrAdmin" class="fil-tr-naznachenie filter-field">
         <WFGPTField
           v-model="assigneeFilter"
           label23270="Назначение"
@@ -502,7 +407,6 @@ const handleResetAllFilters = () => {
       </div>
     </div>
 
-    <!-- экран пустого результата поиска и фильтрации из макета 204 -->
     <div v-else-if="effectiveState === 'no-results'" class="sostoianie-spiska">
       <OctagonIconSearch />
       <p class="nichego-ne-naideno">Ничего не найдено</p>
@@ -568,7 +472,7 @@ const handleResetAllFilters = () => {
         </div>
       </div>
 
-      <div class="paginatsiia">
+      <div v-if="totalPages > 1 || isOperatorOrAdmin" class="paginatsiia">
         <p class="pokazano-1-12-iz-24">{{ paginationLabel }}</p>
         <template v-if="totalPages > 1">
           <OctagonButton
@@ -611,7 +515,8 @@ const handleResetAllFilters = () => {
 }
 
 .rabochii-den-pod-kontrolem,
-.zaiavki-state-heading {
+.zaiavki-state-heading,
+.moi-zaiavki {
   align-self: stretch;
   color: var(--color-text-primary, #E8E7EC);
   font-family: "Montserrat", sans-serif;
@@ -621,7 +526,8 @@ const handleResetAllFilters = () => {
 }
 
 .zaiavki-kotorye-trebuiut-vashego,
-.vse-obrashcheniia-v-odnom-meste {
+.vse-obrashcheniia-v-odnom-meste,
+.naznachennye-vam-obrashcheniia {
   align-self: stretch;
   color: var(--color-text-secondary, #B9B3D4);
   font-family: "Montserrat", sans-serif;
@@ -705,51 +611,6 @@ const handleResetAllFilters = () => {
   flex-wrap: wrap;
 }
 
-.demo-state-switcher {
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  padding: 4px;
-  border-radius: 6px;
-  background: var(--color-bg-surface, #23204D);
-  border: 1px solid var(--color-border-default, #413E74);
-  flex-wrap: wrap;
-}
-
-.demo-state-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-  border-radius: 4px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 16px;
-  cursor: pointer;
-  outline: none;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-
-.demo-state-btn:hover {
-  background: var(--color-bg-subtle, #2F2A6A);
-  color: var(--color-text-primary, #E8E7EC);
-}
-
-.demo-state-btn:focus-visible {
-  border-color: #635BFF;
-  color: var(--color-text-primary, #E8E7EC);
-}
-
-.demo-state-btn.is-active {
-  background: var(--color-bg-subtle, #2F2A6A);
-  border-color: var(--color-border-strong, #615B94);
-  color: var(--color-text-accent, #79CEE8);
-  font-weight: 600;
-}
 
 .fil-try {
   align-self: stretch;
@@ -986,7 +847,8 @@ const handleResetAllFilters = () => {
   }
 
   .rabochii-den-pod-kontrolem,
-  .zaiavki-state-heading {
+  .zaiavki-state-heading,
+  .moi-zaiavki {
     font-size: 24px;
     line-height: 31px;
   }

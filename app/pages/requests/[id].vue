@@ -1,25 +1,29 @@
 <script setup lang="ts">
 import {
   PRIORITY_LABELS,
+  STATUS_LABELS,
   type RequestPriority,
   type RequestStatus,
   type RequestDetailResponseDto,
   type AddCommentResponseDto,
+  type UpdateRequestResponseDto,
   type UserDirectoryItemDto,
   type WorkFlowRequest
-} from '~/types/workflow'
+} from '../../../shared/types/workflow'
+import { getAllowedNextStatuses } from '../../../shared/utils/statusTransitions'
 import { normalizeRequestItem } from '~/utils/normalizeRequests'
 import { usePreferencesStore } from '~/stores/preferences'
 import { useRequestUiStore } from '~/stores/requestUi'
+import { useAuthStore } from '~/stores/auth'
 
 const route = useRoute()
 const router = useRouter()
 const preferencesStore = usePreferencesStore()
 const requestUiStore = useRequestUiStore()
+const authStore = useAuthStore()
 
 const requestId = computed(() => String(route.params.id || '1042').replace(/^#/, ''))
 
-// локальное состояние компонента local state
 const demoDetailState = ref<'ready' | 'loading' | 'error'>('ready')
 const simulatedErrorCode = ref<string>(
   typeof route.query.simulateError === 'string' ? route.query.simulateError : ''
@@ -33,9 +37,29 @@ const isSubmittingComment = ref(false)
 const commentSendError = ref<string | null>(null)
 const simulateCommentError = ref(false)
 
+// состояния модальных окон 4 этапа (макеты 5txt 7txt 8txt 9txt 10txt)
+const isAssignModalOpen = ref(false)
+const assignModalAssignee = ref('Брунгильда Брунгильдовна')
+const assignModalComment = ref('Проверьте права доступа группы')
+const assignModalError = ref('')
+
+const isResolveModalOpen = ref(false)
+const resolveModalSummary = ref('Права доступа восстановлены. Вход проверен.')
+const resolveModalError = ref('')
+
+const isStatusModalOpen = ref(false)
+const statusModalTarget = ref<RequestStatus>('waiting')
+const statusModalWaitingReason = ref('')
+const statusModalError = ref('')
+
+const isCloseModalOpen = ref(false)
+const closeModalReason = ref('')
+const closeModalError = ref('')
+
 const detailQuery = computed(() => ({
   simulateError: simulatedErrorCode.value || undefined,
-  long: isLongVariant.value ? '1' : undefined
+  long: isLongVariant.value ? '1' : undefined,
+  role: authStore.currentRole
 }))
 
 const { data: usersDirectory } = await useFetch<UserDirectoryItemDto[]>('/api/users', {
@@ -43,7 +67,6 @@ const { data: usersDirectory } = await useFetch<UserDirectoryItemDto[]>('/api/us
   default: () => []
 })
 
-// загрузка деталей заявки с сервера через usefetch server state
 const {
   data: rawDetailResponse,
   status: detailStatus,
@@ -66,6 +89,18 @@ if (
   })
 }
 
+if (
+  detailError.value &&
+  (detailError.value as { statusCode?: number }).statusCode === 403 &&
+  !simulatedErrorCode.value
+) {
+  throw createError({
+    statusCode: 403,
+    statusMessage: 'Нет доступа',
+    message: 'Эта страница недоступна вашей роли.'
+  })
+}
+
 const localNormalized = ref<WorkFlowRequest | null>(null)
 
 watch(
@@ -78,7 +113,6 @@ watch(
   { immediate: true }
 )
 
-// объединение серверных данных карточки с оптимистичными обновлениями из pinia
 const requestItem = computed<WorkFlowRequest | null>(() => {
   if (!localNormalized.value) return null
   return requestUiStore.applyOverridesToRequest(localNormalized.value)
@@ -98,22 +132,33 @@ watch(
   { immediate: true }
 )
 
+const isAgentRole = computed(() => authStore.currentRole === 'Agent')
+const isClientRole = computed(() => authStore.currentRole === 'Client')
+const isOperatorOrAdmin = computed(
+  () => authStore.currentRole === 'Operator' || authStore.currentRole === 'Admin'
+)
+
 const assigneeOptions = computed(() => {
   const base = [{ label: 'Не назначен', value: 'Не назначен' }]
-  const fromApi = (usersDirectory.value || []).map(u => ({
-    label: u.name,
-    value: u.name
-  }))
+  const fromApi = (usersDirectory.value || [])
+    .filter(u => u.role === 'Agent')
+    .map(u => ({
+      label: u.isActive ? u.name : `${u.name} · деактивирован`,
+      value: u.isActive ? u.name : `${u.name} · деактивирован`
+    }))
   if (fromApi.length === 0) {
     return [
       ...base,
       { label: 'Брунгильда Брунгильдовна', value: 'Брунгильда Брунгильдовна' },
-      { label: 'Олег Соколов', value: 'Олег Соколов' },
-      { label: 'Анна Кузнецова', value: 'Анна Кузнецова' },
+      { label: 'Олег Соколов · деактивирован', value: 'Олег Соколов · деактивирован' },
       { label: 'Александра Константиновна Рождественская-Соколова', value: 'Александра Константиновна Рождественская-Соколова' }
     ]
   }
   return [...base, ...fromApi]
+})
+
+const assignModalOptions = computed(() => {
+  return assigneeOptions.value.filter(opt => opt.value !== 'Не назначен')
 })
 
 const priorityOptions = [
@@ -122,6 +167,16 @@ const priorityOptions = [
   { label: 'Обычный', value: 'normal' },
   { label: 'Низкий', value: 'low' }
 ]
+
+const allowedStatusOptions = computed(() => {
+  const current = requestItem.value?.status || 'in-progress'
+  const allowed = getAllowedNextStatuses(current, authStore.currentRole)
+  const list = allowed.length > 0 ? allowed : (['waiting', 'resolved', 'in-progress'] as RequestStatus[])
+  return list.map(st => ({
+    label: STATUS_LABELS[st],
+    value: st
+  }))
+})
 
 const priorityDisplayLabel = computed(() => {
   if (!requestItem.value) return 'Высокий  ▾'
@@ -159,20 +214,20 @@ const errorSubtitle = computed(() => {
 
 const isCommentEmpty = computed(() => !commentText.value.trim())
 
-const nextWorkflowStatus = (current: RequestStatus): RequestStatus => {
-  const order: Record<RequestStatus, RequestStatus> = {
-    'new': 'in-progress',
-    'assigned': 'in-progress',
-    'in-progress': 'resolved',
-    'waiting': 'in-progress',
-    'escalated': 'in-progress',
-    'resolved': 'closed',
-    'closed': 'in-progress'
-  }
-  return order[current] || 'in-progress'
-}
+const isAssignModalDeactivatedSelected = computed(() => {
+  const val = assignModalAssignee.value.toLowerCase()
+  return val.includes('деактивирован') || val.includes('олег соколов')
+})
 
-// отправка комментария на сервер с состояниями отправки и ошибки макеты 6txt 7txt 8txt 9txt
+watch(assignModalAssignee, () => {
+  if (isAssignModalDeactivatedSelected.value) {
+    assignModalError.value =
+      'Деактивированный сотрудник не может получить новое назначение. Выберите активного исполнителя.'
+  } else {
+    assignModalError.value = ''
+  }
+})
+
 const handleSendComment = async () => {
   if (isCommentEmpty.value || !requestItem.value || isSubmittingComment.value) return
   const textToSend = commentText.value.trim()
@@ -186,7 +241,7 @@ const handleSendComment = async () => {
       {
         method: 'POST',
         body: {
-          author: 'Брунгильда Брунгильдовна',
+          author: authStore.user?.name || 'Брунгильда Брунгильдовна',
           text: textToSend,
           simulateError: simulateCommentError.value ? '500' : ''
         }
@@ -206,7 +261,6 @@ const handleSendComment = async () => {
   }
 }
 
-// оптимистичное изменение приоритета с поддержкой отката при 409 или 500 и отмены через undo макеты 2txt 3txt 5txt
 const handlePriorityChange = async (val: string) => {
   if (!requestItem.value) return
   const nextPriority = val as RequestPriority
@@ -226,9 +280,17 @@ const handlePriorityChange = async (val: string) => {
   }
 }
 
-// изменение исполнителя через серверный patch
 const handleAssigneeChange = async (val: string) => {
   if (!requestItem.value) return
+  if (val.toLowerCase().includes('деактивирован') || val.toLowerCase().includes('олег соколов')) {
+    assignModalAssignee.value = 'Олег Соколов · деактивирован'
+    assignModalError.value =
+      'Деактивированный сотрудник не может получить новое назначение. Выберите активного исполнителя.'
+    isAssignModalOpen.value = true
+    selectedAssignee.value = requestItem.value.assignee
+    return
+  }
+
   commentSendError.value = null
   selectedAssignee.value = val
 
@@ -245,24 +307,189 @@ const handleAssigneeChange = async (val: string) => {
   }
 }
 
-// изменение статуса заявки с поддержкой undo
-const handleStatusChangeAction = async () => {
+// открытие модального окна назначения исполнителя (макеты 5txt и 7txt)
+const openAssignModal = (presetDeactivated = false) => {
+  assignModalComment.value = 'Проверьте права доступа группы'
+  if (presetDeactivated) {
+    assignModalAssignee.value = 'Олег Соколов · деактивирован'
+    assignModalError.value =
+      'Деактивированный сотрудник не может получить новое назначение. Выберите активного исполнителя.'
+  } else {
+    assignModalAssignee.value = 'Брунгильда Брунгильдовна'
+    assignModalError.value = ''
+  }
+  isAssignModalOpen.value = true
+}
+
+const submitAssignModal = async () => {
   if (!requestItem.value) return
-  commentSendError.value = null
-  const targetStatus = nextWorkflowStatus(requestItem.value.status)
+  if (isAssignModalDeactivatedSelected.value) {
+    assignModalError.value =
+      'Деактивированный сотрудник не может получить новое назначение. Выберите активного исполнителя.'
+    return
+  }
 
-  const ok = await requestUiStore.changeStatus(
-    requestItem.value,
-    targetStatus,
-    preferencesStore.name
-  )
-
-  if (ok) {
+  try {
+    const res = await $fetch<UpdateRequestResponseDto>(`/api/requests/${requestId.value}`, {
+      method: 'PATCH',
+      body: {
+        assignee: assignModalAssignee.value,
+        status: requestItem.value.status === 'new' ? 'assigned' : requestItem.value.status,
+        comment: assignModalComment.value.trim(),
+        actorName: authStore.user?.name || 'Оператор'
+      }
+    })
+    if (res?.item) {
+      localNormalized.value = normalizeRequestItem(res.item)
+    }
+    requestUiStore.clearOptimisticOverride(requestId.value)
+    isAssignModalOpen.value = false
     await refreshDetail()
+  } catch (err) {
+    assignModalError.value =
+      (err as { data?: { message?: string }; message?: string })?.data?.message ||
+      'Деактивированный сотрудник не может получить новое назначение. Выберите активного исполнителя.'
   }
 }
 
-// отмена последнего изменения статуса или приоритета undo
+// открытие модального окна фиксации решения исполнителем (макеты 8txt)
+const openResolveModal = (emptyErrorPreset = false) => {
+  if (emptyErrorPreset) {
+    resolveModalSummary.value = ''
+    resolveModalError.value = 'Опишите результат решения.'
+  } else {
+    resolveModalSummary.value = 'Права доступа восстановлены. Вход проверен.'
+    resolveModalError.value = ''
+  }
+  isResolveModalOpen.value = true
+}
+
+const submitResolveModal = async () => {
+  if (!resolveModalSummary.value.trim()) {
+    resolveModalError.value = 'Опишите результат решения.'
+    return
+  }
+  resolveModalError.value = ''
+  try {
+    const res = await $fetch<UpdateRequestResponseDto>(`/api/requests/${requestId.value}`, {
+      method: 'PATCH',
+      body: {
+        status: 'resolved',
+        resolutionSummary: resolveModalSummary.value.trim(),
+        actorName: authStore.user?.name || 'Брунгильда Брунгильдовна'
+      }
+    })
+    if (res?.item) {
+      localNormalized.value = normalizeRequestItem(res.item)
+    }
+    requestUiStore.clearOptimisticOverride(requestId.value)
+    isResolveModalOpen.value = false
+    await refreshDetail()
+  } catch (err) {
+    resolveModalError.value =
+      (err as { data?: { message?: string }; message?: string })?.data?.message ||
+      'Опишите результат решения.'
+  }
+}
+
+// открытие модального окна изменения статуса с проверкой причины ожидания (макет 9txt)
+const openStatusModal = (waitingErrorPreset = false) => {
+  statusModalTarget.value = 'waiting'
+  statusModalWaitingReason.value = ''
+  statusModalError.value = waitingErrorPreset ? 'Укажите причину ожидания.' : ''
+  isStatusModalOpen.value = true
+}
+
+const submitStatusModal = async () => {
+  if (statusModalTarget.value === 'waiting' && !statusModalWaitingReason.value.trim()) {
+    statusModalError.value = 'Укажите причину ожидания.'
+    return
+  }
+  statusModalError.value = ''
+  if (!requestItem.value) return
+
+  if (statusModalTarget.value === 'resolved') {
+    isStatusModalOpen.value = false
+    openResolveModal(false)
+    return
+  }
+
+  if (statusModalTarget.value === 'closed') {
+    isStatusModalOpen.value = false
+    openCloseModal(false)
+    return
+  }
+
+  try {
+    const res = await $fetch<UpdateRequestResponseDto>(`/api/requests/${requestId.value}`, {
+      method: 'PATCH',
+      body: {
+        status: statusModalTarget.value,
+        waitingReason: statusModalWaitingReason.value.trim() || undefined,
+        actorName: authStore.user?.name || preferencesStore.name
+      }
+    })
+    if (res?.item) {
+      localNormalized.value = normalizeRequestItem(res.item)
+    }
+    requestUiStore.setOptimisticOverride(requestId.value, {
+      status: statusModalTarget.value
+    })
+    isStatusModalOpen.value = false
+    await refreshDetail()
+  } catch (err) {
+    statusModalError.value =
+      (err as { data?: { message?: string }; message?: string })?.data?.message ||
+      'Укажите причину ожидания.'
+  }
+}
+
+// открытие модального окна закрытия заявки оператором (макет 10txt)
+const openCloseModal = (closingErrorPreset = false) => {
+  closeModalReason.value = ''
+  closeModalError.value = closingErrorPreset ? 'Укажите причину ручного закрытия.' : ''
+  isCloseModalOpen.value = true
+}
+
+const submitCloseModal = async () => {
+  if (!closeModalReason.value.trim()) {
+    closeModalError.value = 'Укажите причину ручного закрытия.'
+    return
+  }
+  closeModalError.value = ''
+  try {
+    const res = await $fetch<UpdateRequestResponseDto>(`/api/requests/${requestId.value}`, {
+      method: 'PATCH',
+      body: {
+        status: 'closed',
+        closingReason: closeModalReason.value.trim(),
+        actorName: authStore.user?.name || 'Оператор'
+      }
+    })
+    if (res?.item) {
+      localNormalized.value = normalizeRequestItem(res.item)
+    }
+    requestUiStore.setOptimisticOverride(requestId.value, {
+      status: 'closed'
+    })
+    isCloseModalOpen.value = false
+    await refreshDetail()
+  } catch (err) {
+    closeModalError.value =
+      (err as { data?: { message?: string }; message?: string })?.data?.message ||
+      'Укажите причину ручного закрытия.'
+  }
+}
+
+const handleAddMockAttachment = () => {
+  if (!localNormalized.value) return
+  localNormalized.value.attachments.push({
+    id: `att-${Date.now()}`,
+    fileName: `log-${localNormalized.value.attachments.length + 1}.txt`,
+    fileSizeLabel: '18 КБ'
+  })
+}
+
 const handleUndoChange = async () => {
   await requestUiStore.undoLastChange(preferencesStore.name)
   await refreshDetail()
@@ -278,63 +505,6 @@ const handleRefreshAfterRollback = async () => {
   await refreshDetail()
 }
 
-const triggerDemoConflictOnCard = async () => {
-  if (!requestItem.value) return
-  commentSendError.value = null
-  await requestUiStore.changePriorityOptimistic(
-    requestItem.value,
-    'critical',
-    preferencesStore.name,
-    '409'
-  )
-  if (requestItem.value) {
-    selectedPriority.value = requestItem.value.priority
-  }
-}
-
-const triggerDemoCommentError = async () => {
-  if (!commentText.value.trim()) {
-    commentText.value = 'Уточнила детали заявки.'
-  }
-  simulateCommentError.value = true
-  await handleSendComment()
-  simulateCommentError.value = false
-}
-
-const setDetailDemoMode = async (
-  mode: 'ready' | 'loading' | 'error' | 'long' | '429' | '500'
-) => {
-  requestUiStore.clearBanners()
-  commentSendError.value = null
-  if (mode === 'loading') {
-    simulatedErrorCode.value = ''
-    demoDetailState.value = 'loading'
-    return
-  }
-  if (mode === 'error' || mode === '500') {
-    demoDetailState.value = 'ready'
-    simulatedErrorCode.value = '500'
-    await refreshDetail()
-    return
-  }
-  if (mode === '429') {
-    demoDetailState.value = 'ready'
-    simulatedErrorCode.value = '429'
-    await refreshDetail()
-    return
-  }
-  if (mode === 'long') {
-    demoDetailState.value = 'ready'
-    simulatedErrorCode.value = ''
-    isLongVariant.value = !isLongVariant.value
-    await refreshDetail()
-    return
-  }
-  demoDetailState.value = 'ready'
-  simulatedErrorCode.value = ''
-  isLongVariant.value = false
-  await refreshDetail()
-}
 
 const handleRetryDetail = async () => {
   demoDetailState.value = 'ready'
@@ -354,69 +524,8 @@ const goBackToList = () => {
         variant="ghost"
         label23251="← К списку заявок"
         @click="goBackToList"
-      />
+      />    </div>
 
-      <div class="demo-state-switcher" role="group" aria-label="Демонстрация состояний карточки">
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': effectiveDetailState === 'ready' && !isLongVariant && !simulatedErrorCode && !requestUiStore.rollbackError && !commentSendError }"
-          @click="setDetailDemoMode('ready')"
-        >
-          Карточка
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': Boolean(requestUiStore.rollbackError) }"
-          @click="triggerDemoConflictOnCard"
-        >
-          Конфликт 409 (откат)
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': Boolean(commentSendError) }"
-          @click="triggerDemoCommentError"
-        >
-          Ошибка комментария
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': isLongVariant && effectiveDetailState === 'ready' }"
-          @click="setDetailDemoMode('long')"
-        >
-          Длинное название и ФИО
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': effectiveDetailState === 'loading' }"
-          @click="setDetailDemoMode('loading')"
-        >
-          Загрузка
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': simulatedErrorCode === '429' }"
-          @click="setDetailDemoMode('429')"
-        >
-          Ошибка 429
-        </button>
-        <button
-          type="button"
-          class="demo-state-btn"
-          :class="{ 'is-active': simulatedErrorCode === '500' || demoDetailState === 'error' }"
-          @click="setDetailDemoMode('500')"
-        >
-          Ошибка 500
-        </button>
-      </div>
-    </div>
-
-    <!-- состояние загрузки карточки заявки из макета 207 -->
     <template v-if="effectiveDetailState === 'loading'">
       <p class="zagruzhaem-zaiavku">Загружаем заявку…</p>
       <div class="detali-i-parametry">
@@ -455,7 +564,6 @@ const goBackToList = () => {
       </div>
     </template>
 
-    <!-- состояние ошибки загрузки карточки заявки из макета 208 -->
     <div v-else-if="effectiveDetailState === 'error'" class="sostoianie-spiska">
       <OctagonIconAlert />
       <p class="ne-udalos-zagruzit-zaiavku">Не удалось загрузить заявку</p>
@@ -468,7 +576,6 @@ const goBackToList = () => {
       />
     </div>
 
-    <!-- основное отображение карточки заявки -->
     <template v-else-if="requestItem">
       <div v-if="requestItem.hasMissingData" class="soobshchenie-ob-izmenenii">
         <p class="chast-dannykh-zaiavki-nedostupna-ostal">
@@ -478,7 +585,6 @@ const goBackToList = () => {
 
       <p class="ne-rabotaet-dostup-k-crm">{{ requestItem.title }}</p>
 
-      <!-- плашка конфликта 409 или 500 и отката изменения из макета 5txt -->
       <div v-if="requestUiStore.rollbackError" class="soobshchenie-ob-izmenenii">
         <p class="izmenenie-ne-sokhraneno">{{ requestUiStore.rollbackError.title }}</p>
         <p class="zaiavka-byla-izmenena-drugim">
@@ -491,7 +597,6 @@ const goBackToList = () => {
         />
       </div>
 
-      <!-- плашка ошибки отправки комментария из макета 9txt -->
       <div v-else-if="commentSendError" class="soobshchenie-ob-izmenenii">
         <p class="izmenenie-ne-sokhraneno">Не удалось отправить комментарий</p>
         <p class="zaiavka-byla-izmenena-drugim">{{ commentSendError }}</p>
@@ -502,7 +607,6 @@ const goBackToList = () => {
         />
       </div>
 
-      <!-- плашка успешного изменения приоритета или статуса с кнопкой undo 3txt и отправки комментария 8txt -->
       <div v-else-if="requestUiStore.feedbackBanner" class="soobshchenie-ob-izmenenii">
         <p class="prioritet-izmenion-na-kriticheskii">
           {{ requestUiStore.feedbackBanner.message }}
@@ -530,6 +634,17 @@ const goBackToList = () => {
             <p class="opisanie-problemy">Описание проблемы</p>
             <p class="posle-obnovleniia-ne-udaiotsia-voiti-v">
               {{ requestItem.description }}
+            </p>
+          </div>
+
+          <!-- блок результата решения из макета 10.txt когда заявка решена или закрыта -->
+          <div
+            v-if="(requestItem.status === 'resolved' || requestItem.status === 'closed') && requestItem.resolutionSummary"
+            class="rezul-tat-resheniia"
+          >
+            <p class="rezul-tat-resheniia-2">Результат решения</p>
+            <p class="vosstanovleny-prava-gruppy-otdela">
+              {{ requestItem.resolutionSummary }}
             </p>
           </div>
 
@@ -578,6 +693,26 @@ const goBackToList = () => {
               {{ event.time }}  {{ event.text }}
             </p>
           </div>
+
+          <!-- блок вложений из макета 10.txt -->
+          <div
+            v-if="requestItem.status === 'resolved' || requestItem.status === 'closed' || requestItem.attachments.length > 0"
+            class="vlozheniia"
+          >
+            <p class="vlozheniia-1">Вложения · {{ requestItem.attachments.length || 1 }}</p>
+            <p
+              v-for="att in (requestItem.attachments.length ? requestItem.attachments : [{ id: 'att-default', fileName: 'error-login.png', fileSizeLabel: '245 КБ' }])"
+              :key="att.id"
+              class="error-login-png-245-kb"
+            >
+              {{ att.fileName }} · {{ att.fileSizeLabel }}
+            </p>
+            <OctagonButton
+              variant="secondary"
+              label23251="Добавить файл"
+              @click="handleAddMockAttachment"
+            />
+          </div>
         </div>
 
         <div class="parametry-zaiavki">
@@ -589,40 +724,302 @@ const goBackToList = () => {
           <p class="kategoriia">Категория</p>
           <p class="dostup-i-uchiotnye-zapisi">{{ requestItem.category }}</p>
 
-          <div class="wf-gpt-field">
-            <WFGPTField
-              v-model="selectedAssignee"
-              label23270="Исполнитель"
-              type="select"
-              :options="assigneeOptions"
-              :value="`${requestItem.assignee}  ▾`"
-              @change="handleAssigneeChange"
-            />
-          </div>
+          <!-- для оператора и админа поля исполнителя и приоритета интерактивны -->
+          <template v-if="isOperatorOrAdmin">
+            <div class="wf-gpt-field">
+              <WFGPTField
+                v-model="selectedAssignee"
+                label23270="Исполнитель"
+                type="select"
+                :options="assigneeOptions"
+                :value="`${requestItem.assignee}  ▾`"
+                @change="handleAssigneeChange"
+              />
+            </div>
 
-          <div class="wf-gpt-field-2">
-            <WFGPTField
-              v-model="selectedPriority"
-              label23270="Приоритет"
-              type="select"
-              :options="priorityOptions"
-              :value="priorityDisplayLabel"
-              @change="handlePriorityChange"
-            />
-          </div>
+            <div class="wf-gpt-field-2">
+              <WFGPTField
+                v-model="selectedPriority"
+                label23270="Приоритет"
+                type="select"
+                :options="priorityOptions"
+                :value="priorityDisplayLabel"
+                @change="handlePriorityChange"
+              />
+            </div>
+          </template>
+
+          <!-- для исполнителя и клиента поля исполнителя и приоритета отображаются текстом по макетам 8.txt и 9.txt -->
+          <template v-else>
+            <p class="klient">Исполнитель</p>
+            <p class="ao-vektor">{{ requestItem.assignee }}</p>
+
+            <p class="klient">Приоритет</p>
+            <p class="ao-vektor">{{ PRIORITY_LABELS[requestItem.priority] }}</p>
+          </template>
 
           <p class="srok-resheniia">Срок решения</p>
           <p class="segodnia-13-14">{{ requestItem.dueAt }}</p>
 
-          <div class="octagon-button-3">
-            <OctagonButton
-              label23251="Изменить статус"
-              @click="handleStatusChangeAction"
-            />
-          </div>
+          <!-- кнопки действий в зависимости от роли пользователя и статуса заявки -->
+          <template v-if="isAgentRole">
+            <div class="octagon-button-3">
+              <OctagonButton
+                label23251="Изменить статус"
+                @click="openStatusModal(false)"
+              />
+            </div>
+            <div class="octagon-button-3">
+              <OctagonButton
+                variant="secondary"
+                label23251="Зафиксировать решение"
+                @click="openResolveModal(false)"
+              />
+            </div>
+          </template>
+
+          <template v-else-if="isOperatorOrAdmin">
+            <div v-if="requestItem.status === 'resolved'" class="octagon-button-3">
+              <OctagonButton
+                label23251="Закрыть заявку"
+                @click="openCloseModal(false)"
+              />
+            </div>
+            <div v-else-if="requestItem.status === 'new' || requestItem.assignee === 'Не назначен'" class="octagon-button-3">
+              <OctagonButton
+                label23251="Назначить исполнителя"
+                @click="openAssignModal(false)"
+              />
+            </div>
+            <div v-else class="octagon-button-3">
+              <OctagonButton
+                label23251="Изменить статус"
+                @click="openStatusModal(false)"
+              />
+            </div>
+
+            <div v-if="requestItem.status !== 'new' && requestItem.assignee !== 'Не назначен'" class="octagon-button-3">
+              <OctagonButton
+                variant="secondary"
+                label23251="Назначить исполнителя"
+                @click="openAssignModal(false)"
+              />
+            </div>
+          </template>
         </div>
       </div>
     </template>
+
+    <!-- диалог назначения исполнителя и проверки деактивированного сотрудника из макетов 5.txt и 7.txt -->
+    <Teleport to="body">
+      <div
+        v-if="isAssignModalOpen"
+        class="modal-backdrop"
+        role="dialog"
+        aria-modal="true"
+        @click.self="isAssignModalOpen = false"
+      >
+        <div class="naznachenie">
+          <form class="naznachit-ispolnitelia" @submit.prevent="submitAssignModal">
+            <div class="zagolovok-okna">
+              <p class="naznachit-ispolnitelia-2">Назначить исполнителя</p>
+              <OctagonIconX @click="isAssignModalOpen = false" />
+            </div>
+
+            <p class="vyberite-aktivnogo-sotrudnika">Выберите активного сотрудника.</p>
+
+            <WFGPTField
+              v-model="assignModalAssignee"
+              label23270="Исполнитель"
+              type="select"
+              :options="assignModalOptions"
+              :value="assignModalAssignee.includes('деактивирован') ? assignModalAssignee : `${assignModalAssignee}  ▾`"
+            />
+
+            <WFGPTField
+              v-model="assignModalComment"
+              label23270="Комментарий"
+              value="Проверьте права доступа группы"
+            />
+
+            <div v-if="assignModalError" class="oshibka-sokhraneniia">
+              <p class="deaktivirovannyi-sotrudnik-ne-mozhet">
+                {{ assignModalError }}
+              </p>
+            </div>
+
+            <div class="deistviia">
+              <OctagonButton
+                variant="secondary"
+                label23251="Отмена"
+                @click="isAssignModalOpen = false"
+              />
+              <OctagonButton
+                type="submit"
+                :state="isAssignModalDeactivatedSelected ? 'disabled' : 'default'"
+                :disabled="isAssignModalDeactivatedSelected"
+                label23251="Назначить"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- диалог фиксации решения исполнителем из макетов 8.txt -->
+    <Teleport to="body">
+      <div
+        v-if="isResolveModalOpen"
+        class="modal-backdrop"
+        role="dialog"
+        aria-modal="true"
+        @click.self="isResolveModalOpen = false"
+      >
+        <div class="reshenie">
+          <form class="zafiksirovat-reshenie" @submit.prevent="submitResolveModal">
+            <div class="zagolovok-okna">
+              <p class="zafiksirovat-reshenie-2">Зафиксировать решение</p>
+              <OctagonIconX @click="isResolveModalOpen = false" />
+            </div>
+
+            <p class="rezul-tat-obiazatelen-dlia-statusa">
+              Результат обязателен для статуса «Решена».
+            </p>
+
+            <WFGPTTextarea
+              v-model="resolveModalSummary"
+              label23270="Результат решения"
+              :value="resolveModalSummary"
+            />
+
+            <p v-if="resolveModalError" class="opishite-rezul-tat-resheniia">
+              {{ resolveModalError }}
+            </p>
+
+            <div class="deistviia">
+              <OctagonButton
+                variant="secondary"
+                label23251="Отмена"
+                @click="isResolveModalOpen = false"
+              />
+              <OctagonButton
+                type="submit"
+                label23251="Отправить решение"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- диалог смены статуса с обязательной причиной ожидания из макета 9.txt -->
+    <Teleport to="body">
+      <div
+        v-if="isStatusModalOpen"
+        class="modal-backdrop"
+        role="dialog"
+        aria-modal="true"
+        @click.self="isStatusModalOpen = false"
+      >
+        <div class="smena-statusa">
+          <form class="izmenit-status" @submit.prevent="submitStatusModal">
+            <div class="zagolovok-okna">
+              <p class="izmenit-status-2">Изменить статус</p>
+              <OctagonIconX @click="isStatusModalOpen = false" />
+            </div>
+
+            <p class="dostupnye-deistviia-zavisiat-ot">
+              Доступные действия зависят от текущего статуса.
+            </p>
+
+            <WFGPTField
+              :model-value="requestItem ? STATUS_LABELS[requestItem.status] : 'В работе'"
+              label23270="Текущий статус"
+              state="disabled"
+              :disabled="true"
+              value="В работе"
+            />
+
+            <WFGPTField
+              v-model="statusModalTarget"
+              label23270="Новый статус"
+              type="select"
+              :options="allowedStatusOptions"
+              :value="STATUS_LABELS[statusModalTarget]"
+            />
+
+            <WFGPTTextarea
+              v-if="statusModalTarget === 'waiting'"
+              v-model="statusModalWaitingReason"
+              label23270="Причина ожидания"
+              :value="statusModalWaitingReason"
+            />
+
+            <p v-if="statusModalError" class="ukazhite-prichinu-ozhidaniia">
+              {{ statusModalError }}
+            </p>
+
+            <div class="deistviia">
+              <OctagonButton
+                variant="secondary"
+                label23251="Отмена"
+                @click="isStatusModalOpen = false"
+              />
+              <OctagonButton
+                type="submit"
+                label23251="Сохранить"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- диалог закрытия заявки оператором с обязательной причиной из макета 10.txt -->
+    <Teleport to="body">
+      <div
+        v-if="isCloseModalOpen"
+        class="modal-backdrop"
+        role="dialog"
+        aria-modal="true"
+        @click.self="isCloseModalOpen = false"
+      >
+        <div class="zakrytie">
+          <form class="zakryt-zaiavku" @submit.prevent="submitCloseModal">
+            <div class="zagolovok-okna">
+              <p class="zakryt-zaiavku-2">Закрыть заявку</p>
+              <OctagonIconX @click="isCloseModalOpen = false" />
+            </div>
+
+            <p class="ukazhite-prichinu-ruchnogo-zakrytiia">
+              Укажите причину ручного закрытия.
+            </p>
+
+            <WFGPTTextarea
+              v-model="closeModalReason"
+              label23270="Причина закрытия"
+              :value="closeModalReason"
+            />
+
+            <p v-if="closeModalError" class="ukazhite-prichinu-ruchnogo-zakrytiia-2">
+              {{ closeModalError }}
+            </p>
+
+            <div class="deistviia">
+              <OctagonButton
+                variant="secondary"
+                label23251="Отмена"
+                @click="isCloseModalOpen = false"
+              />
+              <OctagonButton
+                type="submit"
+                label23251="Закрыть заявку"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -649,51 +1046,6 @@ const goBackToList = () => {
   flex-wrap: wrap;
 }
 
-.demo-state-switcher {
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  padding: 4px;
-  border-radius: 6px;
-  background: var(--color-bg-surface, #23204D);
-  border: 1px solid var(--color-border-default, #413E74);
-  flex-wrap: wrap;
-}
-
-.demo-state-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-  border-radius: 4px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 16px;
-  cursor: pointer;
-  outline: none;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-
-.demo-state-btn:hover {
-  background: var(--color-bg-subtle, #2F2A6A);
-  color: var(--color-text-primary, #E8E7EC);
-}
-
-.demo-state-btn:focus-visible {
-  border-color: #635BFF;
-  color: var(--color-text-primary, #E8E7EC);
-}
-
-.demo-state-btn.is-active {
-  background: var(--color-bg-subtle, #2F2A6A);
-  border-color: var(--color-border-strong, #615B94);
-  color: var(--color-text-accent, #79CEE8);
-  font-weight: 600;
-}
 
 .soobshchenie-ob-izmenenii {
   align-self: stretch;
@@ -746,7 +1098,6 @@ const goBackToList = () => {
   line-height: 20px;
 }
 
-/* перенос длинных заголовков заявки без выхода за границы блока */
 .ne-rabotaet-dostup-k-crm {
   align-self: stretch;
   color: var(--color-text-primary, #E8E7EC);
@@ -801,8 +1152,10 @@ const goBackToList = () => {
 }
 
 .opisanie,
+.rezul-tat-resheniia,
 .kommentarii,
-.istoriia-izmenenii {
+.istoriia-izmenenii,
+.vlozheniia {
   align-self: stretch;
   width: 100%;
   display: flex;
@@ -817,8 +1170,10 @@ const goBackToList = () => {
 }
 
 .opisanie-problemy,
+.rezul-tat-resheniia-2,
 .kommentarii-1,
 .istoriia-zaiavki,
+.vlozheniia-1,
 .parametry {
   align-self: stretch;
   color: var(--color-text-primary, #E8E7EC);
@@ -829,7 +1184,9 @@ const goBackToList = () => {
 }
 
 .posle-obnovleniia-ne-udaiotsia-voiti-v,
-.ne-mozhem-voiti-s-rabochikh-komp {
+.vosstanovleny-prava-gruppy-otdela,
+.ne-mozhem-voiti-s-rabochikh-komp,
+.error-login-png-245-kb {
   align-self: stretch;
   color: var(--color-text-primary, #E8E7EC);
   font-family: "Montserrat", sans-serif;
@@ -950,7 +1307,6 @@ const goBackToList = () => {
   width: 100%;
 }
 
-/* скелетоны карточки заявки из макета 207 */
 .skeleton-row-short {
   width: 200px;
   max-width: 100%;
@@ -968,7 +1324,6 @@ const goBackToList = () => {
   background: var(--color-bg-subtle, #2F2A6A);
 }
 
-/* экран ошибки карточки заявки из макета 208 */
 .sostoianie-spiska {
   align-self: stretch;
   width: 100%;
@@ -1001,6 +1356,123 @@ const goBackToList = () => {
   font-weight: 400;
   line-height: 20px;
   text-align: center;
+}
+
+/* стили модальных диалогов 4 этапа */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(23, 21, 58, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.naznachenie,
+.reshenie,
+.smena-statusa,
+.zakrytie {
+  width: 560px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(26.93% 70.32% at 54.55% 50%, #201D47 0%, #17153A 100%);
+}
+
+.naznachit-ispolnitelia,
+.zafiksirovat-reshenie,
+.izmenit-status,
+.zakryt-zaiavku {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+}
+
+.zagolovok-okna {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.naznachit-ispolnitelia-2,
+.zafiksirovat-reshenie-2,
+.izmenit-status-2,
+.zakryt-zaiavku-2 {
+  flex: 1 1 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.vyberite-aktivnogo-sotrudnika,
+.rezul-tat-obiazatelen-dlia-statusa,
+.dostupnye-deistviia-zavisiat-ot,
+.ukazhite-prichinu-ruchnogo-zakrytiia {
+  align-self: stretch;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.oshibka-sokhraneniia {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: #38213D;
+  border: 1px solid #DE5994;
+}
+
+.deaktivirovannyi-sotrudnik-ne-mozhet {
+  align-self: stretch;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.opishite-rezul-tat-resheniia,
+.ukazhite-prichinu-ozhidaniia,
+.ukazhite-prichinu-ruchnogo-zakrytiia-2 {
+  align-self: stretch;
+  color: #FF80A3;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.deistviia {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 @media (max-width: 1023px) {

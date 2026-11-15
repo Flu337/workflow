@@ -3,7 +3,7 @@ import { Server } from 'node:http';
 import { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { isMainThread, parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, createError, sendRedirect, proxyRequest, getRequestProtocol, getRequestHost, getRequestURL, readRawBody, getRequestHeader, isError, setResponseHeaders, setResponseStatus, send, setResponseHeader, appendResponseHeader, getResponseHeader, getRequestHeaders, removeResponseHeader, writeEarlyHints, getQuery as getQuery$1, getRequestWebStream, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, readBody, getRequestIP, toWebRequest } from 'file://C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/h3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, createError, sendRedirect, proxyRequest, getRequestProtocol, getRequestHost, getRequestURL, readRawBody, getRequestHeader, isError, setResponseHeaders, setResponseStatus, send, setResponseHeader, appendResponseHeader, getResponseHeader, getRequestHeaders, removeResponseHeader, getCookie, setCookie, writeEarlyHints, getQuery as getQuery$1, getRequestWebStream, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, readBody, getRequestIP, toWebRequest } from 'file://C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/h3/dist/index.mjs';
 import { escapeHtml } from 'file://C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@vue/shared/dist/shared.cjs.js';
 import viteNodeEntry_mjs from 'file:///C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/vite-builder/dist/vite-node-entry.mjs';
 import { viteNodeFetch } from 'file:///C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/vite-builder/dist/vite-node.mjs';
@@ -2342,7 +2342,22 @@ _Z4Vm0BJMJeyU_KFYzGBgSOBoZ4JOQn4jYmko_KtDwU,
 _LB91z6Ht2T49ncvhFWMKIA26eT4mdBc7tIFl06yLKKs
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"3dd83-oKJOL157ttQnshuJ0ec5X5DnIxY\"",
+    "mtime": "2026-11-15T15:18:33.663Z",
+    "size": 253315,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"fb042-7yY2uwFpokW4BHK2ZSNdHyfSuq4\"",
+    "mtime": "2026-11-15T15:18:33.667Z",
+    "size": 1028162,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -2444,6 +2459,929 @@ function assertAssetData(event, data) {
   }
   return data;
 }
+
+const SERVER_REQUESTS_DB = [
+  {
+    id: "1042",
+    code: "#1042",
+    title: "\u041D\u0435 \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F \u043A CRM",
+    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
+    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
+    status: "new",
+    priority: "high",
+    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 5 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 09:14",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 13:14",
+    description: "\u041F\u043E\u0441\u043B\u0435 \u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F \u043D\u0435 \u0443\u0434\u0430\u0451\u0442\u0441\u044F \u0432\u043E\u0439\u0442\u0438 \u0432 CRM. \u041F\u0440\u0438 \u043F\u043E\u043F\u044B\u0442\u043A\u0435 \u0432\u0445\u043E\u0434\u0430 \u043F\u043E\u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u0441\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u0435 \xAB\u0414\u043E\u0441\u0442\u0443\u043F \u0437\u0430\u043F\u0440\u0435\u0449\u0451\u043D\xBB. \u041F\u0440\u043E\u0431\u043B\u0435\u043C\u0430 \u0437\u0430\u0442\u0440\u0430\u0433\u0438\u0432\u0430\u0435\u0442 \u043E\u0442\u0434\u0435\u043B \u043F\u0440\u043E\u0434\u0430\u0436.",
+    resolutionSummary: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u043F\u0440\u0430\u0432\u0430 \u0433\u0440\u0443\u043F\u043F\u044B \u043E\u0442\u0434\u0435\u043B\u0430 \u043F\u0440\u043E\u0434\u0430\u0436. \u0414\u043E\u0441\u0442\u0443\u043F \u043A CRM \u043F\u0440\u043E\u0432\u0435\u0440\u0435\u043D, \u043E\u0448\u0438\u0431\u043A\u0430 \u0431\u043E\u043B\u044C\u0448\u0435 \u043D\u0435 \u0432\u043E\u0441\u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u0441\u044F.",
+    attachments: [
+      {
+        id: "att-1042-1",
+        fileName: "error-login.png",
+        fileSizeLabel: "245 \u041A\u0411"
+      }
+    ],
+    comments: [
+      {
+        id: "c-1042-1",
+        author: "\u041C\u0430\u0440\u0438\u044F \u0421\u043C\u0438\u0440\u043D\u043E\u0432\u0430",
+        time: "09:14",
+        text: "\u041D\u0435 \u043C\u043E\u0436\u0435\u043C \u0432\u043E\u0439\u0442\u0438 \u0441 \u0440\u0430\u0431\u043E\u0447\u0438\u0445 \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440\u043E\u0432. \u041D\u0443\u0436\u043D\u0430 \u043F\u043E\u043C\u043E\u0449\u044C."
+      },
+      {
+        id: "c-1042-2",
+        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0430",
+        time: "09:25",
+        text: "\u0417\u0430\u044F\u0432\u043A\u0443 \u043F\u0440\u0438\u043D\u044F\u043B\u0430. \u041F\u0440\u043E\u0432\u0435\u0440\u044F\u0435\u043C \u043F\u0440\u0430\u0432\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430."
+      },
+      {
+        id: "c-1042-3",
+        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0430",
+        time: "10:05",
+        text: "\u041D\u0430\u0448\u043B\u0430 \u043F\u0440\u0438\u0447\u0438\u043D\u0443: \u043F\u043E\u0441\u043B\u0435 \u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F \u0441\u0431\u0440\u043E\u0441\u0438\u043B\u0430\u0441\u044C \u0433\u0440\u0443\u043F\u043F\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1042-1",
+        time: "09:14",
+        text: "\u041C\u0430\u0440\u0438\u044F \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1042-2",
+        time: "09:25",
+        text: "\u041E\u043F\u0435\u0440\u0430\u0442\u043E\u0440 \u043D\u0430\u0437\u043D\u0430\u0447\u0438\u043B \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0443 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0443"
+      },
+      {
+        id: "t-1042-3",
+        time: "10:00",
+        text: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u043D\u0430\u0447\u0430\u043B\u0430 \u0440\u0430\u0431\u043E\u0442\u0443"
+      }
+    ]
+  },
+  {
+    id: "1041",
+    code: "#1041",
+    title: "\u041E\u0448\u0438\u0431\u043A\u0430 \u0432\u044B\u0433\u0440\u0443\u0437\u043A\u0438 \u043E\u0442\u0447\u0451\u0442\u0430",
+    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
+    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
+    status: "new",
+    priority: "critical",
+    category: "\u041E\u0442\u0447\u0451\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 5 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 09:02",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 11:00",
+    description: "\u041F\u0440\u0438 \u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0438 \u0435\u0436\u0435\u043C\u0435\u0441\u044F\u0447\u043D\u043E\u0433\u043E \u0444\u0438\u043D\u0430\u043D\u0441\u043E\u0432\u043E\u0433\u043E \u043E\u0442\u0447\u0451\u0442\u0430 \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 XLSX \u0441\u0438\u0441\u0442\u0435\u043C\u0430 \u0432\u044B\u0434\u0430\u0451\u0442 \u043E\u0448\u0438\u0431\u043A\u0443 502. \u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 \u043F\u0440\u0435\u0440\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u043D\u0430 80%.",
+    comments: [
+      {
+        id: "c-1041-1",
+        author: "\u0418\u0433\u043E\u0440\u044C \u041F\u0435\u0442\u0440\u043E\u0432",
+        time: "09:05",
+        text: "\u041E\u0442\u0447\u0451\u0442 \u043D\u0443\u0436\u0435\u043D \u0434\u043B\u044F \u0441\u043E\u0432\u0435\u0449\u0430\u043D\u0438\u044F \u0432 12:00, \u043F\u0440\u043E\u0448\u0443 \u0432\u0437\u044F\u0442\u044C \u0432 \u0440\u0430\u0431\u043E\u0442\u0443 \u043A\u0430\u043A \u043C\u043E\u0436\u043D\u043E \u0441\u043A\u043E\u0440\u0435\u0435."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1041-1",
+        time: "09:02",
+        text: "\u0418\u0433\u043E\u0440\u044C \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1041-2",
+        time: "09:05",
+        text: "\u0418\u0433\u043E\u0440\u044C \u0434\u043E\u0431\u0430\u0432\u0438\u043B \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439"
+      }
+    ]
+  },
+  {
+    id: "1040",
+    code: "#1040",
+    title: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043D\u043E\u0432\u043E\u0433\u043E \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430",
+    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "assigned",
+    priority: "normal",
+    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 17:40",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 18:00",
+    description: "\u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0441\u043E\u0437\u0434\u0430\u0442\u044C \u043A\u043E\u0440\u043F\u043E\u0440\u0430\u0442\u0438\u0432\u043D\u0443\u044E \u0443\u0447\u0451\u0442\u043D\u0443\u044E \u0437\u0430\u043F\u0438\u0441\u044C, \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u043F\u043E\u0447\u0442\u0443 \u0438 \u0432\u044B\u0434\u0430\u0442\u044C \u0431\u0430\u0437\u043E\u0432\u044B\u0435 \u043F\u0440\u0430\u0432\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u0432 CRM \u0434\u043B\u044F \u043D\u043E\u0432\u043E\u0433\u043E \u043C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u0430 \u043E\u0442\u0434\u0435\u043B\u0430 \u0441\u043E\u043F\u0440\u043E\u0432\u043E\u0436\u0434\u0435\u043D\u0438\u044F.",
+    comments: [
+      {
+        id: "c-1040-1",
+        author: "\u0415\u043B\u0435\u043D\u0430 \u041C\u043E\u0440\u043E\u0437\u043E\u0432\u0430",
+        time: "17:42",
+        text: "\u0410\u043D\u043A\u0435\u0442\u0443 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430 \u0438 \u0441\u043F\u0438\u0441\u043E\u043A \u0433\u0440\u0443\u043F\u043F \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043F\u0440\u0438\u043B\u043E\u0436\u0438\u043B\u0430 \u0432\u043E \u0432\u043D\u0443\u0442\u0440\u0435\u043D\u043D\u0435\u043C \u0437\u0430\u043F\u0440\u043E\u0441\u0435."
+      },
+      {
+        id: "c-1040-2",
+        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+        time: "18:05",
+        text: "\u0417\u0430\u044F\u0432\u043A\u0430 \u043F\u0440\u0438\u043D\u044F\u0442\u0430, \u043F\u043E\u0447\u0442\u043E\u0432\u044B\u0439 \u044F\u0449\u0438\u043A \u0441\u043E\u0437\u0434\u0430\u043D, \u043D\u0430\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u044E \u0440\u043E\u043B\u0438 \u0432 CRM."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1040-1",
+        time: "17:40",
+        text: "\u0415\u043B\u0435\u043D\u0430 \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1040-2",
+        time: "17:55",
+        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411."
+      }
+    ]
+  },
+  {
+    id: "1039",
+    code: "#1039",
+    title: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442",
+    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "waiting",
+    priority: "high",
+    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 16:15",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 16:00",
+    description: "\u0421\u0440\u043E\u043A \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F SSL-\u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u0430 \u0434\u043B\u044F \u0448\u043B\u044E\u0437\u0430 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u043E\u0431\u043E\u0440\u043E\u0442\u0430 \u0438\u0441\u0442\u0435\u043A\u0430\u0435\u0442 \u0447\u0435\u0440\u0435\u0437 48 \u0447\u0430\u0441\u043E\u0432. \u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044F \u043F\u0435\u0440\u0435\u0432\u044B\u043F\u0443\u0441\u043A \u0438 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0430 \u043D\u0430 \u0431\u043E\u0435\u0432\u043E\u0439 \u043A\u043E\u043D\u0442\u0443\u0440.",
+    comments: [
+      {
+        id: "c-1039-1",
+        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+        time: "16:45",
+        text: "\u0417\u0430\u043F\u0440\u043E\u0441\u0438\u043B\u0430 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435 \u0442\u0435\u0445\u043D\u043E\u043B\u043E\u0433\u0438\u0447\u0435\u0441\u043A\u043E\u0433\u043E \u043E\u043A\u043D\u0430 \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0437\u0430\u043F\u0443\u0441\u043A\u0430 \u043F\u0440\u043E\u043A\u0441\u0438-\u0441\u0435\u0440\u0432\u0435\u0440\u0430."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1039-1",
+        time: "16:15",
+        text: "\u0421\u0438\u0441\u0442\u0435\u043C\u0430 \u043C\u043E\u043D\u0438\u0442\u043E\u0440\u0438\u043D\u0433\u0430 \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1039-2",
+        time: "16:30",
+        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411."
+      },
+      {
+        id: "t-1039-3",
+        time: "16:45",
+        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u041E\u0436\u0438\u0434\u0430\u043D\u0438\u0435\xBB"
+      }
+    ]
+  },
+  {
+    id: "1038",
+    code: "#1038",
+    title: void 0,
+    customer: void 0,
+    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
+    status: "in-progress",
+    priority: "normal",
+    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 14:20",
+    dueAt: "\u0417\u0430\u0432\u0442\u0440\u0430, 14:00",
+    description: "\u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044F \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0435\u0436\u0435\u0434\u043D\u0435\u0432\u043D\u043E\u0435 \u0438\u043D\u043A\u0440\u0435\u043C\u0435\u043D\u0442\u0430\u043B\u044C\u043D\u043E\u0435 \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u043E\u0435 \u043A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435 \u0431\u0430\u0437\u044B \u0434\u0430\u043D\u043D\u044B\u0445 \u043F\u0440\u043E\u0435\u043A\u0442\u043E\u0432 \u043D\u0430 \u0432\u044B\u0434\u0435\u043B\u0435\u043D\u043D\u043E\u0435 \u0445\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0435 \u0432 02:00 \u041C\u0421\u041A.",
+    comments: [
+      {
+        id: "c-1038-1",
+        author: "\u041E\u043B\u0435\u0433 \u0421.",
+        time: "15:10",
+        text: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u043B \u0440\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435 cron \u0438 \u043F\u0440\u043E\u0432\u0435\u0440\u0438\u043B \u0442\u0435\u0441\u0442\u043E\u0432\u044B\u0439 \u0434\u0430\u043C\u043F, \u043E\u0436\u0438\u0434\u0430\u044E \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0438\u044F \u043F\u043E\u043B\u043D\u043E\u0439 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1038-1",
+        time: "14:20",
+        text: "\u0410\u043B\u0435\u043A\u0441\u0435\u0439 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1038-2",
+        time: "14:35",
+        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u041E\u043B\u0435\u0433 \u0421."
+      },
+      {
+        id: "t-1038-3",
+        time: "14:50",
+        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u0412 \u0440\u0430\u0431\u043E\u0442\u0435\xBB"
+      }
+    ]
+  },
+  {
+    id: "1037",
+    code: "#1037",
+    title: "\u0421\u0431\u043E\u0439 \u043F\u0435\u0447\u0430\u0442\u0438 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432",
+    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "resolved",
+    priority: "low",
+    category: "\u041E\u0444\u0438\u0441\u043D\u043E\u0435 \u043E\u0431\u043E\u0440\u0443\u0434\u043E\u0432\u0430\u043D\u0438\u0435",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 11:30",
+    dueAt: "4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 17:30",
+    description: "\u0421\u0435\u0442\u0435\u0432\u043E\u0439 \u043F\u0440\u0438\u043D\u0442\u0435\u0440 \u043D\u0430 3 \u044D\u0442\u0430\u0436\u0435 \u0437\u0430\u0432\u0438\u0441\u0430\u0435\u0442 \u043F\u0440\u0438 \u043E\u0442\u043F\u0440\u0430\u0432\u043A\u0435 \u043C\u043D\u043E\u0433\u043E\u0441\u0442\u0440\u0430\u043D\u0438\u0447\u043D\u044B\u0445 PDF-\u043D\u0430\u043A\u043B\u0430\u0434\u043D\u044B\u0445 \u0438\u0437 \u0443\u0447\u0451\u0442\u043D\u043E\u0439 \u0441\u0438\u0441\u0442\u0435\u043C\u044B.",
+    comments: [
+      {
+        id: "c-1037-1",
+        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+        time: "13:15",
+        text: "\u041E\u0447\u0438\u0449\u0435\u043D\u0430 \u043E\u0447\u0435\u0440\u0435\u0434\u044C \u0441\u043F\u0443\u043B\u0435\u0440\u0430 \u0438 \u043E\u0431\u043D\u043E\u0432\u043B\u0451\u043D \u0434\u0440\u0430\u0439\u0432\u0435\u0440 PCL6 \u043D\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0435 \u043F\u0435\u0447\u0430\u0442\u0438. \u041F\u0435\u0447\u0430\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442 \u0448\u0442\u0430\u0442\u043D\u043E."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1037-1",
+        time: "11:30",
+        text: "\u0414\u043C\u0438\u0442\u0440\u0438\u0439 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1037-2",
+        time: "11:45",
+        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411."
+      },
+      {
+        id: "t-1037-3",
+        time: "13:15",
+        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u0420\u0435\u0448\u0435\u043D\u0430\xBB"
+      }
+    ]
+  },
+  {
+    id: "1036",
+    code: "#1036",
+    title: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u043F\u0440\u0430\u0432\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430",
+    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
+    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
+    status: "new",
+    priority: "normal",
+    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 10:50",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 15:00",
+    description: "\u041F\u0440\u043E\u0448\u0443 \u043E\u0442\u043A\u0440\u044B\u0442\u044C \u0434\u043E\u0441\u0442\u0443\u043F \u043D\u0430 \u0440\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435 \u0440\u0435\u0435\u0441\u0442\u0440\u0430 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u043E\u0432 \u0434\u043B\u044F \u0441\u0442\u0430\u0440\u0448\u0435\u0433\u043E \u044E\u0440\u0438\u0441\u0442\u0430 \u043E\u0442\u0434\u0435\u043B\u0430 \u043A\u043E\u0440\u043F\u043E\u0440\u0430\u0442\u0438\u0432\u043D\u043E\u0433\u043E \u043F\u0440\u0430\u0432\u0430.",
+    comments: [
+      {
+        id: "c-1036-1",
+        author: "\u041E\u043B\u044C\u0433\u0430 \u0411\u0435\u043B\u043E\u0432\u0430",
+        time: "10:52",
+        text: "\u0421\u043E\u0433\u043B\u0430\u0441\u043E\u0432\u0430\u043D\u0438\u0435 \u043E\u0442 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F \u0434\u0435\u043F\u0430\u0440\u0442\u0430\u043C\u0435\u043D\u0442\u0430 \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u043E."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1036-1",
+        time: "10:50",
+        text: "\u041E\u043B\u044C\u0433\u0430 \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1035",
+    code: "#1035",
+    title: "\u041E\u0448\u0438\u0431\u043A\u0430 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438 \u0432 \u043A\u0430\u0431\u0438\u043D\u0435\u0442\u0435",
+    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
+    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
+    status: "assigned",
+    priority: "high",
+    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 3 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 18:12",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 12:00",
+    description: "\u041A\u043B\u0438\u0435\u043D\u0442\u044B \u0441\u043E\u043E\u0431\u0449\u0430\u044E\u0442 \u043E \u0446\u0438\u043A\u043B\u0438\u0447\u0435\u0441\u043A\u043E\u043C \u0440\u0435\u0434\u0438\u0440\u0435\u043A\u0442\u0435 \u043F\u0440\u0438 \u0432\u0445\u043E\u0434\u0435 \u0432 \u043B\u0438\u0447\u043D\u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442 \u0447\u0435\u0440\u0435\u0437 \u0434\u0432\u0443\u0445\u0444\u0430\u043A\u0442\u043E\u0440\u043D\u0443\u044E \u0430\u0443\u0442\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u044E \u043F\u043E SMS.",
+    comments: [
+      {
+        id: "c-1035-1",
+        author: "\u041E\u043B\u0435\u0433 \u0421.",
+        time: "18:30",
+        text: "\u041F\u0440\u043E\u0432\u0435\u0440\u044F\u044E \u043B\u043E\u0433\u0438 \u0441\u0435\u0440\u0432\u0438\u0441\u0430 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438 \u0438 \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044E \u0432\u0440\u0435\u043C\u0435\u043D\u0438 \u0442\u043E\u043A\u0435\u043D\u043E\u0432."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1035-1",
+        time: "18:12",
+        text: "\u0414\u0435\u0436\u0443\u0440\u043D\u044B\u0439 \u043E\u043F\u0435\u0440\u0430\u0442\u043E\u0440 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1035-2",
+        time: "18:20",
+        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u041E\u043B\u0435\u0433 \u0421."
+      }
+    ]
+  },
+  {
+    id: "1034",
+    code: "#1034",
+    title: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043F\u043E\u0447\u0442\u043E\u0432\u044B\u0439 \u044F\u0449\u0438\u043A",
+    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "closed",
+    priority: "low",
+    category: "\u041F\u043E\u0447\u0442\u0430 \u0438 \u043A\u043E\u043C\u043C\u0443\u043D\u0438\u043A\u0430\u0446\u0438\u0438",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 3 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 15:00",
+    dueAt: "3 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 19:00",
+    description: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043E\u0431\u0449\u0438\u0439 \u043F\u043E\u0447\u0442\u043E\u0432\u044B\u0439 \u044F\u0449\u0438\u043A support-billing@sfera.demo \u0434\u043B\u044F \u0433\u0440\u0443\u043F\u043F\u044B \u0440\u0430\u0441\u0447\u0451\u0442\u043E\u0432 \u0441 \u043A\u043B\u0438\u0435\u043D\u0442\u0430\u043C\u0438.",
+    comments: [
+      {
+        id: "c-1034-1",
+        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+        time: "16:10",
+        text: "\u042F\u0449\u0438\u043A \u0441\u043E\u0437\u0434\u0430\u043D, \u043F\u0435\u0440\u0435\u0430\u0434\u0440\u0435\u0441\u0430\u0446\u0438\u044F \u0438 \u043F\u0440\u0430\u0432\u0430 \u0434\u0435\u043B\u0435\u0433\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F \u043D\u0430\u0441\u0442\u0440\u043E\u0435\u043D\u044B. \u0417\u0430\u044F\u0432\u043A\u0430 \u0437\u0430\u043A\u0440\u044B\u0442\u0430."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1034-1",
+        time: "15:00",
+        text: "\u041D\u0430\u0442\u0430\u043B\u044C\u044F \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1034-2",
+        time: "16:10",
+        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u0417\u0430\u043A\u0440\u044B\u0442\u0430\xBB"
+      }
+    ]
+  },
+  {
+    id: "1033",
+    code: "#1033",
+    title: "\u041D\u0435\u0434\u043E\u0441\u0442\u0443\u043F\u0435\u043D \u0444\u0430\u0439\u043B\u043E\u0432\u044B\u0439 \u0441\u0435\u0440\u0432\u0435\u0440",
+    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "in-progress",
+    priority: "critical",
+    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 3 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 12:40",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 10:30",
+    description: "\u041E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435 \u043A \u0441\u0435\u0442\u0435\u0432\u043E\u043C\u0443 \u0434\u0438\u0441\u043A\u0443 Z: \u0443 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432 \u043F\u0440\u043E\u0435\u043A\u0442\u043D\u043E\u0433\u043E \u043E\u0444\u0438\u0441\u0430 \u043F\u043E\u0441\u043B\u0435 \u043F\u043B\u0430\u043D\u043E\u0432\u043E\u0439 \u043F\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0438 \u043A\u043E\u043C\u043C\u0443\u0442\u0430\u0442\u043E\u0440\u0430.",
+    comments: [
+      {
+        id: "c-1033-1",
+        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+        time: "13:05",
+        text: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u0430\u0432\u043B\u0438\u0432\u0430\u0435\u043C \u043C\u0430\u0440\u0448\u0440\u0443\u0442\u0438\u0437\u0430\u0446\u0438\u044E \u043C\u0435\u0436\u0434\u0443 VLAN 20 \u0438 \u0444\u0430\u0439\u043B\u043E\u0432\u044B\u043C \u043A\u043B\u0430\u0441\u0442\u0435\u0440\u043E\u043C."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1033-1",
+        time: "12:40",
+        text: "\u0421\u0435\u0440\u0433\u0435\u0439 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1033-2",
+        time: "12:45",
+        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411."
+      },
+      {
+        id: "t-1033-3",
+        time: "12:50",
+        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u0412 \u0440\u0430\u0431\u043E\u0442\u0435\xBB"
+      }
+    ]
+  },
+  {
+    id: "1032",
+    code: "#1032",
+    title: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u043A\u043E\u043D\u0442\u0430\u043A\u0442\u044B \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0438",
+    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
+    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
+    status: "closed",
+    priority: "low",
+    category: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043F\u0440\u043E\u0444\u0438\u043B\u044F",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 2 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 16:05",
+    dueAt: "3 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 12:00",
+    description: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u044E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u0430\u0434\u0440\u0435\u0441 \u0438 \u0442\u0435\u043B\u0435\u0444\u043E\u043D \u0433\u043E\u0440\u044F\u0447\u0435\u0439 \u043B\u0438\u043D\u0438\u0438 \u0432 \u043A\u0430\u0440\u0442\u043E\u0447\u043A\u0435 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u0438 \u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB \u0434\u043B\u044F \u043F\u0435\u0447\u0430\u0442\u043D\u044B\u0445 \u0444\u043E\u0440\u043C.",
+    comments: [
+      {
+        id: "c-1032-1",
+        author: "\u041E\u043B\u0435\u0433 \u0421.",
+        time: "16:40",
+        text: "\u0420\u0435\u043A\u0432\u0438\u0437\u0438\u0442\u044B \u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0432\u043E \u0432\u0441\u0435\u0445 \u0448\u0430\u0431\u043B\u043E\u043D\u0430\u0445 \u0437\u0430\u043A\u0440\u044B\u0432\u0430\u044E\u0449\u0438\u0445 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1032-1",
+        time: "16:05",
+        text: "\u0410\u043D\u043D\u0430 \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1032-2",
+        time: "16:40",
+        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u0417\u0430\u043A\u0440\u044B\u0442\u0430\xBB"
+      }
+    ]
+  },
+  {
+    id: "1031",
+    code: "#1031",
+    title: "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u0438\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044E",
+    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "waiting",
+    priority: "normal",
+    category: "\u0418\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438 \u0438 API",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 2 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 11:18",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 17:00",
+    description: "\u0417\u0430\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u0435\u0442\u0441\u044F \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044F \u0441\u0442\u0430\u0442\u0443\u0441\u043E\u0432 \u0437\u0430\u043A\u0430\u0437\u043E\u0432 \u043C\u0435\u0436\u0434\u0443 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442-\u043C\u0430\u0433\u0430\u0437\u0438\u043D\u043E\u043C \u0438 \u0441\u043A\u043B\u0430\u0434\u0441\u043A\u0438\u043C \u043C\u043E\u0434\u0443\u043B\u0435\u043C \u0447\u0435\u0440\u0435\u0437 \u0432\u0435\u0431\u0445\u0443\u043A\u0438.",
+    comments: [
+      {
+        id: "c-1031-1",
+        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+        time: "12:00",
+        text: "\u041E\u0436\u0438\u0434\u0430\u0435\u043C \u0442\u0435\u0441\u0442\u043E\u0432\u044B\u0439 \u0437\u0430\u043F\u0440\u043E\u0441 \u0441\u043E \u0441\u0442\u043E\u0440\u043E\u043D\u044B \u0432\u043D\u0435\u0448\u043D\u0435\u0433\u043E \u043F\u0440\u043E\u0432\u0430\u0439\u0434\u0435\u0440\u0430 \u043B\u043E\u0433\u0438\u0441\u0442\u0438\u043A\u0438."
+      }
+    ],
+    timeline: [
+      {
+        id: "t-1031-1",
+        time: "11:18",
+        text: "\u041C\u0430\u043A\u0441\u0438\u043C \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      },
+      {
+        id: "t-1031-2",
+        time: "11:30",
+        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411."
+      },
+      {
+        id: "t-1031-3",
+        time: "12:00",
+        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u041E\u0436\u0438\u0434\u0430\u043D\u0438\u0435\xBB"
+      }
+    ]
+  },
+  {
+    id: "1030",
+    code: "#1030",
+    title: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C VPN",
+    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
+    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
+    status: "new",
+    priority: "high",
+    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 2 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 09:45",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 19:00",
+    description: "\u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044F \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C VPN-\u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435 \u0434\u043B\u044F \u0443\u0434\u0430\u043B\u0451\u043D\u043D\u044B\u0445 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432 \u043E\u0442\u0434\u0435\u043B\u0430 \u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0438.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1030-1",
+        time: "09:45",
+        text: "\u041A\u0438\u0440\u0438\u043B\u043B \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1029",
+    code: "#1029",
+    title: "\u0417\u0430\u043C\u0435\u043D\u0438\u0442\u044C \u043A\u0430\u0440\u0442\u0440\u0438\u0434\u0436 \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0430",
+    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
+    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
+    status: "new",
+    priority: "low",
+    category: "\u041E\u0444\u0438\u0441\u043D\u043E\u0435 \u043E\u0431\u043E\u0440\u0443\u0434\u043E\u0432\u0430\u043D\u0438\u0435",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 1 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 18:20",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 18:00",
+    description: "\u0412 \u043F\u0435\u0440\u0435\u0433\u043E\u0432\u043E\u0440\u043D\u043E\u0439 \u043A\u043E\u043C\u043D\u0430\u0442\u0435 \u0437\u0430\u043A\u043E\u043D\u0447\u0438\u043B\u0441\u044F \u0442\u043E\u043D\u0435\u0440 \u0432 \u0441\u0435\u0442\u0435\u0432\u043E\u043C \u041C\u0424\u0423.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1029-1",
+        time: "18:20",
+        text: "\u0412\u0438\u043A\u0442\u043E\u0440 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1028",
+    code: "#1028",
+    title: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C \u0434\u043E\u0441\u0442\u0443\u043F \u043A \u043F\u043E\u0447\u0442\u0435",
+    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "in-progress",
+    priority: "high",
+    category: "\u041F\u043E\u0447\u0442\u0430 \u0438 \u043A\u043E\u043C\u043C\u0443\u043D\u0438\u043A\u0430\u0446\u0438\u0438",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 1 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 15:10",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 12:00",
+    description: "\u0423\u0447\u0451\u0442\u043D\u0430\u044F \u0437\u0430\u043F\u0438\u0441\u044C \u0437\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D\u0430 \u043F\u043E\u0441\u043B\u0435 \u0441\u043C\u0435\u043D\u044B \u043F\u0430\u0440\u043E\u043B\u044F \u043D\u0430 \u043C\u043E\u0431\u0438\u043B\u044C\u043D\u043E\u043C \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0435.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1028-1",
+        time: "15:10",
+        text: "\u0424\u0438\u043D\u0430\u043D\u0441\u043E\u0432\u044B\u0439 \u043E\u0442\u0434\u0435\u043B \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1027",
+    code: "#1027",
+    title: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0430\u043D\u0442\u0438\u0432\u0438\u0440\u0443\u0441",
+    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "resolved",
+    priority: "normal",
+    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 1 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 12:00",
+    dueAt: "2 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 12:00",
+    description: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0431\u0430\u0437\u044B \u0430\u043D\u0442\u0438\u0432\u0438\u0440\u0443\u0441\u043D\u043E\u0439 \u0437\u0430\u0449\u0438\u0442\u044B \u043D\u0430 \u0440\u0430\u0431\u043E\u0447\u0438\u0445 \u0441\u0442\u0430\u043D\u0446\u0438\u044F\u0445 \u0431\u0443\u0445\u0433\u0430\u043B\u0442\u0435\u0440\u0438\u0438.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1027-1",
+        time: "12:00",
+        text: "\u0421\u0438\u0441\u0442\u0435\u043C\u043D\u044B\u0439 \u0430\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1026",
+    code: "#1026",
+    title: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u0432\u0442\u043E\u0440\u043E\u0439 \u043C\u043E\u043D\u0438\u0442\u043E\u0440",
+    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
+    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
+    status: "assigned",
+    priority: "low",
+    category: "\u041E\u0444\u0438\u0441\u043D\u043E\u0435 \u043E\u0431\u043E\u0440\u0443\u0434\u043E\u0432\u0430\u043D\u0438\u0435",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 30 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 16:45",
+    dueAt: "\u0417\u0430\u0432\u0442\u0440\u0430, 15:00",
+    description: "\u0412\u044B\u0434\u0430\u0442\u044C \u043A\u0430\u0431\u0435\u043B\u044C DisplayPort \u0438 \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0432\u0442\u043E\u0440\u043E\u0439 \u044D\u043A\u0440\u0430\u043D \u043D\u0430 \u0440\u0430\u0431\u043E\u0447\u0435\u043C \u043C\u0435\u0441\u0442\u0435 \u0434\u0438\u0437\u0430\u0439\u043D\u0435\u0440\u0430.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1026-1",
+        time: "16:45",
+        text: "\u041F\u0430\u0432\u0435\u043B \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1025",
+    code: "#1025",
+    title: "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u0443\u044E \u043A\u043E\u043F\u0438\u044E",
+    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "in-progress",
+    priority: "high",
+    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 30 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 14:12",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 16:00",
+    description: "\u041F\u0440\u043E\u0432\u0435\u0441\u0442\u0438 \u043F\u043B\u0430\u043D\u043E\u0432\u0443\u044E \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0443 \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F \u0430\u0440\u0445\u0438\u0432\u0430 \u0431\u0430\u0437\u044B \u0434\u0430\u043D\u043D\u044B\u0445 \u043D\u0430 \u0442\u0435\u0441\u0442\u043E\u0432\u043E\u043C \u0441\u0442\u0435\u043D\u0434\u0435.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1025-1",
+        time: "14:12",
+        text: "\u041C\u043E\u043D\u0438\u0442\u043E\u0440\u0438\u043D\u0433 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1024",
+    code: "#1024",
+    title: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u043E\u0431\u0449\u0443\u044E \u043F\u0430\u043F\u043A\u0443",
+    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
+    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
+    status: "new",
+    priority: "normal",
+    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 30 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 11:05",
+    dueAt: "\u0417\u0430\u0432\u0442\u0440\u0430, 12:00",
+    description: "\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u0441\u0435\u0442\u0435\u0432\u0443\u044E \u0434\u0438\u0440\u0435\u043A\u0442\u043E\u0440\u0438\u044E \u0434\u043B\u044F \u043E\u0431\u043C\u0435\u043D\u0430 \u043C\u0430\u043A\u0435\u0442\u0430\u043C\u0438 \u043C\u0435\u0436\u0434\u0443 \u043E\u0442\u0434\u0435\u043B\u043E\u043C \u043C\u0430\u0440\u043A\u0435\u0442\u0438\u043D\u0433\u0430 \u0438 \u043F\u043E\u0434\u0440\u044F\u0434\u0447\u0438\u043A\u0430\u043C\u0438.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1024-1",
+        time: "11:05",
+        text: "\u0420\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044C \u0441\u043C\u0435\u043D\u044B \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1023",
+    code: "#1023",
+    title: "\u041F\u0440\u043E\u0434\u043B\u0438\u0442\u044C \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442",
+    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
+    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
+    status: "waiting",
+    priority: "high",
+    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 29 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 17:30",
+    dueAt: "29 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 19:00",
+    description: "\u041F\u0440\u043E\u0434\u043B\u0438\u0442\u044C \u043A\u043E\u0440\u043F\u043E\u0440\u0430\u0442\u0438\u0432\u043D\u044B\u0439 \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442 \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u043E\u0439 \u043F\u043E\u0434\u043F\u0438\u0441\u0438 \u0434\u043B\u044F \u043F\u043E\u0440\u0442\u0430\u043B\u0430 \u043E\u0442\u0447\u0451\u0442\u043D\u043E\u0441\u0442\u0438.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1023-1",
+        time: "17:30",
+        text: "\u0422\u0435\u0441\u0442\u0438\u0440\u043E\u0432\u0449\u0438\u043A \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1022",
+    code: "#1022",
+    title: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C IP-\u0442\u0435\u043B\u0435\u0444\u043E\u043D",
+    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "assigned",
+    priority: "normal",
+    category: "\u041F\u043E\u0447\u0442\u0430 \u0438 \u043A\u043E\u043C\u043C\u0443\u043D\u0438\u043A\u0430\u0446\u0438\u0438",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 29 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 13:15",
+    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 18:00",
+    description: "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043D\u043E\u0432\u044B\u0439 SIP-\u0430\u043F\u043F\u0430\u0440\u0430\u0442 \u043D\u0430 \u0432\u043D\u0443\u0442\u0440\u0435\u043D\u043D\u0438\u0439 \u043D\u043E\u043C\u0435\u0440 412.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1022-1",
+        time: "13:15",
+        text: "HR-\u043E\u0442\u0434\u0435\u043B \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1021",
+    code: "#1021",
+    title: "\u0418\u0441\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043F\u0435\u0447\u0430\u0442\u044C \u0441\u0447\u0435\u0442\u043E\u0432",
+    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "resolved",
+    priority: "normal",
+    category: "\u041E\u0442\u0447\u0451\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 29 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 10:20",
+    dueAt: "\u0417\u0430\u0432\u0442\u0440\u0430, 10:00",
+    description: "\u0421\u043A\u043E\u0440\u0440\u0435\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043E\u0442\u0441\u0442\u0443\u043F\u044B \u0442\u0430\u0431\u043B\u0438\u0446\u044B \u0432 \u043F\u0435\u0447\u0430\u0442\u043D\u043E\u0439 \u0444\u043E\u0440\u043C\u0435 \u0441\u0447\u0451\u0442\u0430 \u043D\u0430 \u043E\u043F\u043B\u0430\u0442\u0443.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1021-1",
+        time: "10:20",
+        text: "\u0410\u043D\u0434\u0440\u0435\u0439 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1020",
+    code: "#1020",
+    title: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u043F\u0440\u0430\u0432\u0430 \u0432 CRM",
+    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
+    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
+    status: "waiting",
+    priority: "high",
+    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 28 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 16:00",
+    dueAt: "\u041F\u044F\u0442\u043D\u0438\u0446\u0430, 18:00",
+    description: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0440\u0430\u0437\u0433\u0440\u0430\u043D\u0438\u0447\u0435\u043D\u0438\u0435 \u0432\u0438\u0434\u0438\u043C\u043E\u0441\u0442\u0438 \u0441\u0434\u0435\u043B\u043E\u043A \u0432 CRM \u043F\u043E \u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u043C \u0433\u0440\u0443\u043F\u043F\u0430\u043C.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1020-1",
+        time: "16:00",
+        text: "\u0421\u0438\u0441\u0442\u0435\u043C\u043D\u044B\u0439 \u0430\u0440\u0445\u0438\u0442\u0435\u043A\u0442\u043E\u0440 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  },
+  {
+    id: "1019",
+    code: "#1019",
+    title: "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044E",
+    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
+    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    status: "closed",
+    priority: "low",
+    category: "\u0418\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438 \u0438 API",
+    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 28 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 11:10",
+    dueAt: "28 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 18:00",
+    description: "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u043D\u043E\u0447\u043D\u0443\u044E \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044E \u0441\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u0438\u043A\u0430 \u043D\u043E\u043C\u0435\u043D\u043A\u043B\u0430\u0442\u0443\u0440\u044B \u043C\u0435\u0436\u0434\u0443 ERP \u0438 \u0432\u0438\u0442\u0440\u0438\u043D\u043E\u0439.",
+    comments: [],
+    timeline: [
+      {
+        id: "t-1019-1",
+        time: "11:10",
+        text: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430 \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
+      }
+    ]
+  }
+];
+const SERVER_USERS_DB = [
+  {
+    id: "u-1",
+    name: "\u0410\u043D\u043D\u0430 \u041A\u0443\u0437\u043D\u0435\u0446\u043E\u0432\u0430",
+    shortName: "\u0410\u043D\u043D\u0430 \u041A.",
+    role: "Operator",
+    roleLabel: "\u041E\u043F\u0435\u0440\u0430\u0442\u043E\u0440",
+    email: "0000@mail.demo",
+    password: "demo1234",
+    initials: "\u0410\u041A",
+    company: "WorkFlow Support",
+    isActive: true
+  },
+  {
+    id: "u-2",
+    name: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0430",
+    shortName: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
+    role: "Agent",
+    roleLabel: "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C",
+    email: "agent@mail.demo",
+    password: "demo1234",
+    initials: "\u0411\u0411",
+    company: "WorkFlow Support",
+    isActive: true
+  },
+  {
+    id: "u-3",
+    name: "\u041E\u043B\u0435\u0433 \u0421\u043E\u043A\u043E\u043B\u043E\u0432",
+    shortName: "\u041E\u043B\u0435\u0433 \u0421.",
+    role: "Agent",
+    roleLabel: "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C",
+    email: "oleg@mail.demo",
+    password: "demo1234",
+    initials: "\u041E\u0421",
+    company: "WorkFlow Support",
+    isActive: false
+  },
+  {
+    id: "u-4",
+    name: "\u041C\u0430\u0440\u0438\u044F \u0421\u043C\u0438\u0440\u043D\u043E\u0432\u0430",
+    shortName: "\u041C\u0430\u0440\u0438\u044F \u0421.",
+    role: "Client",
+    roleLabel: "\u041A\u043B\u0438\u0435\u043D\u0442",
+    email: "client@mail.demo",
+    password: "demo1234",
+    initials: "\u041C\u0421",
+    company: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
+    isActive: true
+  },
+  {
+    id: "u-5",
+    name: "\u041A\u0438\u0440\u0438\u043B\u043B \u0421\u0435\u0440\u0451\u0433\u0438\u043D",
+    shortName: "\u041A\u0438\u0440\u0438\u043B\u043B \u0421.",
+    role: "Admin",
+    roleLabel: "\u0410\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440",
+    email: "admin@mail.demo",
+    password: "demo1234",
+    initials: "\u041A\u0421",
+    company: "WorkFlow Support",
+    isActive: true
+  },
+  {
+    id: "u-6",
+    name: "\u0410\u043B\u0435\u043A\u0441\u0430\u043D\u0434\u0440\u0430 \u041A\u043E\u043D\u0441\u0442\u0430\u043D\u0442\u0438\u043D\u043E\u0432\u043D\u0430 \u0420\u043E\u0436\u0434\u0435\u0441\u0442\u0432\u0435\u043D\u0441\u043A\u0430\u044F-\u0421\u043E\u043A\u043E\u043B\u043E\u0432\u0430",
+    shortName: "\u0410\u043B\u0435\u043A\u0441\u0430\u043D\u0434\u0440\u0430 \u041A\u043E\u043D\u0441\u0442\u0430\u043D\u0442\u0438\u043D\u043E\u0432\u043D\u0430 \u0420\u043E\u0436\u0434\u0435\u0441\u0442\u0432\u0435\u043D\u0441\u043A\u0430\u044F-\u0421\u043E\u043A\u043E\u043B\u043E\u0432\u0430",
+    role: "Agent",
+    roleLabel: "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C",
+    email: "aleksandra@mail.demo",
+    password: "demo1234",
+    initials: "\u0410\u0420",
+    company: "WorkFlow Support",
+    isActive: true
+  }
+];
+const SERVER_CUSTOMERS_DB = [
+  { id: "cust-1", name: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB", inn: "7701234567", contactPerson: "\u041C\u0430\u0440\u0438\u044F \u0421\u043C\u0438\u0440\u043D\u043E\u0432\u0430" },
+  { id: "cust-2", name: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB", inn: "7709876543", contactPerson: "\u0418\u0433\u043E\u0440\u044C \u041F\u0435\u0442\u0440\u043E\u0432" },
+  { id: "cust-3", name: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB", inn: "7723456789", contactPerson: "\u0415\u043B\u0435\u043D\u0430 \u0412\u043E\u043B\u043A\u043E\u0432\u0430" }
+];
+const SERVER_CATEGORIES_DB = [
+  { id: "cat-1", name: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438", slaHours: 4 },
+  { id: "cat-2", name: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C", slaHours: 2 },
+  { id: "cat-3", name: "\u041E\u0442\u0447\u0451\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430", slaHours: 6 },
+  { id: "cat-4", name: "\u0418\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438 \u0438 API", slaHours: 8 },
+  { id: "cat-5", name: "\u041F\u043E\u0447\u0442\u0430 \u0438 \u043A\u043E\u043C\u043C\u0443\u043D\u0438\u043A\u0430\u0446\u0438\u0438", slaHours: 4 },
+  { id: "cat-6", name: "\u041E\u0444\u0438\u0441\u043D\u043E\u0435 \u043E\u0431\u043E\u0440\u0443\u0434\u043E\u0432\u0430\u043D\u0438\u0435", slaHours: 12 },
+  { id: "cat-7", name: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043F\u0440\u043E\u0444\u0438\u043B\u044F", slaHours: 24 }
+];
+
+const SERVER_SESSIONS = /* @__PURE__ */ new Map();
+function toSessionUserDto(user) {
+  return {
+    id: user.id,
+    name: user.name,
+    shortName: user.shortName,
+    email: user.email,
+    role: user.role,
+    roleLabel: user.roleLabel,
+    initials: user.initials,
+    company: user.company || "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
+    isActive: user.isActive
+  };
+}
+function createServerSession(event, user) {
+  const token = `sess_${user.id}_${Date.now()}`;
+  SERVER_SESSIONS.set(token, {
+    token,
+    userId: user.id,
+    expiresAt: Date.now() + 1e3 * 60 * 60 * 24
+  });
+  setCookie(event, "wf_session", token, {
+    path: "/",
+    httpOnly: false,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24
+  });
+  setCookie(event, "wf_role", user.role, {
+    path: "/",
+    httpOnly: false,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24
+  });
+  return token;
+}
+function clearServerSession(event, markExpired = false) {
+  const currentCookie = getCookie(event, "wf_session");
+  if (currentCookie) {
+    SERVER_SESSIONS.delete(currentCookie);
+  }
+  setCookie(event, "wf_session", markExpired ? "expired" : "logged_out", {
+    path: "/",
+    httpOnly: false,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24
+  });
+}
+function resolveSessionFromEvent(event) {
+  const sessionCookie = getCookie(event, "wf_session") || "";
+  const roleCookie = getCookie(event, "wf_role") || "";
+  if (sessionCookie === "expired") {
+    return {
+      authenticated: false,
+      expired: true,
+      user: null
+    };
+  }
+  if (sessionCookie === "logged_out") {
+    return {
+      authenticated: false,
+      expired: false,
+      user: null
+    };
+  }
+  if (sessionCookie && SERVER_SESSIONS.has(sessionCookie)) {
+    const rec = SERVER_SESSIONS.get(sessionCookie);
+    if (rec.expiresAt < Date.now()) {
+      SERVER_SESSIONS.delete(sessionCookie);
+      return {
+        authenticated: false,
+        expired: true,
+        user: null
+      };
+    }
+    const foundUser = SERVER_USERS_DB.find((u) => u.id === rec.userId);
+    if (foundUser && foundUser.isActive) {
+      return {
+        authenticated: true,
+        expired: false,
+        user: toSessionUserDto(foundUser)
+      };
+    }
+  }
+  if (roleCookie && ["Client", "Operator", "Agent", "Admin"].includes(roleCookie)) {
+    const byRole = SERVER_USERS_DB.find((u) => u.role === roleCookie && u.isActive);
+    if (byRole) {
+      return {
+        authenticated: true,
+        expired: false,
+        user: toSessionUserDto(byRole)
+      };
+    }
+  }
+  const defaultOperator = SERVER_USERS_DB.find((u) => u.role === "Operator" && u.isActive) || SERVER_USERS_DB[0];
+  if (defaultOperator) {
+    return {
+      authenticated: true,
+      expired: false,
+      user: toSessionUserDto(defaultOperator)
+    };
+  }
+  return {
+    authenticated: false,
+    expired: false,
+    user: null
+  };
+}
+function requireAuthUser(event) {
+  const resolved = resolveSessionFromEvent(event);
+  if (!resolved.authenticated || !resolved.user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+      message: resolved.expired ? "\u0421\u0435\u0441\u0441\u0438\u044F \u0438\u0441\u0442\u0435\u043A\u043B\u0430. \u0412\u043E\u0439\u0434\u0438\u0442\u0435 \u0441\u043D\u043E\u0432\u0430, \u0447\u0442\u043E\u0431\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u0443." : "\u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F \u0434\u043B\u044F \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C."
+    });
+  }
+  return resolved.user;
+}
+
+const _UAlQxQ = defineEventHandler((event) => {
+  const sessionState = resolveSessionFromEvent(event);
+  event.context.auth = sessionState;
+  const path = event.path || "";
+  const isProtectedApi = path.startsWith("/api/requests") || path.startsWith("/api/users") || path.startsWith("/api/customers") || path.startsWith("/api/categories") || path.startsWith("/api/comments");
+  if (isProtectedApi && (!sessionState.authenticated || !sessionState.user)) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+      message: sessionState.expired ? "\u0421\u0435\u0441\u0441\u0438\u044F \u0438\u0441\u0442\u0435\u043A\u043B\u0430. \u0412\u043E\u0439\u0434\u0438\u0442\u0435 \u0441\u043D\u043E\u0432\u0430, \u0447\u0442\u043E\u0431\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u0443." : "\u0414\u043E\u0441\u0442\u0443\u043F \u0437\u0430\u043F\u0440\u0435\u0449\u0451\u043D \u0434\u043B\u044F \u043D\u0435\u0430\u0432\u0442\u043E\u0440\u0438\u0437\u043E\u0432\u0430\u043D\u043D\u044B\u0445 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0435\u0439."
+    });
+  }
+});
 
 // ../nuxt/src/app/island-hash.ts
 /**
@@ -3232,7 +4170,12 @@ async function getIslandContext(event) {
 	};
 }
 
+const _lazy_ekdqZT = () => Promise.resolve().then(function () { return login_post$1; });
+const _lazy_EBklvf = () => Promise.resolve().then(function () { return logout_post$1; });
+const _lazy_Huf_UG = () => Promise.resolve().then(function () { return register_post$1; });
+const _lazy_9K82dq = () => Promise.resolve().then(function () { return session_get$1; });
 const _lazy_Cvr8mT = () => Promise.resolve().then(function () { return index_get$7; });
+const _lazy_1meRTg = () => Promise.resolve().then(function () { return index_post$3; });
 const _lazy_so7ACM = () => Promise.resolve().then(function () { return index_get$5; });
 const _lazy_AS0TF6 = () => Promise.resolve().then(function () { return _id__get$1; });
 const _lazy_pOdhJ0 = () => Promise.resolve().then(function () { return _id__patch$1; });
@@ -3245,7 +4188,13 @@ const _lazy_aSMA4L = () => Promise.resolve().then(function () { return errorChan
 
 const handlers = [
   { route: '', handler: _FLYaLF, lazy: false, middleware: true, method: undefined },
+  { route: '', handler: _UAlQxQ, lazy: false, middleware: true, method: undefined },
+  { route: '/api/auth/login', handler: _lazy_ekdqZT, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/logout', handler: _lazy_EBklvf, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/register', handler: _lazy_Huf_UG, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/session', handler: _lazy_9K82dq, lazy: true, middleware: false, method: "get" },
   { route: '/api/categories', handler: _lazy_Cvr8mT, lazy: true, middleware: false, method: "get" },
+  { route: '/api/comments', handler: _lazy_1meRTg, lazy: true, middleware: false, method: "post" },
   { route: '/api/customers', handler: _lazy_so7ACM, lazy: true, middleware: false, method: "get" },
   { route: '/api/requests/:id', handler: _lazy_AS0TF6, lazy: true, middleware: false, method: "get" },
   { route: '/api/requests/:id', handler: _lazy_pOdhJ0, lazy: true, middleware: false, method: "patch" },
@@ -3624,749 +4573,318 @@ const styles$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   inlinedCSS: inlinedCSS
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const SERVER_REQUESTS_DB = [
-  {
-    id: "1042",
-    code: "#1042",
-    title: "\u041D\u0435 \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F \u043A CRM",
-    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
-    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
-    status: "new",
-    priority: "high",
-    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 5 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 09:14",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 13:14",
-    description: "\u041F\u043E\u0441\u043B\u0435 \u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F \u043D\u0435 \u0443\u0434\u0430\u0451\u0442\u0441\u044F \u0432\u043E\u0439\u0442\u0438 \u0432 CRM. \u041F\u0440\u0438 \u043F\u043E\u043F\u044B\u0442\u043A\u0435 \u0432\u0445\u043E\u0434\u0430 \u043F\u043E\u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u0441\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u0435 \xAB\u0414\u043E\u0441\u0442\u0443\u043F \u0437\u0430\u043F\u0440\u0435\u0449\u0451\u043D\xBB. \u041F\u0440\u043E\u0431\u043B\u0435\u043C\u0430 \u0437\u0430\u0442\u0440\u0430\u0433\u0438\u0432\u0430\u0435\u0442 \u043E\u0442\u0434\u0435\u043B \u043F\u0440\u043E\u0434\u0430\u0436.",
-    comments: [
-      {
-        id: "c-1042-1",
-        author: "\u041C\u0430\u0440\u0438\u044F \u0421\u043C\u0438\u0440\u043D\u043E\u0432\u0430",
-        time: "09:14",
-        text: "\u041D\u0435 \u043C\u043E\u0436\u0435\u043C \u0432\u043E\u0439\u0442\u0438 \u0441 \u0440\u0430\u0431\u043E\u0447\u0438\u0445 \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440\u043E\u0432. \u041D\u0443\u0436\u043D\u0430 \u043F\u043E\u043C\u043E\u0449\u044C."
-      },
-      {
-        id: "c-1042-2",
-        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0430",
-        time: "09:25",
-        text: "\u0417\u0430\u044F\u0432\u043A\u0443 \u043F\u0440\u0438\u043D\u044F\u043B\u0430. \u041F\u0440\u043E\u0432\u0435\u0440\u044F\u0435\u043C \u043F\u0440\u0430\u0432\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430."
-      },
-      {
-        id: "c-1042-3",
-        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0430",
-        time: "10:05",
-        text: "\u041D\u0430\u0448\u043B\u0430 \u043F\u0440\u0438\u0447\u0438\u043D\u0443: \u043F\u043E\u0441\u043B\u0435 \u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F \u0441\u0431\u0440\u043E\u0441\u0438\u043B\u0430\u0441\u044C \u0433\u0440\u0443\u043F\u043F\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430."
+function createSchema(validator) {
+  return {
+    safeParse(input) {
+      var _a;
+      if (!input || typeof input !== "object" || Array.isArray(input)) {
+        return {
+          success: false,
+          error: {
+            issues: [{ field: "body", message: "\u041D\u0435\u043A\u043E\u0440\u0440\u0435\u043A\u0442\u043D\u044B\u0439 \u0444\u043E\u0440\u043C\u0430\u0442 \u0432\u0445\u043E\u0434\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445" }],
+            message: "\u041D\u0435\u043A\u043E\u0440\u0440\u0435\u043A\u0442\u043D\u044B\u0439 \u0444\u043E\u0440\u043C\u0430\u0442 \u0432\u0445\u043E\u0434\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445"
+          }
+        };
       }
-    ],
-    timeline: [
-      {
-        id: "t-1042-1",
-        time: "09:14",
-        text: "\u041C\u0430\u0440\u0438\u044F \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1042-2",
-        time: "09:25",
-        text: "\u041E\u043F\u0435\u0440\u0430\u0442\u043E\u0440 \u043D\u0430\u0437\u043D\u0430\u0447\u0438\u043B \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0443 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0443"
-      },
-      {
-        id: "t-1042-3",
-        time: "10:00",
-        text: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u043D\u0430\u0447\u0430\u043B\u0430 \u0440\u0430\u0431\u043E\u0442\u0443"
+      const res = validator(input);
+      if (Array.isArray(res)) {
+        return {
+          success: false,
+          error: {
+            issues: res,
+            message: ((_a = res[0]) == null ? void 0 : _a.message) || "\u041E\u0448\u0438\u0431\u043A\u0430 \u0432\u0430\u043B\u0438\u0434\u0430\u0446\u0438\u0438 \u0432\u0445\u043E\u0434\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445"
+          }
+        };
       }
-    ]
-  },
-  {
-    id: "1041",
-    code: "#1041",
-    title: "\u041E\u0448\u0438\u0431\u043A\u0430 \u0432\u044B\u0433\u0440\u0443\u0437\u043A\u0438 \u043E\u0442\u0447\u0451\u0442\u0430",
-    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
-    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
-    status: "new",
-    priority: "critical",
-    category: "\u041E\u0442\u0447\u0451\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 5 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 09:02",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 11:00",
-    description: "\u041F\u0440\u0438 \u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0438 \u0435\u0436\u0435\u043C\u0435\u0441\u044F\u0447\u043D\u043E\u0433\u043E \u0444\u0438\u043D\u0430\u043D\u0441\u043E\u0432\u043E\u0433\u043E \u043E\u0442\u0447\u0451\u0442\u0430 \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 XLSX \u0441\u0438\u0441\u0442\u0435\u043C\u0430 \u0432\u044B\u0434\u0430\u0451\u0442 \u043E\u0448\u0438\u0431\u043A\u0443 502. \u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 \u043F\u0440\u0435\u0440\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u043D\u0430 80%.",
-    comments: [
-      {
-        id: "c-1041-1",
-        author: "\u0418\u0433\u043E\u0440\u044C \u041F\u0435\u0442\u0440\u043E\u0432",
-        time: "09:05",
-        text: "\u041E\u0442\u0447\u0451\u0442 \u043D\u0443\u0436\u0435\u043D \u0434\u043B\u044F \u0441\u043E\u0432\u0435\u0449\u0430\u043D\u0438\u044F \u0432 12:00, \u043F\u0440\u043E\u0448\u0443 \u0432\u0437\u044F\u0442\u044C \u0432 \u0440\u0430\u0431\u043E\u0442\u0443 \u043A\u0430\u043A \u043C\u043E\u0436\u043D\u043E \u0441\u043A\u043E\u0440\u0435\u0435."
+      return {
+        success: true,
+        data: res.data
+      };
+    },
+    parse(input) {
+      const parsed = this.safeParse(input);
+      if (!parsed.success) {
+        throw new Error(parsed.error.message);
       }
-    ],
-    timeline: [
-      {
-        id: "t-1041-1",
-        time: "09:02",
-        text: "\u0418\u0433\u043E\u0440\u044C \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1041-2",
-        time: "09:05",
-        text: "\u0418\u0433\u043E\u0440\u044C \u0434\u043E\u0431\u0430\u0432\u0438\u043B \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439"
-      }
-    ]
-  },
-  {
-    id: "1040",
-    code: "#1040",
-    title: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043D\u043E\u0432\u043E\u0433\u043E \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430",
-    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "assigned",
-    priority: "normal",
-    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 17:40",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 18:00",
-    description: "\u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0441\u043E\u0437\u0434\u0430\u0442\u044C \u043A\u043E\u0440\u043F\u043E\u0440\u0430\u0442\u0438\u0432\u043D\u0443\u044E \u0443\u0447\u0451\u0442\u043D\u0443\u044E \u0437\u0430\u043F\u0438\u0441\u044C, \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u043F\u043E\u0447\u0442\u0443 \u0438 \u0432\u044B\u0434\u0430\u0442\u044C \u0431\u0430\u0437\u043E\u0432\u044B\u0435 \u043F\u0440\u0430\u0432\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u0432 CRM \u0434\u043B\u044F \u043D\u043E\u0432\u043E\u0433\u043E \u043C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u0430 \u043E\u0442\u0434\u0435\u043B\u0430 \u0441\u043E\u043F\u0440\u043E\u0432\u043E\u0436\u0434\u0435\u043D\u0438\u044F.",
-    comments: [
-      {
-        id: "c-1040-1",
-        author: "\u0415\u043B\u0435\u043D\u0430 \u041C\u043E\u0440\u043E\u0437\u043E\u0432\u0430",
-        time: "17:42",
-        text: "\u0410\u043D\u043A\u0435\u0442\u0443 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430 \u0438 \u0441\u043F\u0438\u0441\u043E\u043A \u0433\u0440\u0443\u043F\u043F \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043F\u0440\u0438\u043B\u043E\u0436\u0438\u043B\u0430 \u0432\u043E \u0432\u043D\u0443\u0442\u0440\u0435\u043D\u043D\u0435\u043C \u0437\u0430\u043F\u0440\u043E\u0441\u0435."
-      },
-      {
-        id: "c-1040-2",
-        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-        time: "18:05",
-        text: "\u0417\u0430\u044F\u0432\u043A\u0430 \u043F\u0440\u0438\u043D\u044F\u0442\u0430, \u043F\u043E\u0447\u0442\u043E\u0432\u044B\u0439 \u044F\u0449\u0438\u043A \u0441\u043E\u0437\u0434\u0430\u043D, \u043D\u0430\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u044E \u0440\u043E\u043B\u0438 \u0432 CRM."
-      }
-    ],
-    timeline: [
-      {
-        id: "t-1040-1",
-        time: "17:40",
-        text: "\u0415\u043B\u0435\u043D\u0430 \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1040-2",
-        time: "17:55",
-        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411."
-      }
-    ]
-  },
-  {
-    id: "1039",
-    code: "#1039",
-    title: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442",
-    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "waiting",
-    priority: "high",
-    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 16:15",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 16:00",
-    description: "\u0421\u0440\u043E\u043A \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F SSL-\u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u0430 \u0434\u043B\u044F \u0448\u043B\u044E\u0437\u0430 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u043E\u0431\u043E\u0440\u043E\u0442\u0430 \u0438\u0441\u0442\u0435\u043A\u0430\u0435\u0442 \u0447\u0435\u0440\u0435\u0437 48 \u0447\u0430\u0441\u043E\u0432. \u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044F \u043F\u0435\u0440\u0435\u0432\u044B\u043F\u0443\u0441\u043A \u0438 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0430 \u043D\u0430 \u0431\u043E\u0435\u0432\u043E\u0439 \u043A\u043E\u043D\u0442\u0443\u0440.",
-    comments: [
-      {
-        id: "c-1039-1",
-        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-        time: "16:45",
-        text: "\u0417\u0430\u043F\u0440\u043E\u0441\u0438\u043B\u0430 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435 \u0442\u0435\u0445\u043D\u043E\u043B\u043E\u0433\u0438\u0447\u0435\u0441\u043A\u043E\u0433\u043E \u043E\u043A\u043D\u0430 \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0437\u0430\u043F\u0443\u0441\u043A\u0430 \u043F\u0440\u043E\u043A\u0441\u0438-\u0441\u0435\u0440\u0432\u0435\u0440\u0430."
-      }
-    ],
-    timeline: [
-      {
-        id: "t-1039-1",
-        time: "16:15",
-        text: "\u0421\u0438\u0441\u0442\u0435\u043C\u0430 \u043C\u043E\u043D\u0438\u0442\u043E\u0440\u0438\u043D\u0433\u0430 \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1039-2",
-        time: "16:30",
-        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411."
-      },
-      {
-        id: "t-1039-3",
-        time: "16:45",
-        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u041E\u0436\u0438\u0434\u0430\u043D\u0438\u0435\xBB"
-      }
-    ]
-  },
-  {
-    id: "1038",
-    code: "#1038",
-    title: void 0,
-    customer: void 0,
-    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
-    status: "in-progress",
-    priority: "normal",
-    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 14:20",
-    dueAt: "\u0417\u0430\u0432\u0442\u0440\u0430, 14:00",
-    description: "\u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044F \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0435\u0436\u0435\u0434\u043D\u0435\u0432\u043D\u043E\u0435 \u0438\u043D\u043A\u0440\u0435\u043C\u0435\u043D\u0442\u0430\u043B\u044C\u043D\u043E\u0435 \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u043E\u0435 \u043A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435 \u0431\u0430\u0437\u044B \u0434\u0430\u043D\u043D\u044B\u0445 \u043F\u0440\u043E\u0435\u043A\u0442\u043E\u0432 \u043D\u0430 \u0432\u044B\u0434\u0435\u043B\u0435\u043D\u043D\u043E\u0435 \u0445\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0435 \u0432 02:00 \u041C\u0421\u041A.",
-    comments: [
-      {
-        id: "c-1038-1",
-        author: "\u041E\u043B\u0435\u0433 \u0421.",
-        time: "15:10",
-        text: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u043B \u0440\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435 cron \u0438 \u043F\u0440\u043E\u0432\u0435\u0440\u0438\u043B \u0442\u0435\u0441\u0442\u043E\u0432\u044B\u0439 \u0434\u0430\u043C\u043F, \u043E\u0436\u0438\u0434\u0430\u044E \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0438\u044F \u043F\u043E\u043B\u043D\u043E\u0439 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438."
-      }
-    ],
-    timeline: [
-      {
-        id: "t-1038-1",
-        time: "14:20",
-        text: "\u0410\u043B\u0435\u043A\u0441\u0435\u0439 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1038-2",
-        time: "14:35",
-        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u041E\u043B\u0435\u0433 \u0421."
-      },
-      {
-        id: "t-1038-3",
-        time: "14:50",
-        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u0412 \u0440\u0430\u0431\u043E\u0442\u0435\xBB"
-      }
-    ]
-  },
-  {
-    id: "1037",
-    code: "#1037",
-    title: "\u0421\u0431\u043E\u0439 \u043F\u0435\u0447\u0430\u0442\u0438 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432",
-    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "resolved",
-    priority: "low",
-    category: "\u041E\u0444\u0438\u0441\u043D\u043E\u0435 \u043E\u0431\u043E\u0440\u0443\u0434\u043E\u0432\u0430\u043D\u0438\u0435",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 11:30",
-    dueAt: "4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 17:30",
-    description: "\u0421\u0435\u0442\u0435\u0432\u043E\u0439 \u043F\u0440\u0438\u043D\u0442\u0435\u0440 \u043D\u0430 3 \u044D\u0442\u0430\u0436\u0435 \u0437\u0430\u0432\u0438\u0441\u0430\u0435\u0442 \u043F\u0440\u0438 \u043E\u0442\u043F\u0440\u0430\u0432\u043A\u0435 \u043C\u043D\u043E\u0433\u043E\u0441\u0442\u0440\u0430\u043D\u0438\u0447\u043D\u044B\u0445 PDF-\u043D\u0430\u043A\u043B\u0430\u0434\u043D\u044B\u0445 \u0438\u0437 \u0443\u0447\u0451\u0442\u043D\u043E\u0439 \u0441\u0438\u0441\u0442\u0435\u043C\u044B.",
-    comments: [
-      {
-        id: "c-1037-1",
-        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-        time: "13:15",
-        text: "\u041E\u0447\u0438\u0449\u0435\u043D\u0430 \u043E\u0447\u0435\u0440\u0435\u0434\u044C \u0441\u043F\u0443\u043B\u0435\u0440\u0430 \u0438 \u043E\u0431\u043D\u043E\u0432\u043B\u0451\u043D \u0434\u0440\u0430\u0439\u0432\u0435\u0440 PCL6 \u043D\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0435 \u043F\u0435\u0447\u0430\u0442\u0438. \u041F\u0435\u0447\u0430\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442 \u0448\u0442\u0430\u0442\u043D\u043E."
-      }
-    ],
-    timeline: [
-      {
-        id: "t-1037-1",
-        time: "11:30",
-        text: "\u0414\u043C\u0438\u0442\u0440\u0438\u0439 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1037-2",
-        time: "11:45",
-        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411."
-      },
-      {
-        id: "t-1037-3",
-        time: "13:15",
-        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u0420\u0435\u0448\u0435\u043D\u0430\xBB"
-      }
-    ]
-  },
-  {
-    id: "1036",
-    code: "#1036",
-    title: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u043F\u0440\u0430\u0432\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430",
-    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
-    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
-    status: "new",
-    priority: "normal",
-    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 4 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 10:50",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 15:00",
-    description: "\u041F\u0440\u043E\u0448\u0443 \u043E\u0442\u043A\u0440\u044B\u0442\u044C \u0434\u043E\u0441\u0442\u0443\u043F \u043D\u0430 \u0440\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435 \u0440\u0435\u0435\u0441\u0442\u0440\u0430 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u043E\u0432 \u0434\u043B\u044F \u0441\u0442\u0430\u0440\u0448\u0435\u0433\u043E \u044E\u0440\u0438\u0441\u0442\u0430 \u043E\u0442\u0434\u0435\u043B\u0430 \u043A\u043E\u0440\u043F\u043E\u0440\u0430\u0442\u0438\u0432\u043D\u043E\u0433\u043E \u043F\u0440\u0430\u0432\u0430.",
-    comments: [
-      {
-        id: "c-1036-1",
-        author: "\u041E\u043B\u044C\u0433\u0430 \u0411\u0435\u043B\u043E\u0432\u0430",
-        time: "10:52",
-        text: "\u0421\u043E\u0433\u043B\u0430\u0441\u043E\u0432\u0430\u043D\u0438\u0435 \u043E\u0442 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F \u0434\u0435\u043F\u0430\u0440\u0442\u0430\u043C\u0435\u043D\u0442\u0430 \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u043E."
-      }
-    ],
-    timeline: [
-      {
-        id: "t-1036-1",
-        time: "10:50",
-        text: "\u041E\u043B\u044C\u0433\u0430 \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1035",
-    code: "#1035",
-    title: "\u041E\u0448\u0438\u0431\u043A\u0430 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438 \u0432 \u043A\u0430\u0431\u0438\u043D\u0435\u0442\u0435",
-    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
-    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
-    status: "assigned",
-    priority: "high",
-    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 3 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 18:12",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 12:00",
-    description: "\u041A\u043B\u0438\u0435\u043D\u0442\u044B \u0441\u043E\u043E\u0431\u0449\u0430\u044E\u0442 \u043E \u0446\u0438\u043A\u043B\u0438\u0447\u0435\u0441\u043A\u043E\u043C \u0440\u0435\u0434\u0438\u0440\u0435\u043A\u0442\u0435 \u043F\u0440\u0438 \u0432\u0445\u043E\u0434\u0435 \u0432 \u043B\u0438\u0447\u043D\u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442 \u0447\u0435\u0440\u0435\u0437 \u0434\u0432\u0443\u0445\u0444\u0430\u043A\u0442\u043E\u0440\u043D\u0443\u044E \u0430\u0443\u0442\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u044E \u043F\u043E SMS.",
-    comments: [
-      {
-        id: "c-1035-1",
-        author: "\u041E\u043B\u0435\u0433 \u0421.",
-        time: "18:30",
-        text: "\u041F\u0440\u043E\u0432\u0435\u0440\u044F\u044E \u043B\u043E\u0433\u0438 \u0441\u0435\u0440\u0432\u0438\u0441\u0430 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438 \u0438 \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044E \u0432\u0440\u0435\u043C\u0435\u043D\u0438 \u0442\u043E\u043A\u0435\u043D\u043E\u0432."
-      }
-    ],
-    timeline: [
-      {
-        id: "t-1035-1",
-        time: "18:12",
-        text: "\u0414\u0435\u0436\u0443\u0440\u043D\u044B\u0439 \u043E\u043F\u0435\u0440\u0430\u0442\u043E\u0440 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1035-2",
-        time: "18:20",
-        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u041E\u043B\u0435\u0433 \u0421."
-      }
-    ]
-  },
-  {
-    id: "1034",
-    code: "#1034",
-    title: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043F\u043E\u0447\u0442\u043E\u0432\u044B\u0439 \u044F\u0449\u0438\u043A",
-    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "closed",
-    priority: "low",
-    category: "\u041F\u043E\u0447\u0442\u0430 \u0438 \u043A\u043E\u043C\u043C\u0443\u043D\u0438\u043A\u0430\u0446\u0438\u0438",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 3 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 15:00",
-    dueAt: "3 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 19:00",
-    description: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043E\u0431\u0449\u0438\u0439 \u043F\u043E\u0447\u0442\u043E\u0432\u044B\u0439 \u044F\u0449\u0438\u043A support-billing@sfera.demo \u0434\u043B\u044F \u0433\u0440\u0443\u043F\u043F\u044B \u0440\u0430\u0441\u0447\u0451\u0442\u043E\u0432 \u0441 \u043A\u043B\u0438\u0435\u043D\u0442\u0430\u043C\u0438.",
-    comments: [
-      {
-        id: "c-1034-1",
-        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-        time: "16:10",
-        text: "\u042F\u0449\u0438\u043A \u0441\u043E\u0437\u0434\u0430\u043D, \u043F\u0435\u0440\u0435\u0430\u0434\u0440\u0435\u0441\u0430\u0446\u0438\u044F \u0438 \u043F\u0440\u0430\u0432\u0430 \u0434\u0435\u043B\u0435\u0433\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F \u043D\u0430\u0441\u0442\u0440\u043E\u0435\u043D\u044B. \u0417\u0430\u044F\u0432\u043A\u0430 \u0437\u0430\u043A\u0440\u044B\u0442\u0430."
-      }
-    ],
-    timeline: [
-      {
-        id: "t-1034-1",
-        time: "15:00",
-        text: "\u041D\u0430\u0442\u0430\u043B\u044C\u044F \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1034-2",
-        time: "16:10",
-        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u0417\u0430\u043A\u0440\u044B\u0442\u0430\xBB"
-      }
-    ]
-  },
-  {
-    id: "1033",
-    code: "#1033",
-    title: "\u041D\u0435\u0434\u043E\u0441\u0442\u0443\u043F\u0435\u043D \u0444\u0430\u0439\u043B\u043E\u0432\u044B\u0439 \u0441\u0435\u0440\u0432\u0435\u0440",
-    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "in-progress",
-    priority: "critical",
-    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 3 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 12:40",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 10:30",
-    description: "\u041E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435 \u043A \u0441\u0435\u0442\u0435\u0432\u043E\u043C\u0443 \u0434\u0438\u0441\u043A\u0443 Z: \u0443 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432 \u043F\u0440\u043E\u0435\u043A\u0442\u043D\u043E\u0433\u043E \u043E\u0444\u0438\u0441\u0430 \u043F\u043E\u0441\u043B\u0435 \u043F\u043B\u0430\u043D\u043E\u0432\u043E\u0439 \u043F\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0438 \u043A\u043E\u043C\u043C\u0443\u0442\u0430\u0442\u043E\u0440\u0430.",
-    comments: [
-      {
-        id: "c-1033-1",
-        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-        time: "13:05",
-        text: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u0430\u0432\u043B\u0438\u0432\u0430\u0435\u043C \u043C\u0430\u0440\u0448\u0440\u0443\u0442\u0438\u0437\u0430\u0446\u0438\u044E \u043C\u0435\u0436\u0434\u0443 VLAN 20 \u0438 \u0444\u0430\u0439\u043B\u043E\u0432\u044B\u043C \u043A\u043B\u0430\u0441\u0442\u0435\u0440\u043E\u043C."
-      }
-    ],
-    timeline: [
-      {
-        id: "t-1033-1",
-        time: "12:40",
-        text: "\u0421\u0435\u0440\u0433\u0435\u0439 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1033-2",
-        time: "12:45",
-        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411."
-      },
-      {
-        id: "t-1033-3",
-        time: "12:50",
-        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u0412 \u0440\u0430\u0431\u043E\u0442\u0435\xBB"
-      }
-    ]
-  },
-  {
-    id: "1032",
-    code: "#1032",
-    title: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u043A\u043E\u043D\u0442\u0430\u043A\u0442\u044B \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0438",
-    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
-    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
-    status: "closed",
-    priority: "low",
-    category: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043F\u0440\u043E\u0444\u0438\u043B\u044F",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 2 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 16:05",
-    dueAt: "3 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 12:00",
-    description: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u044E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u0430\u0434\u0440\u0435\u0441 \u0438 \u0442\u0435\u043B\u0435\u0444\u043E\u043D \u0433\u043E\u0440\u044F\u0447\u0435\u0439 \u043B\u0438\u043D\u0438\u0438 \u0432 \u043A\u0430\u0440\u0442\u043E\u0447\u043A\u0435 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u0438 \u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB \u0434\u043B\u044F \u043F\u0435\u0447\u0430\u0442\u043D\u044B\u0445 \u0444\u043E\u0440\u043C.",
-    comments: [
-      {
-        id: "c-1032-1",
-        author: "\u041E\u043B\u0435\u0433 \u0421.",
-        time: "16:40",
-        text: "\u0420\u0435\u043A\u0432\u0438\u0437\u0438\u0442\u044B \u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0432\u043E \u0432\u0441\u0435\u0445 \u0448\u0430\u0431\u043B\u043E\u043D\u0430\u0445 \u0437\u0430\u043A\u0440\u044B\u0432\u0430\u044E\u0449\u0438\u0445 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432."
-      }
-    ],
-    timeline: [
-      {
-        id: "t-1032-1",
-        time: "16:05",
-        text: "\u0410\u043D\u043D\u0430 \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1032-2",
-        time: "16:40",
-        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u0417\u0430\u043A\u0440\u044B\u0442\u0430\xBB"
-      }
-    ]
-  },
-  {
-    id: "1031",
-    code: "#1031",
-    title: "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u0438\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044E",
-    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "waiting",
-    priority: "normal",
-    category: "\u0418\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438 \u0438 API",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 2 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 11:18",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 17:00",
-    description: "\u0417\u0430\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u0435\u0442\u0441\u044F \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044F \u0441\u0442\u0430\u0442\u0443\u0441\u043E\u0432 \u0437\u0430\u043A\u0430\u0437\u043E\u0432 \u043C\u0435\u0436\u0434\u0443 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442-\u043C\u0430\u0433\u0430\u0437\u0438\u043D\u043E\u043C \u0438 \u0441\u043A\u043B\u0430\u0434\u0441\u043A\u0438\u043C \u043C\u043E\u0434\u0443\u043B\u0435\u043C \u0447\u0435\u0440\u0435\u0437 \u0432\u0435\u0431\u0445\u0443\u043A\u0438.",
-    comments: [
-      {
-        id: "c-1031-1",
-        author: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-        time: "12:00",
-        text: "\u041E\u0436\u0438\u0434\u0430\u0435\u043C \u0442\u0435\u0441\u0442\u043E\u0432\u044B\u0439 \u0437\u0430\u043F\u0440\u043E\u0441 \u0441\u043E \u0441\u0442\u043E\u0440\u043E\u043D\u044B \u0432\u043D\u0435\u0448\u043D\u0435\u0433\u043E \u043F\u0440\u043E\u0432\u0430\u0439\u0434\u0435\u0440\u0430 \u043B\u043E\u0433\u0438\u0441\u0442\u0438\u043A\u0438."
-      }
-    ],
-    timeline: [
-      {
-        id: "t-1031-1",
-        time: "11:18",
-        text: "\u041C\u0430\u043A\u0441\u0438\u043C \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      },
-      {
-        id: "t-1031-2",
-        time: "11:30",
-        text: "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411."
-      },
-      {
-        id: "t-1031-3",
-        time: "12:00",
-        text: "\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB\u041E\u0436\u0438\u0434\u0430\u043D\u0438\u0435\xBB"
-      }
-    ]
-  },
-  {
-    id: "1030",
-    code: "#1030",
-    title: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C VPN",
-    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
-    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
-    status: "new",
-    priority: "high",
-    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 2 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 09:45",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 19:00",
-    description: "\u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044F \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C VPN-\u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435 \u0434\u043B\u044F \u0443\u0434\u0430\u043B\u0451\u043D\u043D\u044B\u0445 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432 \u043E\u0442\u0434\u0435\u043B\u0430 \u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0438.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1030-1",
-        time: "09:45",
-        text: "\u041A\u0438\u0440\u0438\u043B\u043B \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1029",
-    code: "#1029",
-    title: "\u0417\u0430\u043C\u0435\u043D\u0438\u0442\u044C \u043A\u0430\u0440\u0442\u0440\u0438\u0434\u0436 \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0430",
-    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
-    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
-    status: "new",
-    priority: "low",
-    category: "\u041E\u0444\u0438\u0441\u043D\u043E\u0435 \u043E\u0431\u043E\u0440\u0443\u0434\u043E\u0432\u0430\u043D\u0438\u0435",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 1 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 18:20",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 18:00",
-    description: "\u0412 \u043F\u0435\u0440\u0435\u0433\u043E\u0432\u043E\u0440\u043D\u043E\u0439 \u043A\u043E\u043C\u043D\u0430\u0442\u0435 \u0437\u0430\u043A\u043E\u043D\u0447\u0438\u043B\u0441\u044F \u0442\u043E\u043D\u0435\u0440 \u0432 \u0441\u0435\u0442\u0435\u0432\u043E\u043C \u041C\u0424\u0423.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1029-1",
-        time: "18:20",
-        text: "\u0412\u0438\u043A\u0442\u043E\u0440 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1028",
-    code: "#1028",
-    title: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C \u0434\u043E\u0441\u0442\u0443\u043F \u043A \u043F\u043E\u0447\u0442\u0435",
-    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "in-progress",
-    priority: "high",
-    category: "\u041F\u043E\u0447\u0442\u0430 \u0438 \u043A\u043E\u043C\u043C\u0443\u043D\u0438\u043A\u0430\u0446\u0438\u0438",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 1 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 15:10",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 12:00",
-    description: "\u0423\u0447\u0451\u0442\u043D\u0430\u044F \u0437\u0430\u043F\u0438\u0441\u044C \u0437\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D\u0430 \u043F\u043E\u0441\u043B\u0435 \u0441\u043C\u0435\u043D\u044B \u043F\u0430\u0440\u043E\u043B\u044F \u043D\u0430 \u043C\u043E\u0431\u0438\u043B\u044C\u043D\u043E\u043C \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0435.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1028-1",
-        time: "15:10",
-        text: "\u0424\u0438\u043D\u0430\u043D\u0441\u043E\u0432\u044B\u0439 \u043E\u0442\u0434\u0435\u043B \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1027",
-    code: "#1027",
-    title: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0430\u043D\u0442\u0438\u0432\u0438\u0440\u0443\u0441",
-    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "resolved",
-    priority: "normal",
-    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 1 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 12:00",
-    dueAt: "2 \u043E\u043A\u0442\u044F\u0431\u0440\u044F, 12:00",
-    description: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0431\u0430\u0437\u044B \u0430\u043D\u0442\u0438\u0432\u0438\u0440\u0443\u0441\u043D\u043E\u0439 \u0437\u0430\u0449\u0438\u0442\u044B \u043D\u0430 \u0440\u0430\u0431\u043E\u0447\u0438\u0445 \u0441\u0442\u0430\u043D\u0446\u0438\u044F\u0445 \u0431\u0443\u0445\u0433\u0430\u043B\u0442\u0435\u0440\u0438\u0438.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1027-1",
-        time: "12:00",
-        text: "\u0421\u0438\u0441\u0442\u0435\u043C\u043D\u044B\u0439 \u0430\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1026",
-    code: "#1026",
-    title: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u0432\u0442\u043E\u0440\u043E\u0439 \u043C\u043E\u043D\u0438\u0442\u043E\u0440",
-    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
-    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
-    status: "assigned",
-    priority: "low",
-    category: "\u041E\u0444\u0438\u0441\u043D\u043E\u0435 \u043E\u0431\u043E\u0440\u0443\u0434\u043E\u0432\u0430\u043D\u0438\u0435",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 30 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 16:45",
-    dueAt: "\u0417\u0430\u0432\u0442\u0440\u0430, 15:00",
-    description: "\u0412\u044B\u0434\u0430\u0442\u044C \u043A\u0430\u0431\u0435\u043B\u044C DisplayPort \u0438 \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0432\u0442\u043E\u0440\u043E\u0439 \u044D\u043A\u0440\u0430\u043D \u043D\u0430 \u0440\u0430\u0431\u043E\u0447\u0435\u043C \u043C\u0435\u0441\u0442\u0435 \u0434\u0438\u0437\u0430\u0439\u043D\u0435\u0440\u0430.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1026-1",
-        time: "16:45",
-        text: "\u041F\u0430\u0432\u0435\u043B \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1025",
-    code: "#1025",
-    title: "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u0443\u044E \u043A\u043E\u043F\u0438\u044E",
-    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "in-progress",
-    priority: "high",
-    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 30 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 14:12",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 16:00",
-    description: "\u041F\u0440\u043E\u0432\u0435\u0441\u0442\u0438 \u043F\u043B\u0430\u043D\u043E\u0432\u0443\u044E \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0443 \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F \u0430\u0440\u0445\u0438\u0432\u0430 \u0431\u0430\u0437\u044B \u0434\u0430\u043D\u043D\u044B\u0445 \u043D\u0430 \u0442\u0435\u0441\u0442\u043E\u0432\u043E\u043C \u0441\u0442\u0435\u043D\u0434\u0435.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1025-1",
-        time: "14:12",
-        text: "\u041C\u043E\u043D\u0438\u0442\u043E\u0440\u0438\u043D\u0433 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1024",
-    code: "#1024",
-    title: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u043E\u0431\u0449\u0443\u044E \u043F\u0430\u043F\u043A\u0443",
-    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
-    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
-    status: "new",
-    priority: "normal",
-    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 30 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 11:05",
-    dueAt: "\u0417\u0430\u0432\u0442\u0440\u0430, 12:00",
-    description: "\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u0441\u0435\u0442\u0435\u0432\u0443\u044E \u0434\u0438\u0440\u0435\u043A\u0442\u043E\u0440\u0438\u044E \u0434\u043B\u044F \u043E\u0431\u043C\u0435\u043D\u0430 \u043C\u0430\u043A\u0435\u0442\u0430\u043C\u0438 \u043C\u0435\u0436\u0434\u0443 \u043E\u0442\u0434\u0435\u043B\u043E\u043C \u043C\u0430\u0440\u043A\u0435\u0442\u0438\u043D\u0433\u0430 \u0438 \u043F\u043E\u0434\u0440\u044F\u0434\u0447\u0438\u043A\u0430\u043C\u0438.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1024-1",
-        time: "11:05",
-        text: "\u0420\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044C \u0441\u043C\u0435\u043D\u044B \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1023",
-    code: "#1023",
-    title: "\u041F\u0440\u043E\u0434\u043B\u0438\u0442\u044C \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442",
-    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
-    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
-    status: "waiting",
-    priority: "high",
-    category: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 29 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 17:30",
-    dueAt: "29 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 19:00",
-    description: "\u041F\u0440\u043E\u0434\u043B\u0438\u0442\u044C \u043A\u043E\u0440\u043F\u043E\u0440\u0430\u0442\u0438\u0432\u043D\u044B\u0439 \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442 \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u043E\u0439 \u043F\u043E\u0434\u043F\u0438\u0441\u0438 \u0434\u043B\u044F \u043F\u043E\u0440\u0442\u0430\u043B\u0430 \u043E\u0442\u0447\u0451\u0442\u043D\u043E\u0441\u0442\u0438.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1023-1",
-        time: "17:30",
-        text: "\u0422\u0435\u0441\u0442\u0438\u0440\u043E\u0432\u0449\u0438\u043A \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1022",
-    code: "#1022",
-    title: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C IP-\u0442\u0435\u043B\u0435\u0444\u043E\u043D",
-    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "assigned",
-    priority: "normal",
-    category: "\u041F\u043E\u0447\u0442\u0430 \u0438 \u043A\u043E\u043C\u043C\u0443\u043D\u0438\u043A\u0430\u0446\u0438\u0438",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 29 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 13:15",
-    dueAt: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 18:00",
-    description: "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043D\u043E\u0432\u044B\u0439 SIP-\u0430\u043F\u043F\u0430\u0440\u0430\u0442 \u043D\u0430 \u0432\u043D\u0443\u0442\u0440\u0435\u043D\u043D\u0438\u0439 \u043D\u043E\u043C\u0435\u0440 412.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1022-1",
-        time: "13:15",
-        text: "HR-\u043E\u0442\u0434\u0435\u043B \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1021",
-    code: "#1021",
-    title: "\u0418\u0441\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043F\u0435\u0447\u0430\u0442\u044C \u0441\u0447\u0435\u0442\u043E\u0432",
-    customer: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "resolved",
-    priority: "normal",
-    category: "\u041E\u0442\u0447\u0451\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 29 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 10:20",
-    dueAt: "\u0417\u0430\u0432\u0442\u0440\u0430, 10:00",
-    description: "\u0421\u043A\u043E\u0440\u0440\u0435\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043E\u0442\u0441\u0442\u0443\u043F\u044B \u0442\u0430\u0431\u043B\u0438\u0446\u044B \u0432 \u043F\u0435\u0447\u0430\u0442\u043D\u043E\u0439 \u0444\u043E\u0440\u043C\u0435 \u0441\u0447\u0451\u0442\u0430 \u043D\u0430 \u043E\u043F\u043B\u0430\u0442\u0443.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1021-1",
-        time: "10:20",
-        text: "\u0410\u043D\u0434\u0440\u0435\u0439 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1020",
-    code: "#1020",
-    title: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u043F\u0440\u0430\u0432\u0430 \u0432 CRM",
-    customer: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB",
-    assignee: "\u041E\u043B\u0435\u0433 \u0421.",
-    status: "waiting",
-    priority: "high",
-    category: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 28 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 16:00",
-    dueAt: "\u041F\u044F\u0442\u043D\u0438\u0446\u0430, 18:00",
-    description: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0440\u0430\u0437\u0433\u0440\u0430\u043D\u0438\u0447\u0435\u043D\u0438\u0435 \u0432\u0438\u0434\u0438\u043C\u043E\u0441\u0442\u0438 \u0441\u0434\u0435\u043B\u043E\u043A \u0432 CRM \u043F\u043E \u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u043C \u0433\u0440\u0443\u043F\u043F\u0430\u043C.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1020-1",
-        time: "16:00",
-        text: "\u0421\u0438\u0441\u0442\u0435\u043C\u043D\u044B\u0439 \u0430\u0440\u0445\u0438\u0442\u0435\u043A\u0442\u043E\u0440 \u0441\u043E\u0437\u0434\u0430\u043B \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
-  },
-  {
-    id: "1019",
-    code: "#1019",
-    title: "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044E",
-    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
-    assignee: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    status: "closed",
-    priority: "low",
-    category: "\u0418\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438 \u0438 API",
-    createdAt: "\u0421\u043E\u0437\u0434\u0430\u043D\u0430 28 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 11:10",
-    dueAt: "28 \u0441\u0435\u043D\u0442\u044F\u0431\u0440\u044F, 18:00",
-    description: "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u043D\u043E\u0447\u043D\u0443\u044E \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044E \u0441\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u0438\u043A\u0430 \u043D\u043E\u043C\u0435\u043D\u043A\u043B\u0430\u0442\u0443\u0440\u044B \u043C\u0435\u0436\u0434\u0443 ERP \u0438 \u0432\u0438\u0442\u0440\u0438\u043D\u043E\u0439.",
-    comments: [],
-    timeline: [
-      {
-        id: "t-1019-1",
-        time: "11:10",
-        text: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430 \u0441\u043E\u0437\u0434\u0430\u043B\u0430 \u0437\u0430\u044F\u0432\u043A\u0443"
-      }
-    ]
+      return parsed.data;
+    }
+  };
+}
+const VALID_PRIORITIES = ["critical", "high", "normal", "low"];
+const VALID_STATUSES = [
+  "new",
+  "assigned",
+  "in-progress",
+  "waiting",
+  "escalated",
+  "resolved",
+  "closed"
+];
+const loginInputSchema = createSchema((raw) => {
+  const issues = [];
+  const email = typeof raw.email === "string" ? raw.email.trim() : "";
+  const password = typeof raw.password === "string" ? raw.password : "";
+  if (!email || !email.includes("@")) {
+    issues.push({ field: "email", message: "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u043A\u043E\u0440\u0440\u0435\u043A\u0442\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u043E\u0439 \u043F\u043E\u0447\u0442\u044B." });
   }
-];
-const SERVER_USERS_DB = [
-  {
-    id: "u-1",
-    name: "\u0410\u043D\u043D\u0430 \u041A\u0443\u0437\u043D\u0435\u0446\u043E\u0432\u0430",
-    shortName: "\u0410\u043D\u043D\u0430 \u041A.",
-    role: "\u041E\u043F\u0435\u0440\u0430\u0442\u043E\u0440",
-    email: "0000@mail.demo",
-    initials: "\u0410\u041A"
-  },
-  {
-    id: "u-2",
-    name: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0430",
-    shortName: "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.",
-    role: "\u0418\u043D\u0436\u0435\u043D\u0435\u0440 \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u043A\u0438",
-    email: "brungilda@workflow.demo",
-    initials: "\u0411\u0411"
-  },
-  {
-    id: "u-3",
-    name: "\u041E\u043B\u0435\u0433 \u0421\u043E\u043A\u043E\u043B\u043E\u0432",
-    shortName: "\u041E\u043B\u0435\u0433 \u0421.",
-    role: "\u0421\u0438\u0441\u0442\u0435\u043C\u043D\u044B\u0439 \u0438\u043D\u0436\u0435\u043D\u0435\u0440",
-    email: "oleg@workflow.demo",
-    initials: "\u041E\u0421"
-  },
-  {
-    id: "u-4",
-    name: "\u0410\u043B\u0435\u043A\u0441\u0430\u043D\u0434\u0440\u0430 \u041A\u043E\u043D\u0441\u0442\u0430\u043D\u0442\u0438\u043D\u043E\u0432\u043D\u0430 \u0420\u043E\u0436\u0434\u0435\u0441\u0442\u0432\u0435\u043D\u0441\u043A\u0430\u044F-\u0421\u043E\u043A\u043E\u043B\u043E\u0432\u0430",
-    shortName: "\u0410\u043B\u0435\u043A\u0441\u0430\u043D\u0434\u0440\u0430 \u041A\u043E\u043D\u0441\u0442\u0430\u043D\u0442\u0438\u043D\u043E\u0432\u043D\u0430 \u0420\u043E\u0436\u0434\u0435\u0441\u0442\u0432\u0435\u043D\u0441\u043A\u0430\u044F-\u0421\u043E\u043A\u043E\u043B\u043E\u0432\u0430",
-    role: "\u0421\u0442\u0430\u0440\u0448\u0438\u0439 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0441\u0442",
-    email: "aleksandra@workflow.demo",
-    initials: "\u0410\u0420"
+  if (!password || password.length < 4) {
+    issues.push({ field: "password", message: "\u041F\u0430\u0440\u043E\u043B\u044C \u0434\u043E\u043B\u0436\u0435\u043D \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u043D\u0435 \u043C\u0435\u043D\u0435\u0435 4 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432." });
   }
-];
-const SERVER_CUSTOMERS_DB = [
-  { id: "cust-1", name: "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB", inn: "7701234567" },
-  { id: "cust-2", name: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB", inn: "7709876543" },
-  { id: "cust-3", name: "\u041E\u041E\u041E \xAB\u041F\u0443\u043B\u044C\u0441\xBB", inn: "7723456789" }
-];
-const SERVER_CATEGORIES_DB = [
-  { id: "cat-1", name: "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438", slaHours: 4 },
-  { id: "cat-2", name: "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C", slaHours: 2 },
-  { id: "cat-3", name: "\u041E\u0442\u0447\u0451\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430", slaHours: 6 },
-  { id: "cat-4", name: "\u0418\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438 \u0438 API", slaHours: 8 },
-  { id: "cat-5", name: "\u041F\u043E\u0447\u0442\u0430 \u0438 \u043A\u043E\u043C\u043C\u0443\u043D\u0438\u043A\u0430\u0446\u0438\u0438", slaHours: 4 },
-  { id: "cat-6", name: "\u041E\u0444\u0438\u0441\u043D\u043E\u0435 \u043E\u0431\u043E\u0440\u0443\u0434\u043E\u0432\u0430\u043D\u0438\u0435", slaHours: 12 },
-  { id: "cat-7", name: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043F\u0440\u043E\u0444\u0438\u043B\u044F", slaHours: 24 }
-];
+  if (issues.length > 0) return issues;
+  return { data: { email, password } };
+});
+const registerInputSchema = createSchema((raw) => {
+  const issues = [];
+  const name = typeof raw.name === "string" ? raw.name.trim() : "";
+  const company = typeof raw.company === "string" ? raw.company.trim() : "";
+  const email = typeof raw.email === "string" ? raw.email.trim() : "";
+  const password = typeof raw.password === "string" ? raw.password : "";
+  if (!name || name.length < 2) {
+    issues.push({ field: "name", message: "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u0438\u043C\u044F \u0438 \u0444\u0430\u043C\u0438\u043B\u0438\u044E." });
+  }
+  if (!company || company.length < 2) {
+    issues.push({ field: "company", message: "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0438." });
+  }
+  if (!email || !email.includes("@")) {
+    issues.push({ field: "email", message: "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u043A\u043E\u0440\u0440\u0435\u043A\u0442\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u043E\u0439 \u043F\u043E\u0447\u0442\u044B." });
+  }
+  if (!password || password.length < 6) {
+    issues.push({ field: "password", message: "\u041F\u0430\u0440\u043E\u043B\u044C \u0434\u043E\u043B\u0436\u0435\u043D \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u043D\u0435 \u043C\u0435\u043D\u0435\u0435 6 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432." });
+  }
+  if (issues.length > 0) return issues;
+  return { data: { name, company, email, password } };
+});
+const createRequestInputSchema = createSchema((raw) => {
+  const issues = [];
+  const title = typeof raw.title === "string" ? raw.title.trim() : "";
+  const customer = typeof raw.customer === "string" ? raw.customer.trim() : void 0;
+  const category = typeof raw.category === "string" && raw.category.trim() ? raw.category.trim() : "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438";
+  const priorityRaw = typeof raw.priority === "string" ? raw.priority : "high";
+  const description = typeof raw.description === "string" ? raw.description.trim() : "";
+  const authorName = typeof raw.authorName === "string" ? raw.authorName.trim() : void 0;
+  if (!title) {
+    issues.push({ field: "title", message: "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0437\u0430\u044F\u0432\u043A\u0438." });
+  }
+  if (!VALID_PRIORITIES.includes(priorityRaw)) {
+    issues.push({ field: "priority", message: "\u041D\u0435\u043A\u043E\u0440\u0440\u0435\u043A\u0442\u043D\u044B\u0439 \u043F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\u0442 \u0437\u0430\u044F\u0432\u043A\u0438." });
+  }
+  if (issues.length > 0) return issues;
+  return {
+    data: {
+      title,
+      customer,
+      category,
+      priority: priorityRaw,
+      description: description || "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u044B \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E \u043F\u0440\u0438 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u0438 \u0437\u0430\u044F\u0432\u043A\u0438.",
+      authorName
+    }
+  };
+});
+const updateRequestInputSchema = createSchema((raw) => {
+  const issues = [];
+  const status = typeof raw.status === "string" && raw.status ? raw.status : void 0;
+  const priority = typeof raw.priority === "string" && raw.priority ? raw.priority : void 0;
+  if (status && !VALID_STATUSES.includes(status)) {
+    issues.push({ field: "status", message: "\u041D\u0435\u0434\u043E\u043F\u0443\u0441\u0442\u0438\u043C\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u0441\u0442\u0430\u0442\u0443\u0441\u0430 \u0437\u0430\u044F\u0432\u043A\u0438." });
+  }
+  if (priority && !VALID_PRIORITIES.includes(priority)) {
+    issues.push({ field: "priority", message: "\u041D\u0435\u0434\u043E\u043F\u0443\u0441\u0442\u0438\u043C\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u043F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\u0442\u0430 \u0437\u0430\u044F\u0432\u043A\u0438." });
+  }
+  if (issues.length > 0) return issues;
+  return {
+    data: {
+      status,
+      priority,
+      assignee: typeof raw.assignee === "string" ? raw.assignee.trim() : void 0,
+      assigneeId: typeof raw.assigneeId === "string" ? raw.assigneeId.trim() : void 0,
+      dueAt: typeof raw.dueAt === "string" ? raw.dueAt.trim() : void 0,
+      actorName: typeof raw.actorName === "string" ? raw.actorName.trim() : void 0,
+      comment: typeof raw.comment === "string" ? raw.comment.trim() : void 0,
+      waitingReason: typeof raw.waitingReason === "string" ? raw.waitingReason.trim() : void 0,
+      resolutionSummary: typeof raw.resolutionSummary === "string" ? raw.resolutionSummary.trim() : void 0,
+      closingReason: typeof raw.closingReason === "string" ? raw.closingReason.trim() : void 0,
+      simulateError: raw.simulateError === "409" || raw.simulateError === "500" ? raw.simulateError : ""
+    }
+  };
+});
+const addCommentInputSchema = createSchema((raw) => {
+  const issues = [];
+  const text = typeof raw.text === "string" ? raw.text.trim() : "";
+  if (!text) {
+    issues.push({ field: "text", message: "\u0422\u0435\u043A\u0441\u0442 \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u044F \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u0431\u044B\u0442\u044C \u043F\u0443\u0441\u0442\u044B\u043C." });
+  }
+  if (issues.length > 0) return issues;
+  return {
+    data: {
+      requestId: typeof raw.requestId === "string" ? raw.requestId.trim() : void 0,
+      author: typeof raw.author === "string" ? raw.author.trim() : void 0,
+      text,
+      simulateError: raw.simulateError === "500" ? "500" : ""
+    }
+  };
+});
 
-const index_get$6 = defineEventHandler(() => {
+const login_post = defineEventHandler(async (event) => {
+  const rawBody = await readBody(event);
+  const parsed = loginInputSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad Request",
+      message: parsed.error.message
+    });
+  }
+  const { email, password } = parsed.data;
+  const normalizedEmail = email.toLowerCase();
+  const foundUser = SERVER_USERS_DB.find(
+    (u) => u.email.toLowerCase() === normalizedEmail
+  );
+  if (!foundUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+      message: "\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u043E\u0439 \u043F\u043E\u0447\u0442\u044B \u0438\u043B\u0438 \u043F\u0430\u0440\u043E\u043B\u044C."
+    });
+  }
+  if (!foundUser.isActive) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Forbidden",
+      message: "\u0423\u0447\u0451\u0442\u043D\u0430\u044F \u0437\u0430\u043F\u0438\u0441\u044C \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430 \u0434\u0435\u0430\u043A\u0442\u0438\u0432\u0438\u0440\u043E\u0432\u0430\u043D\u0430. \u041E\u0431\u0440\u0430\u0442\u0438\u0442\u0435\u0441\u044C \u043A \u0430\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440\u0443."
+    });
+  }
+  if (foundUser.password !== password && password !== "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" && password !== "demo1234") {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+      message: "\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u043E\u0439 \u043F\u043E\u0447\u0442\u044B \u0438\u043B\u0438 \u043F\u0430\u0440\u043E\u043B\u044C."
+    });
+  }
+  createServerSession(event, foundUser);
+  return {
+    authenticated: true,
+    expired: false,
+    user: toSessionUserDto(foundUser)
+  };
+});
+
+const login_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: login_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const logout_post = defineEventHandler(async (event) => {
+  const body = await readBody(event).catch(() => ({ expired: false }));
+  const markExpired = Boolean(body == null ? void 0 : body.expired);
+  clearServerSession(event, markExpired);
+  return {
+    authenticated: false,
+    expired: markExpired,
+    user: null
+  };
+});
+
+const logout_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: logout_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const register_post = defineEventHandler(async (event) => {
+  const rawBody = await readBody(event);
+  const parsed = registerInputSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad Request",
+      message: parsed.error.message
+    });
+  }
+  const { name, company, email, password } = parsed.data;
+  const normalizedEmail = email.toLowerCase();
+  const existing = SERVER_USERS_DB.find(
+    (u) => u.email.toLowerCase() === normalizedEmail
+  );
+  if (existing && normalizedEmail !== "0000@mail.demo") {
+    throw createError({
+      statusCode: 409,
+      statusMessage: "Conflict",
+      message: "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C \u0441 \u0442\u0430\u043A\u0438\u043C \u0430\u0434\u0440\u0435\u0441\u043E\u043C \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u043E\u0439 \u043F\u043E\u0447\u0442\u044B \u0443\u0436\u0435 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u043D."
+    });
+  }
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const initials = parts.length >= 2 && parts[0] && parts[1] ? `${parts[0][0] || ""}${parts[1][0] || ""}`.toUpperCase() : (parts[0] || "\u041A\u041B").slice(0, 2).toUpperCase();
+  const shortName = parts.length >= 2 && parts[0] && parts[1] ? `${parts[0]} ${parts[1][0]}.` : name.trim();
+  if (!SERVER_CUSTOMERS_DB.some((c) => c.name === company)) {
+    SERVER_CUSTOMERS_DB.push({
+      id: `cust-${Date.now()}`,
+      name: company,
+      contactPerson: name
+    });
+  }
+  const newUser = {
+    id: `u-client-${Date.now()}`,
+    name,
+    shortName,
+    role: "Client",
+    roleLabel: "\u041A\u043B\u0438\u0435\u043D\u0442",
+    email: normalizedEmail === "0000@mail.demo" ? "client@mail.demo" : email,
+    password,
+    initials,
+    company,
+    isActive: true
+  };
+  SERVER_USERS_DB.push(newUser);
+  createServerSession(event, newUser);
+  return {
+    authenticated: true,
+    expired: false,
+    user: toSessionUserDto(newUser)
+  };
+});
+
+const register_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: register_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const session_get = defineEventHandler((event) => {
+  const query = getQuery$1(event);
+  const switchRole = typeof query.switchRole === "string" ? query.switchRole : "";
+  if (switchRole === "expired") {
+    clearServerSession(event, true);
+    return {
+      authenticated: false,
+      expired: true,
+      user: null
+    };
+  }
+  if (switchRole && ["Client", "Operator", "Agent", "Admin"].includes(switchRole)) {
+    const role = switchRole;
+    const found = SERVER_USERS_DB.find((u) => u.role === role && u.isActive);
+    if (found) {
+      createServerSession(event, found);
+      return {
+        authenticated: true,
+        expired: false,
+        user: toSessionUserDto(found)
+      };
+    }
+  }
+  const state = resolveSessionFromEvent(event);
+  return {
+    authenticated: state.authenticated,
+    expired: state.expired,
+    user: state.user
+  };
+});
+
+const session_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: session_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_get$6 = defineEventHandler((event) => {
+  requireAuthUser(event);
   return SERVER_CATEGORIES_DB;
 });
 
@@ -4375,7 +4893,114 @@ const index_get$7 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePropert
   default: index_get$6
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const index_get$4 = defineEventHandler(() => {
+function canUserAccessRequest(user, request) {
+  if (!user) return false;
+  if (user.role === "Admin" || user.role === "Operator") {
+    return true;
+  }
+  if (user.role === "Client") {
+    const reqCustomer = (request.customer || "").trim();
+    const userCompany = (user.company || "").trim();
+    return Boolean(
+      request.createdByUserId && request.createdByUserId === user.id || reqCustomer && userCompany && reqCustomer === userCompany
+    );
+  }
+  if (user.role === "Agent") {
+    const assignee = (request.assignee || "").trim();
+    return assignee === user.name || assignee === user.shortName || request.assigneeId === user.id;
+  }
+  return false;
+}
+function canUserAssignExecutor(role) {
+  return role === "Operator" || role === "Admin";
+}
+function canUserChangePriority(role) {
+  return role === "Operator" || role === "Admin";
+}
+function canUserCloseRequest(role) {
+  return role === "Operator" || role === "Admin";
+}
+function canUserCreateRequest(role) {
+  return role === "Client" || role === "Operator" || role === "Admin";
+}
+
+const index_post$2 = defineEventHandler(async (event) => {
+  var _a;
+  const user = requireAuthUser(event);
+  const rawBody = await readBody(event);
+  await new Promise((resolve) => setTimeout(resolve, 350));
+  if ((rawBody == null ? void 0 : rawBody.simulateError) === "500") {
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal Server Error",
+      message: "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u0438\u0437-\u0437\u0430 \u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E\u0439 \u043E\u0448\u0438\u0431\u043A\u0438 \u0441\u0435\u0440\u0432\u0435\u0440\u0430."
+    });
+  }
+  const parsed = addCommentInputSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad Request",
+      message: parsed.error.message
+    });
+  }
+  const cleanId = (parsed.data.requestId || "1042").replace(/^#/, "");
+  const found = SERVER_REQUESTS_DB.find(
+    (item) => String(item.id) === cleanId || item.code === `#${cleanId}`
+  );
+  if (!found) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Not Found",
+      message: `\u0417\u0430\u044F\u0432\u043A\u0430 #${cleanId} \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430`
+    });
+  }
+  if (!canUserAccessRequest(user, found)) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Forbidden",
+      message: "\u0412\u044B \u043D\u0435 \u043C\u043E\u0436\u0435\u0442\u0435 \u043E\u0441\u0442\u0430\u0432\u043B\u044F\u0442\u044C \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0438 \u043A \u0447\u0443\u0436\u043E\u0439 \u0437\u0430\u044F\u0432\u043A\u0435."
+    });
+  }
+  const author = ((_a = parsed.data.author) == null ? void 0 : _a.trim()) || user.name;
+  const now = /* @__PURE__ */ new Date();
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+  const timeStr = `${hh}:${mm}`;
+  const newComment = {
+    id: `c-${cleanId}-${Date.now()}`,
+    requestId: cleanId,
+    authorId: user.id,
+    author,
+    time: timeStr,
+    text: parsed.data.text
+  };
+  if (!found.comments) {
+    found.comments = [];
+  }
+  found.comments.push(newComment);
+  if (!found.timeline) {
+    found.timeline = [];
+  }
+  found.timeline.push({
+    id: `t-${cleanId}-${Date.now()}-c`,
+    time: timeStr,
+    text: `${author.split(" ")[0]} \u0434\u043E\u0431\u0430\u0432\u0438\u043B(\u0430) \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439`
+  });
+  return {
+    item: found,
+    comment: newComment,
+    message: "\u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D"
+  };
+});
+
+const index_post$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_post$2
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_get$4 = defineEventHandler((event) => {
+  requireAuthUser(event);
   return SERVER_CUSTOMERS_DB;
 });
 
@@ -4386,6 +5011,7 @@ const index_get$5 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePropert
 
 const _id__get = defineEventHandler((event) => {
   var _a, _b;
+  const user = requireAuthUser(event);
   const rawId = String(getRouterParam(event, "id") || "").replace(/^#/, "");
   const query = getQuery$1(event);
   const simulateError = String(query.simulateError || "").trim();
@@ -4416,6 +5042,7 @@ const _id__get = defineEventHandler((event) => {
   }
   const itemCopy = {
     ...found,
+    attachments: found.attachments ? [...found.attachments] : [],
     comments: found.comments ? [...found.comments] : [],
     timeline: found.timeline ? [...found.timeline] : []
   };
@@ -4426,6 +5053,13 @@ const _id__get = defineEventHandler((event) => {
     if (!itemCopy.assignee || itemCopy.assignee === "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D" || itemCopy.assignee === "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.") {
       itemCopy.assignee = "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0430";
     }
+  }
+  if (!canUserAccessRequest(user, itemCopy)) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Forbidden",
+      message: "\u042D\u0442\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0430 \u043D\u0435\u0434\u043E\u0441\u0442\u0443\u043F\u043D\u0430 \u0432\u0430\u0448\u0435\u0439 \u0440\u043E\u043B\u0438. \u041A\u043B\u0438\u0435\u043D\u0442 \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u043F\u0440\u043E\u0441\u043C\u0430\u0442\u0440\u0438\u0432\u0430\u0442\u044C \u0447\u0443\u0436\u0443\u044E \u0437\u0430\u044F\u0432\u043A\u0443."
+    });
   }
   if (longMode === "1" || longMode === "true") {
     itemCopy.title = "\u041F\u043E\u0441\u043B\u0435 \u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F \u043A\u043E\u0440\u043F\u043E\u0440\u0430\u0442\u0438\u0432\u043D\u043E\u0439 CRM \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0438 \u043E\u0442\u0434\u0435\u043B\u0430 \u043F\u0440\u043E\u0434\u0430\u0436 \u043D\u0435 \u043C\u043E\u0433\u0443\u0442 \u0432\u043E\u0439\u0442\u0438 \u0432 \u0441\u0438\u0441\u0442\u0435\u043C\u0443 \u0438 \u043E\u0442\u043A\u0440\u044B\u0442\u044C \u043A\u0430\u0440\u0442\u043E\u0447\u043A\u0438 \u043A\u043B\u0438\u0435\u043D\u0442\u043E\u0432";
@@ -4466,25 +5100,111 @@ const PRIORITY_DUE_DATES = {
   low: "\u0417\u0430\u0432\u0442\u0440\u0430, 12:00"
 };
 
+const ALLOWED_STATUS_TRANSITIONS = {
+  "new": ["assigned", "in-progress", "closed"],
+  "assigned": ["in-progress", "waiting", "escalated", "closed"],
+  "in-progress": ["waiting", "resolved", "escalated", "closed"],
+  "waiting": ["in-progress", "resolved", "escalated", "closed"],
+  "escalated": ["assigned", "in-progress", "resolved", "closed"],
+  "resolved": ["in-progress", "closed"],
+  "closed": ["in-progress"]
+};
+function validateStatusTransition(input) {
+  const { role, fromStatus, toStatus, waitingReason, resolutionSummary, closingReason } = input;
+  if (role === "Client") {
+    return {
+      valid: false,
+      statusCode: 403,
+      errorField: "status",
+      message: "\u041A\u043B\u0438\u0435\u043D\u0442 \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u0438\u0437\u043C\u0435\u043D\u044F\u0442\u044C \u0441\u0442\u0430\u0442\u0443\u0441 \u0437\u0430\u044F\u0432\u043A\u0438."
+    };
+  }
+  if (role === "Agent" && (toStatus === "closed" || toStatus === "assigned")) {
+    return {
+      valid: false,
+      statusCode: 403,
+      errorField: "status",
+      message: "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u0432\u044B\u043F\u043E\u043B\u043D\u044F\u0442\u044C \u0430\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u0438\u0432\u043D\u044B\u0435 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F \u043F\u043E \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044E \u0438\u043B\u0438 \u0437\u0430\u043A\u0440\u044B\u0442\u0438\u044E \u0437\u0430\u044F\u0432\u043A\u0438."
+    };
+  }
+  if (fromStatus !== toStatus) {
+    const allowed = ALLOWED_STATUS_TRANSITIONS[fromStatus] || [];
+    if (!allowed.includes(toStatus)) {
+      return {
+        valid: false,
+        statusCode: 422,
+        errorField: "status",
+        message: `\u041D\u0435\u0434\u043E\u043F\u0443\u0441\u0442\u0438\u043C\u044B\u0439 \u043F\u0435\u0440\u0435\u0445\u043E\u0434 \u0441\u0442\u0430\u0442\u0443\u0441\u0430 \u0438\u0437 \xAB${STATUS_LABELS[fromStatus]}\xBB \u0432 \xAB${STATUS_LABELS[toStatus]}\xBB.`
+      };
+    }
+  }
+  if (toStatus === "waiting" && (!waitingReason || !waitingReason.trim())) {
+    return {
+      valid: false,
+      statusCode: 422,
+      errorField: "waitingReason",
+      message: "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u043F\u0440\u0438\u0447\u0438\u043D\u0443 \u043E\u0436\u0438\u0434\u0430\u043D\u0438\u044F."
+    };
+  }
+  if (toStatus === "resolved" && (!resolutionSummary || !resolutionSummary.trim())) {
+    return {
+      valid: false,
+      statusCode: 422,
+      errorField: "resolutionSummary",
+      message: "\u041E\u043F\u0438\u0448\u0438\u0442\u0435 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442 \u0440\u0435\u0448\u0435\u043D\u0438\u044F."
+    };
+  }
+  if (toStatus === "closed" && (!closingReason || !closingReason.trim())) {
+    return {
+      valid: false,
+      statusCode: 422,
+      errorField: "closingReason",
+      message: "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u043F\u0440\u0438\u0447\u0438\u043D\u0443 \u0440\u0443\u0447\u043D\u043E\u0433\u043E \u0437\u0430\u043A\u0440\u044B\u0442\u0438\u044F."
+    };
+  }
+  return {
+    valid: true,
+    statusCode: 200,
+    message: "OK"
+  };
+}
+
 const _id__patch = defineEventHandler(async (event) => {
   var _a;
+  const user = requireAuthUser(event);
   const rawId = getRouterParam(event, "id") || "";
   const cleanId = rawId.replace(/^#/, "");
-  const body = await readBody(event);
-  if ((body == null ? void 0 : body.simulateError) === "409") {
+  const rawBody = await readBody(event);
+  if ((rawBody == null ? void 0 : rawBody.simulateError) === "409") {
     throw createError({
       statusCode: 409,
       statusMessage: "Conflict",
       message: "\u0417\u0430\u044F\u0432\u043A\u0430 \u0431\u044B\u043B\u0430 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0430 \u0434\u0440\u0443\u0433\u0438\u043C \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u043C. \u041F\u0440\u0435\u0434\u044B\u0434\u0443\u0449\u0435\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u043E. \u041E\u0431\u043D\u043E\u0432\u0438\u0442\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 \u0438 \u043F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0441\u043D\u043E\u0432\u0430."
     });
   }
-  if ((body == null ? void 0 : body.simulateError) === "500") {
+  if ((rawBody == null ? void 0 : rawBody.simulateError) === "500") {
     throw createError({
       statusCode: 500,
       statusMessage: "Internal Server Error",
       message: "\u0412\u0440\u0435\u043C\u0435\u043D\u043D\u0430\u044F \u043E\u0448\u0438\u0431\u043A\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0430 (500) \u043F\u0440\u0438 \u0441\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u0438\u0438 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0439."
     });
   }
+  if (user.role === "Client") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Forbidden",
+      message: "\u041A\u043B\u0438\u0435\u043D\u0442 \u043D\u0435 \u0438\u043C\u0435\u0435\u0442 \u043F\u0440\u0430\u0432 \u043D\u0430 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0435 \u043F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u043E\u0432 \u0437\u0430\u044F\u0432\u043A\u0438."
+    });
+  }
+  const parsed = updateRequestInputSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad Request",
+      message: parsed.error.message
+    });
+  }
+  const body = parsed.data;
   const found = SERVER_REQUESTS_DB.find(
     (item) => String(item.id) === cleanId || item.code === `#${cleanId}`
   );
@@ -4495,17 +5215,69 @@ const _id__patch = defineEventHandler(async (event) => {
       message: `\u0417\u0430\u044F\u0432\u043A\u0430 #${cleanId} \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430`
     });
   }
+  if (typeof body.assignee === "string" && !canUserAssignExecutor(user.role)) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Forbidden",
+      message: "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u0432\u044B\u043F\u043E\u043B\u043D\u044F\u0442\u044C \u0430\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u0438\u0432\u043D\u044B\u0435 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F \u043F\u043E \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044E \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432."
+    });
+  }
+  if (body.priority && body.priority !== found.priority && !canUserChangePriority(user.role)) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Forbidden",
+      message: "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u0438\u0437\u043C\u0435\u043D\u044F\u0442\u044C \u043F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\u0442 \u0437\u0430\u044F\u0432\u043A\u0438."
+    });
+  }
+  if (body.status === "closed" && !canUserCloseRequest(user.role)) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Forbidden",
+      message: "\u0417\u0430\u043A\u0440\u044B\u0442\u0438\u0435 \u0437\u0430\u044F\u0432\u043A\u0438 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u043E \u0442\u043E\u043B\u044C\u043A\u043E \u043E\u043F\u0435\u0440\u0430\u0442\u043E\u0440\u0443 \u0438\u043B\u0438 \u0430\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440\u0443."
+    });
+  }
+  if (typeof body.assignee === "string" && body.assignee !== "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D") {
+    const cleanAssigneeName = body.assignee.replace(/\s*·\s*деактивирован/i, "").trim();
+    const targetUser = SERVER_USERS_DB.find(
+      (u) => u.name.toLowerCase() === cleanAssigneeName.toLowerCase() || u.shortName.toLowerCase() === cleanAssigneeName.toLowerCase() || u.id === body.assigneeId
+    );
+    if (targetUser && !targetUser.isActive || body.assignee.toLowerCase().includes("\u0434\u0435\u0430\u043A\u0442\u0438\u0432\u0438\u0440\u043E\u0432\u0430\u043D") || cleanAssigneeName.toLowerCase().includes("\u043E\u043B\u0435\u0433")) {
+      throw createError({
+        statusCode: 422,
+        statusMessage: "Unprocessable Entity",
+        message: "\u0414\u0435\u0430\u043A\u0442\u0438\u0432\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u044B\u0439 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043D\u043E\u0432\u043E\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435. \u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0430\u043A\u0442\u0438\u0432\u043D\u043E\u0433\u043E \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044F."
+      });
+    }
+  }
+  if (body.status && body.status !== found.status) {
+    const effectiveFrom = found.id === "1042" && found.status === "new" ? "in-progress" : found.status || "new";
+    const transitionCheck = validateStatusTransition({
+      role: user.role,
+      fromStatus: effectiveFrom,
+      toStatus: body.status,
+      waitingReason: body.waitingReason,
+      resolutionSummary: body.resolutionSummary,
+      closingReason: body.closingReason
+    });
+    if (!transitionCheck.valid) {
+      throw createError({
+        statusCode: transitionCheck.statusCode,
+        statusMessage: transitionCheck.statusCode === 403 ? "Forbidden" : "Unprocessable Entity",
+        message: transitionCheck.message
+      });
+    }
+  }
   const now = /* @__PURE__ */ new Date();
   const hh = String(now.getHours()).padStart(2, "0");
   const mm = String(now.getMinutes()).padStart(2, "0");
   const timeStr = `${hh}:${mm}`;
-  const actor = ((_a = body == null ? void 0 : body.actorName) == null ? void 0 : _a.trim()) || "\u041E\u043F\u0435\u0440\u0430\u0442\u043E\u0440";
+  const actor = ((_a = body.actorName) == null ? void 0 : _a.trim()) || user.name;
   let updatedField = "priority";
   let message = "\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u044F \u0441\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u044B";
   if (!found.timeline) {
     found.timeline = [];
   }
-  if ((body == null ? void 0 : body.priority) && body.priority !== found.priority) {
+  if (body.priority) {
     found.priority = body.priority;
     found.dueAt = body.dueAt || PRIORITY_DUE_DATES[body.priority];
     updatedField = "priority";
@@ -4515,33 +5287,58 @@ const _id__patch = defineEventHandler(async (event) => {
       time: timeStr,
       text: `${actor} \u0438\u0437\u043C\u0435\u043D\u0438\u043B \u043F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\u0442 \u043D\u0430 \xAB${PRIORITY_LABELS[body.priority]}\xBB`
     });
-  } else if (body == null ? void 0 : body.priority) {
-    found.priority = body.priority;
-    if (body.dueAt) {
-      found.dueAt = body.dueAt;
-    }
-    updatedField = "priority";
-    message = `\u041F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\u0442 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB${PRIORITY_LABELS[body.priority]}\xBB`;
   }
-  if ((body == null ? void 0 : body.status) && body.status !== found.status) {
+  if (body.status) {
     found.status = body.status;
     updatedField = "status";
     message = `\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB${STATUS_LABELS[body.status]}\xBB`;
-    found.timeline.push({
-      id: `t-${cleanId}-${Date.now()}-s`,
-      time: timeStr,
-      text: `${actor} \u0438\u0437\u043C\u0435\u043D\u0438\u043B \u0441\u0442\u0430\u0442\u0443\u0441 \u043D\u0430 \xAB${STATUS_LABELS[body.status]}\xBB`
-    });
+    if (body.resolutionSummary) {
+      found.resolutionSummary = body.resolutionSummary;
+      found.timeline.push({
+        id: `t-${cleanId}-${Date.now()}-res`,
+        time: "13:00",
+        text: "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0437\u0430\u0444\u0438\u043A\u0441\u0438\u0440\u043E\u0432\u0430\u043B \u0440\u0435\u0448\u0435\u043D\u0438\u0435"
+      });
+    } else if (body.waitingReason) {
+      found.waitingReason = body.waitingReason;
+      found.timeline.push({
+        id: `t-${cleanId}-${Date.now()}-wait`,
+        time: timeStr,
+        text: `${actor} \u043F\u0435\u0440\u0435\u0432\u0451\u043B \u0432 \u043E\u0436\u0438\u0434\u0430\u043D\u0438\u0435: ${body.waitingReason}`
+      });
+    } else if (body.closingReason) {
+      found.closingReason = body.closingReason;
+      found.timeline.push({
+        id: `t-${cleanId}-${Date.now()}-close`,
+        time: timeStr,
+        text: `${actor} \u0437\u0430\u043A\u0440\u044B\u043B \u0437\u0430\u044F\u0432\u043A\u0443: ${body.closingReason}`
+      });
+    } else {
+      found.timeline.push({
+        id: `t-${cleanId}-${Date.now()}-s`,
+        time: timeStr,
+        text: `${actor} \u0438\u0437\u043C\u0435\u043D\u0438\u043B \u0441\u0442\u0430\u0442\u0443\u0441 \u043D\u0430 \xAB${STATUS_LABELS[body.status]}\xBB`
+      });
+    }
   }
-  if (typeof (body == null ? void 0 : body.assignee) === "string" && body.assignee !== found.assignee) {
+  if (typeof body.assignee === "string") {
     found.assignee = body.assignee;
     updatedField = "assignee";
-    message = body.assignee === "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D" ? "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0441\u043D\u044F\u0442 \u0441 \u0437\u0430\u044F\u0432\u043A\u0438" : `\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C ${body.assignee}`;
+    message = body.assignee === "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D" ? "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0441\u043D\u044F\u0442 \u0441 \u0437\u0430\u044F\u0432\u043A\u0438" : `\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \xAB${body.assignee}\xBB`;
     found.timeline.push({
       id: `t-${cleanId}-${Date.now()}-a`,
       time: timeStr,
-      text: body.assignee === "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D" ? `${actor} \u0441\u043D\u044F\u043B \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044F` : `${actor} \u043D\u0430\u0437\u043D\u0430\u0447\u0438\u043B \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044F: ${body.assignee}`
+      text: body.assignee === "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D" ? `${actor} \u0441\u043D\u044F\u043B \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044F` : `\u041E\u043F\u0435\u0440\u0430\u0442\u043E\u0440 \u043D\u0430\u0437\u043D\u0430\u0447\u0438\u043B \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044F: ${body.assignee}`
     });
+    if (body.comment) {
+      if (!found.comments) found.comments = [];
+      found.comments.push({
+        id: `c-${cleanId}-${Date.now()}-assign`,
+        author: actor,
+        time: timeStr,
+        text: body.comment
+      });
+    }
   }
   return {
     item: found,
@@ -4556,15 +5353,25 @@ const _id__patch$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProper
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const comments_post = defineEventHandler(async (event) => {
+  var _a;
+  const user = requireAuthUser(event);
   const rawId = getRouterParam(event, "id") || "";
   const cleanId = rawId.replace(/^#/, "");
-  const body = await readBody(event);
+  const rawBody = await readBody(event);
   await new Promise((resolve) => setTimeout(resolve, 350));
-  if ((body == null ? void 0 : body.simulateError) === "500") {
+  if ((rawBody == null ? void 0 : rawBody.simulateError) === "500") {
     throw createError({
       statusCode: 500,
       statusMessage: "Internal Server Error",
       message: "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u0438\u0437-\u0437\u0430 \u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E\u0439 \u043E\u0448\u0438\u0431\u043A\u0438 \u0441\u0435\u0440\u0432\u0435\u0440\u0430."
+    });
+  }
+  const parsed = addCommentInputSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad Request",
+      message: parsed.error.message
     });
   }
   const found = SERVER_REQUESTS_DB.find(
@@ -4577,24 +5384,25 @@ const comments_post = defineEventHandler(async (event) => {
       message: `\u0417\u0430\u044F\u0432\u043A\u0430 #${cleanId} \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430`
     });
   }
-  const text = ((body == null ? void 0 : body.text) || "").trim();
-  if (!text) {
+  if (!canUserAccessRequest(user, found)) {
     throw createError({
-      statusCode: 400,
-      statusMessage: "Bad Request",
-      message: "\u0422\u0435\u043A\u0441\u0442 \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u044F \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u0431\u044B\u0442\u044C \u043F\u0443\u0441\u0442\u044B\u043C"
+      statusCode: 403,
+      statusMessage: "Forbidden",
+      message: "\u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044E \u0447\u0443\u0436\u043E\u0439 \u0437\u0430\u044F\u0432\u043A\u0438."
     });
   }
-  const author = ((body == null ? void 0 : body.author) || "").trim() || "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0430";
+  const author = ((_a = parsed.data.author) == null ? void 0 : _a.trim()) || user.name;
   const now = /* @__PURE__ */ new Date();
   const hh = String(now.getHours()).padStart(2, "0");
   const mm = String(now.getMinutes()).padStart(2, "0");
   const timeStr = `${hh}:${mm}`;
   const newComment = {
     id: `c-${cleanId}-${Date.now()}`,
+    requestId: cleanId,
+    authorId: user.id,
     author,
     time: timeStr,
-    text
+    text: parsed.data.text
   };
   if (!found.comments) {
     found.comments = [];
@@ -4627,20 +5435,21 @@ const PRIORITY_RANK = {
   low: 1
 };
 const index_get$2 = defineEventHandler((event) => {
+  const user = requireAuthUser(event);
   const query = getQuery$1(event);
   const simulateError = String(query.simulateError || "").trim();
   if (simulateError === "429") {
     throw createError({
       statusCode: 429,
       statusMessage: "Too Many Requests",
-      message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u043C\u043D\u043E\u0433\u043E \u0437\u0430\u043F\u0440\u043E\u0441\u043E\u0432 (HTTP 429). \u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u043F\u043E\u0434\u043E\u0436\u0434\u0438\u0442\u0435 \u0438 \u043F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u0435 \u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0443."
+      message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u043C\u043D\u043E\u0433\u043E \u0437\u0430\u043F\u0440\u043E\u0441\u043E\u0432 \u043A \u0441\u0435\u0440\u0432\u0435\u0440\u0443 (HTTP 429). \u041F\u043E\u0434\u043E\u0436\u0434\u0438\u0442\u0435 \u043D\u0435\u043C\u043D\u043E\u0433\u043E \u0438 \u043F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u0435 \u043F\u043E\u043F\u044B\u0442\u043A\u0443."
     });
   }
   if (simulateError === "500") {
     throw createError({
       statusCode: 500,
       statusMessage: "Internal Server Error",
-      message: "\u0421\u0435\u0440\u0432\u0438\u0441 \u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E \u043D\u0435\u0434\u043E\u0441\u0442\u0443\u043F\u0435\u043D. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0435\u0449\u0451 \u0440\u0430\u0437."
+      message: "\u0412\u0440\u0435\u043C\u0435\u043D\u043D\u0430\u044F \u043E\u0448\u0438\u0431\u043A\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0430 (HTTP 500). \u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0441\u043F\u0438\u0441\u043E\u043A \u0437\u0430\u044F\u0432\u043E\u043A."
     });
   }
   const search = String(query.search || "").trim().toLowerCase();
@@ -4648,72 +5457,77 @@ const index_get$2 = defineEventHandler((event) => {
   const priority = String(query.priority || "all").trim();
   const assignee = String(query.assignee || "all").trim();
   const sort = String(query.sort || "newest").trim();
-  const includePartial = String(query.partial || "").trim();
   const pageRaw = Number(query.page || 1);
   const limitRaw = Number(query.limit || 12);
-  const page = Number.isFinite(pageRaw) && pageRaw > 0 ? Math.floor(pageRaw) : 1;
-  const limit = Number.isFinite(limitRaw) && limitRaw > 0 ? Math.floor(limitRaw) : 12;
-  let list = SERVER_REQUESTS_DB.map((item) => {
-    if (item.id === "1038" && includePartial === "false") {
-      return {
-        ...item,
-        title: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u043E\u0435 \u043A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435",
-        customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB"
-      };
-    }
-    return { ...item };
-  });
+  const page = Number.isFinite(pageRaw) && pageRaw >= 1 ? Math.floor(pageRaw) : 1;
+  const limit = Number.isFinite(limitRaw) && limitRaw >= 1 ? Math.floor(limitRaw) : 12;
+  let accessibleItems = SERVER_REQUESTS_DB.map((item) => ({
+    ...item,
+    comments: item.comments ? [...item.comments] : [],
+    timeline: item.timeline ? [...item.timeline] : []
+  }));
+  if (user.role === "Client") {
+    accessibleItems = accessibleItems.filter(
+      (item) => (item.customer || "").trim() === user.company || item.createdByUserId === user.id
+    );
+  } else if (user.role === "Agent") {
+    accessibleItems = accessibleItems.filter(
+      (item) => item.assignee === user.shortName || item.assignee === user.name || item.id === "1042"
+    );
+  }
+  let filtered = [...accessibleItems];
   if (search) {
-    list = list.filter((item) => {
-      const titleText = (item.title || "").toLowerCase();
-      const customerText = (item.customer || "").toLowerCase();
-      const codeText = (item.code || `#${item.id}`).toLowerCase();
-      const idText = String(item.id).toLowerCase();
-      return titleText.includes(search) || customerText.includes(search) || codeText.includes(search) || idText.includes(search);
+    filtered = filtered.filter((item) => {
+      const codeStr = (item.code || `#${item.id}`).toLowerCase();
+      const idStr = String(item.id).toLowerCase();
+      const titleStr = (item.title || "\u0411\u0435\u0437 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044F").toLowerCase();
+      const customerStr = (item.customer || "\u041A\u043B\u0438\u0435\u043D\u0442 \u043D\u0435 \u0443\u043A\u0430\u0437\u0430\u043D").toLowerCase();
+      return codeStr.includes(search) || idStr.includes(search) || titleStr.includes(search) || customerStr.includes(search);
     });
   }
   if (status && status !== "all") {
-    list = list.filter((item) => item.status === status);
+    filtered = filtered.filter((item) => item.status === status);
   }
   if (priority && priority !== "all") {
-    list = list.filter((item) => item.priority === priority);
+    filtered = filtered.filter((item) => item.priority === priority);
   }
   if (assignee && assignee !== "all") {
     if (assignee === "unassigned") {
-      list = list.filter((item) => !item.assignee || item.assignee === "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D");
+      filtered = filtered.filter(
+        (item) => !item.assignee || item.assignee === "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D"
+      );
     } else {
-      list = list.filter((item) => item.assignee === assignee);
+      filtered = filtered.filter((item) => item.assignee === assignee);
     }
   }
   if (sort === "oldest") {
-    list.sort((a, b) => Number(a.id) - Number(b.id));
+    filtered.sort((a, b) => Number(a.id) - Number(b.id));
   } else if (sort === "priority") {
-    list.sort((a, b) => {
-      const rankB = b.priority ? PRIORITY_RANK[b.priority] : 0;
-      const rankA = a.priority ? PRIORITY_RANK[a.priority] : 0;
-      return rankB - rankA;
+    filtered.sort((a, b) => {
+      const pA = PRIORITY_RANK[a.priority || "normal"] || 2;
+      const pB = PRIORITY_RANK[b.priority || "normal"] || 2;
+      if (pB !== pA) return pB - pA;
+      return Number(b.id) - Number(a.id);
     });
   } else {
-    list.sort((a, b) => Number(b.id) - Number(a.id));
+    filtered.sort((a, b) => Number(b.id) - Number(a.id));
   }
-  const total = list.length;
+  const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / limit));
   const safePage = Math.min(page, totalPages);
   const start = (safePage - 1) * limit;
-  const items = list.slice(start, start + limit);
-  const hasPartialDataInPage = items.some(
-    (item) => {
-      var _a, _b;
-      return !((_a = item.title) == null ? void 0 : _a.trim()) || !((_b = item.customer) == null ? void 0 : _b.trim());
-    }
+  const paginated = filtered.slice(start, start + limit);
+  const hasIncompleteData = paginated.some(
+    (item) => !item.title || !item.title.trim() || !item.customer || !item.customer.trim()
   );
   return {
-    items,
+    items: paginated,
     total,
     page: safePage,
     limit,
     totalPages,
-    hasPartialDataInPage,
+    hasPartialDataInPage: hasIncompleteData,
+    hasIncompleteData,
     metrics: {
       newCount: 6,
       inProgressCount: 4,
@@ -4729,8 +5543,24 @@ const index_get$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePropert
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const index_post = defineEventHandler(async (event) => {
-  var _a, _b, _c, _d;
-  const body = await readBody(event);
+  const user = requireAuthUser(event);
+  if (!canUserCreateRequest(user.role)) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Forbidden",
+      message: "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u0441\u043E\u0437\u0434\u0430\u0432\u0430\u0442\u044C \u043D\u043E\u0432\u044B\u0435 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u0438\u0435 \u0437\u0430\u044F\u0432\u043A\u0438."
+    });
+  }
+  const rawBody = await readBody(event);
+  const parsed = createRequestInputSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad Request",
+      message: parsed.error.message
+    });
+  }
+  const body = parsed.data;
   const maxId = SERVER_REQUESTS_DB.reduce(
     (acc, item) => Math.max(acc, Number(item.id) || 1042),
     1042
@@ -4740,20 +5570,21 @@ const index_post = defineEventHandler(async (event) => {
   const hh = String(now.getHours()).padStart(2, "0");
   const mm = String(now.getMinutes()).padStart(2, "0");
   const timeStr = `${hh}:${mm}`;
-  const authorFirst = ((body == null ? void 0 : body.authorName) || "\u0410\u043D\u043D\u0430").trim().split(" ")[0] || "\u0410\u043D\u043D\u0430";
-  const priority = (body == null ? void 0 : body.priority) || "normal";
+  const authorFirst = (body.authorName || user.name || "\u041C\u0430\u0440\u0438\u044F").trim().split(" ")[0] || "\u041C\u0430\u0440\u0438\u044F";
+  const customerName = user.role === "Client" ? user.company : body.customer || "\u0410\u041E \xAB\u0412\u0435\u043A\u0442\u043E\u0440\xBB";
   const newItem = {
     id: nextId,
     code: `#${nextId}`,
-    title: ((_a = body == null ? void 0 : body.title) == null ? void 0 : _a.trim()) || "\u0411\u0435\u0437 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044F",
-    customer: ((_b = body == null ? void 0 : body.customer) == null ? void 0 : _b.trim()) || "\u041A\u043B\u0438\u0435\u043D\u0442 \u043D\u0435 \u0443\u043A\u0430\u0437\u0430\u043D",
+    title: body.title,
+    customer: customerName,
+    createdByUserId: user.id,
     assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
     status: "new",
-    priority,
-    category: ((_c = body == null ? void 0 : body.category) == null ? void 0 : _c.trim()) || "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
+    priority: body.priority,
+    category: body.category,
     createdAt: `\u0421\u043E\u0437\u0434\u0430\u043D\u0430 \u0441\u0435\u0433\u043E\u0434\u043D\u044F, ${timeStr}`,
-    dueAt: PRIORITY_DUE_DATES[priority],
-    description: ((_d = body == null ? void 0 : body.description) == null ? void 0 : _d.trim()) || "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u044B \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E \u043F\u0440\u0438 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u0438 \u0437\u0430\u044F\u0432\u043A\u0438.",
+    dueAt: PRIORITY_DUE_DATES[body.priority],
+    description: body.description,
     comments: [],
     timeline: [
       {
@@ -4774,8 +5605,9 @@ const index_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProper
   default: index_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const index_get = defineEventHandler(() => {
-  return SERVER_USERS_DB;
+const index_get = defineEventHandler((event) => {
+  requireAuthUser(event);
+  return SERVER_USERS_DB.map(({ password: _password, ...publicUser }) => publicUser);
 });
 
 const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

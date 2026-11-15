@@ -1,48 +1,72 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
 
-defineProps<{
+const props = defineProps<{
   error?: NuxtError
 }>()
 
-const handleBackToRequests = () => {
+const statusCode = computed(() => {
+  return props.error?.statusCode === 403 ? 403 : 404
+})
+
+const errorHeading = computed(() => {
+  return statusCode.value === 403 ? 'Нет доступа' : 'Страница не найдена'
+})
+
+const errorDescription = computed(() => {
+  return statusCode.value === 403
+    ? 'Эта страница недоступна вашей роли.'
+    : 'Такой страницы нет или она была перемещена.'
+})
+
+const handleReturn = () => {
   clearError({ redirect: '/requests' })
 }
 </script>
 
 <template>
-  <div class="layer-1-10-sistemnaia-oshibka-404">
-    <div class="oshibka">
-      <p class="layer-404">404</p>
-      <p class="stranitsa-ne-naidena">Страница не найдена</p>
-      <p class="prover-te-adres-ili-vernites-k-zaiavkam">
-        Проверьте адрес или вернитесь к заявкам.
-      </p>
-      <OctagonButton
-        label23251="Вернуться к заявкам"
-        @click="handleBackToRequests"
-      />
+  <div class="error-page-wrapper">
+    <div class="layer-1-12-sistemnaia-oshibka">
+      <div class="oshibka">
+        <p class="layer-404">{{ statusCode }}</p>
+        <p class="stranitsa-ne-naidena">{{ errorHeading }}</p>
+        <p class="takoi-stranitsy-net-ili-ona-byla">
+          {{ errorDescription }}
+        </p>
+        <div class="octagon-button">
+          <OctagonButton
+            label23251="Вернуться к заявкам"
+            @click="handleReturn"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.layer-1-10-sistemnaia-oshibka-404 {
-  position: relative;
-  width: 100%;
+.error-page-wrapper {
   min-height: 100vh;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 0px;
-  padding: 0px;
   justify-content: center;
   align-items: center;
   background: radial-gradient(29.3% 64.65% at 54.55% 50%, #201D47 0%, #17153A 100%);
 }
 
-.oshibka {
+.layer-1-12-sistemnaia-oshibka {
   width: 100%;
-  max-width: 720px;
+  max-width: 1280px;
+  min-height: 900px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.oshibka {
+  width: 720px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -71,7 +95,7 @@ const handleBackToRequests = () => {
   text-align: center;
 }
 
-.prover-te-adres-ili-vernites-k-zaiavkam {
+.takoi-stranitsy-net-ili-ona-byla {
   align-self: stretch;
   color: var(--color-text-secondary, #B9B3D4);
   font-family: "Montserrat", sans-serif;
@@ -81,14 +105,37 @@ const handleBackToRequests = () => {
   text-align: center;
 }
 
-@media (max-width: 639px) {
+.octagon-button {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 1023px) {
   .oshibka {
-    padding: 40px 16px;
+    width: 100%;
+    padding: 64px 32px;
+  }
+}
+
+@media (max-width: 639px) {
+  .layer-1-12-sistemnaia-oshibka {
+    min-height: 100vh;
+  }
+
+  .oshibka {
+    width: 100%;
+    padding: 64px 16px;
   }
 
   .stranitsa-ne-naidena {
     font-size: 24px;
     line-height: 31px;
+  }
+
+  .octagon-button,
+  .octagon-button :deep(.octagon-btn) {
+    align-self: stretch;
+    width: 100%;
   }
 }
 </style>

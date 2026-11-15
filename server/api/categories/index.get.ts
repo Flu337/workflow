@@ -1,6 +1,8 @@
 import { SERVER_CATEGORIES_DB } from '../../utils/db'
-import type { CategoryDirectoryItemDto } from '~/types/workflow'
+import { requireAuthUser } from '../../utils/auth'
+import type { CategoryDirectoryItemDto } from '../../../shared/types/workflow'
 
-export default defineEventHandler((): CategoryDirectoryItemDto[] => {
+export default defineEventHandler((event): CategoryDirectoryItemDto[] => {
+  requireAuthUser(event)
   return SERVER_CATEGORIES_DB
 })

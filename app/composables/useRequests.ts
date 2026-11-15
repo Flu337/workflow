@@ -217,7 +217,11 @@ export const useRequests = () => {
           text: `${preferencesStore.name.split(' ')[0]} создал(а) заявку`
         }
       ],
-      hasMissingData: !payload.title.trim() || !payload.customer.trim()
+      hasMissingData: !payload.title.trim() || !payload.customer.trim(),
+      resolutionSummary: '',
+      waitingReason: '',
+      closingReason: '' ,
+      attachments: []
     }
 
     requests.value.unshift(newReq)

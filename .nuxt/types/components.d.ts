@@ -21,6 +21,7 @@ interface _GlobalComponents {
   OctagonIconInboxEmpty: typeof import("../../app/components/OctagonIconInboxEmpty.vue")['default']
   OctagonIconMenu: typeof import("../../app/components/OctagonIconMenu.vue")['default']
   OctagonIconSearch: typeof import("../../app/components/OctagonIconSearch.vue")['default']
+  OctagonIconX: typeof import("../../app/components/OctagonIconX.vue")['default']
   OctagonPriorityBadge: typeof import("../../app/components/OctagonPriorityBadge.vue")['default']
   OctagonStatusBadge: typeof import("../../app/components/OctagonStatusBadge.vue")['default']
   WFGPTCreateRequestModal: typeof import("../../app/components/WFGPTCreateRequestModal.vue")['default']
@@ -129,6 +130,7 @@ interface _GlobalComponents {
   LazyOctagonIconInboxEmpty: LazyComponent<typeof import("../../app/components/OctagonIconInboxEmpty.vue")['default']>
   LazyOctagonIconMenu: LazyComponent<typeof import("../../app/components/OctagonIconMenu.vue")['default']>
   LazyOctagonIconSearch: LazyComponent<typeof import("../../app/components/OctagonIconSearch.vue")['default']>
+  LazyOctagonIconX: LazyComponent<typeof import("../../app/components/OctagonIconX.vue")['default']>
   LazyOctagonPriorityBadge: LazyComponent<typeof import("../../app/components/OctagonPriorityBadge.vue")['default']>
   LazyOctagonStatusBadge: LazyComponent<typeof import("../../app/components/OctagonStatusBadge.vue")['default']>
   LazyWFGPTCreateRequestModal: LazyComponent<typeof import("../../app/components/WFGPTCreateRequestModal.vue")['default']>

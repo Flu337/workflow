@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RequestPriority } from '~/types/workflow'
+import type { RequestPriority } from '../../shared/types/workflow'
 
 const props = defineProps<{
   modelValue: boolean
@@ -12,11 +12,23 @@ const emit = defineEmits<{
 
 const { createNewRequest } = useRequests()
 
-const title = ref('')
-const customer = ref('АО «Вектор»')
+const title = ref('Не работает доступ к CRM')
 const category = ref('Доступ и учётные записи')
+const description = ref(
+  'После обновления не удаётся войти в CRM. При попытке входа появляется сообщение «Доступ запрещён». Проблема затрагивает отдел продаж.'
+)
 const priority = ref<RequestPriority>('high')
-const description = ref('')
+const errorMessage = ref('')
+const isSubmitting = ref(false)
+
+const categoryOptions = [
+  { label: 'Доступ и учётные записи', value: 'Доступ и учётные записи' },
+  { label: 'Инфраструктура и безопасность', value: 'Инфраструктура и безопасность' },
+  { label: 'Отчётность и аналитика', value: 'Отчётность и аналитика' },
+  { label: 'Интеграции и API', value: 'Интеграции и API' },
+  { label: 'Почта и коммуникации', value: 'Почта и коммуникации' },
+  { label: 'Офисное оборудование', value: 'Офисное оборудование' }
+]
 
 const priorityOptions = [
   { label: 'Критический', value: 'critical' },
@@ -25,29 +37,36 @@ const priorityOptions = [
   { label: 'Низкий', value: 'low' }
 ]
 
-const customerOptions = [
-  { label: 'АО «Вектор»', value: 'АО «Вектор»' },
-  { label: 'ООО «Сфера»', value: 'ООО «Сфера»' },
-  { label: 'ООО «Пульс»', value: 'ООО «Пульс»' }
-]
-
 const closeModal = () => {
+  errorMessage.value = ''
   emit('update:modelValue', false)
 }
 
 const handleSubmit = async () => {
-  if (!title.value.trim()) return
-  const created = await createNewRequest({
-    title: title.value,
-    customer: customer.value,
-    category: category.value,
-    priority: priority.value,
-    description: description.value
-  })
-  title.value = ''
-  description.value = ''
-  emit('created', created.id)
-  closeModal()
+  errorMessage.value = ''
+  if (!title.value.trim()) {
+    errorMessage.value = 'Укажите название заявки.'
+    return
+  }
+
+  isSubmitting.value = true
+  try {
+    const created = await createNewRequest({
+      title: title.value.trim(),
+      customer: 'АО «Вектор»',
+      category: category.value,
+      priority: priority.value,
+      description: description.value.trim()
+    })
+    emit('created', created.id)
+    closeModal()
+  } catch (err) {
+    errorMessage.value =
+      (err as { data?: { message?: string }; message?: string })?.data?.message ||
+      'Не удалось создать заявку.'
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 const handleKeydown = (e: KeyboardEvent) => {
@@ -76,38 +95,35 @@ onBeforeUnmount(() => {
       aria-labelledby="modal-create-title"
       @click.self="closeModal"
     >
-      <div class="modal-card">
-        <div class="modal-header">
-          <p id="modal-create-title" class="modal-title">Создать заявку</p>
-          <button
-            type="button"
-            class="ui-icon-btn"
-            aria-label="Закрыть модальное окно"
-            @click="closeModal"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path
-                d="M5 5L15 15M15 5L5 15"
-                stroke="#B9B3D4"
-                stroke-width="1.67"
-                stroke-linecap="round"
-              />
-            </svg>
-          </button>
-        </div>
+      <div class="sozdanie-zaiavki">
+        <form class="novaia-zaiavka" @submit.prevent="handleSubmit">
+          <div class="zagolovok-okna">
+            <p id="modal-create-title" class="novaia-zaiavka-2">Новая заявка</p>
+            <OctagonIconX @click="closeModal" />
+          </div>
 
-        <form class="modal-form" @submit.prevent="handleSubmit">
+          <p class="opishite-problemu-operator-naznachit">
+            Опишите проблему — оператор назначит исполнителя.
+          </p>
+
           <WFGPTField
             v-model="title"
-            label23270="Тема заявки"
-            placeholder="Например: Не работает доступ к CRM"
+            label23270="Название"
+            value="Не работает доступ к CRM"
           />
 
           <WFGPTField
-            v-model="customer"
-            label23270="Клиент"
+            v-model="category"
+            label23270="Категория"
             type="select"
-            :options="customerOptions"
+            :options="categoryOptions"
+            :value="`${category}  ▾`"
+          />
+
+          <WFGPTTextarea
+            v-model="description"
+            label23270="Описание"
+            :value="description"
           />
 
           <WFGPTField
@@ -115,15 +131,12 @@ onBeforeUnmount(() => {
             label23270="Приоритет"
             type="select"
             :options="priorityOptions"
+            value="Высокий  ▾"
           />
 
-          <WFGPTTextarea
-            v-model="description"
-            label23270="Описание проблемы"
-            placeholder="Опишите детали обращения…"
-          />
+          <p v-if="errorMessage" class="modal-error-text">{{ errorMessage }}</p>
 
-          <div class="modal-actions">
+          <div class="deistviia">
             <OctagonButton
               variant="secondary"
               label23251="Отмена"
@@ -131,8 +144,8 @@ onBeforeUnmount(() => {
             />
             <OctagonButton
               type="submit"
-              :disabled="!title.trim()"
-              :state="!title.trim() ? 'disabled' : 'default'"
+              :disabled="!title.trim() || isSubmitting"
+              :state="!title.trim() || isSubmitting ? 'disabled' : 'default'"
               label23251="Создать заявку"
             />
           </div>
@@ -147,34 +160,46 @@ onBeforeUnmount(() => {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(15, 13, 38, 0.75);
+  background: rgba(23, 21, 58, 0.65);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 16px;
 }
 
-.modal-card {
-  width: 100%;
-  max-width: 480px;
+.sozdanie-zaiavki {
+  width: 560px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  background: radial-gradient(45.39% 41.73% at 54.55% 50%, #201D47 0%, #17153A 100%);
+}
+
+.novaia-zaiavka {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
   border-radius: 4px;
   background: var(--color-bg-surface, #23204D);
   border: 1px solid var(--color-border-default, #413E74);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
 }
 
-.modal-header {
+.zagolovok-okna {
+  align-self: stretch;
+  width: 100%;
   display: flex;
   flex-direction: row;
+  gap: 16px;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
-.modal-title {
+.novaia-zaiavka-2 {
+  flex: 1 1 0;
   color: var(--color-text-primary, #E8E7EC);
   font-family: "Montserrat", sans-serif;
   font-size: 20px;
@@ -182,17 +207,30 @@ onBeforeUnmount(() => {
   line-height: 28px;
 }
 
-.modal-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.opishite-problemu-operator-naznachit {
+  align-self: stretch;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
 }
 
-.modal-actions {
+.modal-error-text {
+  color: #FF80A3;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.deistviia {
+  align-self: stretch;
+  width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
   gap: 12px;
-  margin-top: 4px;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 </style>

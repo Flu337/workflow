@@ -1,11 +1,19 @@
 import type {
   RequestItemDto,
+  RequestCommentDto,
+  RequestTimelineItemDto,
   RequestsListResponseDto,
   WorkFlowRequest,
+  RequestComment,
+  RequestTimelineItem,
   NormalizedRequestsListResult,
   RequestStatus,
   RequestPriority
-} from '~/types/workflow'
+} from '../../shared/types/workflow'
+
+export const DEFAULT_REQUEST_TITLE = 'Без названия'
+export const DEFAULT_CUSTOMER_NAME = 'Клиент не указан'
+export const DEFAULT_ASSIGNEE_NAME = 'Не назначен'
 
 const VALID_STATUSES: RequestStatus[] = [
   'new',
@@ -19,63 +27,76 @@ const VALID_STATUSES: RequestStatus[] = [
 
 const VALID_PRIORITIES: RequestPriority[] = ['critical', 'high', 'normal', 'low']
 
+function normalizeComment(dto: RequestCommentDto, index: number): RequestComment {
+  return {
+    id: dto.id || `comment-${index}`,
+    author: dto.author && dto.author.trim() ? dto.author.trim() : 'Сотрудник поддержки',
+    time: dto.time && dto.time.trim() ? dto.time.trim() : '09:00',
+    text: dto.text && dto.text.trim() ? dto.text.trim() : 'Текст комментария отсутствует.'
+  }
+}
+
+function normalizeTimelineItem(dto: RequestTimelineItemDto, index: number): RequestTimelineItem {
+  return {
+    id: dto.id || `timeline-${index}`,
+    time: dto.time && dto.time.trim() ? dto.time.trim() : '09:00',
+    text: dto.text && dto.text.trim() ? dto.text.trim() : 'Обновление заявки'
+  }
+}
+
 // единая нормализация заявки и подстановка значений для пустых полей
 export function normalizeRequestItem(dto: RequestItemDto): WorkFlowRequest {
+  const rawId = String(dto.id ?? '').replace(/^#/, '').trim() || '1000'
   const rawTitle = typeof dto.title === 'string' ? dto.title.trim() : ''
   const rawCustomer = typeof dto.customer === 'string' ? dto.customer.trim() : ''
   const rawAssignee = typeof dto.assignee === 'string' ? dto.assignee.trim() : ''
-  const rawCategory = typeof dto.category === 'string' ? dto.category.trim() : ''
-  const rawDescription = typeof dto.description === 'string' ? dto.description.trim() : ''
 
   const hasMissingData = !rawTitle || !rawCustomer
 
-  const cleanId = String(dto.id || '').replace(/^#/, '') || '0000'
-  const code = dto.code && dto.code.trim() ? dto.code.trim() : `#${cleanId}`
-
   const status: RequestStatus =
     dto.status && VALID_STATUSES.includes(dto.status) ? dto.status : 'new'
-
   const priority: RequestPriority =
     dto.priority && VALID_PRIORITIES.includes(dto.priority) ? dto.priority : 'normal'
 
   return {
-    id: cleanId,
-    code,
-    title: rawTitle || 'Без названия',
-    customer: rawCustomer || 'Клиент не указан',
-    assignee: rawAssignee || 'Не назначен',
+    id: rawId,
+    code: dto.code && dto.code.trim() ? dto.code.trim() : `#${rawId}`,
+    title: rawTitle || DEFAULT_REQUEST_TITLE,
+    customer: rawCustomer || DEFAULT_CUSTOMER_NAME,
+    assignee: rawAssignee || DEFAULT_ASSIGNEE_NAME,
+    assigneeId: dto.assigneeId || undefined,
     status,
     priority,
-    category: rawCategory || 'Доступ и учётные записи',
-    createdAt: dto.createdAt && dto.createdAt.trim() ? dto.createdAt.trim() : 'Создана сегодня',
+    category:
+      dto.category && dto.category.trim() ? dto.category.trim() : 'Доступ и учётные записи',
+    createdAt:
+      dto.createdAt && dto.createdAt.trim() ? dto.createdAt.trim() : 'Создана 5 октября, 09:00',
     dueAt: dto.dueAt && dto.dueAt.trim() ? dto.dueAt.trim() : 'Сегодня, 18:00',
     description:
-      rawDescription ||
-      'Описание проблемы не было передано при создании обращения.',
-    comments: Array.isArray(dto.comments)
-      ? dto.comments.map(c => ({
-          id: String(c.id),
-          author: c.author?.trim() || 'Оператор',
-          time: c.time?.trim() || '09:00',
-          text: c.text?.trim() || ''
-        }))
-      : [],
-    timeline: Array.isArray(dto.timeline)
-      ? dto.timeline.map(t => ({
-          id: String(t.id),
-          time: t.time?.trim() || '09:00',
-          text: t.text?.trim() || 'Событие по заявке'
-        }))
-      : [],
+      dto.description && dto.description.trim()
+        ? dto.description.trim()
+        : 'Описание проблемы не указано.',
+    resolutionSummary:
+      typeof dto.resolutionSummary === 'string' ? dto.resolutionSummary.trim() : '',
+    waitingReason: typeof dto.waitingReason === 'string' ? dto.waitingReason.trim() : '',
+    closingReason: typeof dto.closingReason === 'string' ? dto.closingReason.trim() : '',
+    attachments: Array.isArray(dto.attachments) ? dto.attachments : [],
+    comments: Array.isArray(dto.comments) ? dto.comments.map(normalizeComment) : [],
+    timeline: Array.isArray(dto.timeline) ? dto.timeline.map(normalizeTimelineItem) : [],
     hasMissingData
   }
 }
 
+export function normalizeRequestDetail(dto: RequestItemDto | null | undefined): WorkFlowRequest | null {
+  if (!dto) return null
+  return normalizeRequestItem(dto)
+}
+
 // нормализация ответа списка заявок с проверкой неполных данных
 export function normalizeRequestsListResponse(
-  response?: RequestsListResponseDto | null
+  response: RequestsListResponseDto | null | undefined
 ): NormalizedRequestsListResult {
-  if (!response || !Array.isArray(response.items)) {
+  if (!response) {
     return {
       items: [],
       total: 0,
@@ -92,9 +113,13 @@ export function normalizeRequestsListResponse(
     }
   }
 
-  const normalizedItems = response.items.map(normalizeRequestItem)
+  const normalizedItems = Array.isArray(response.items)
+    ? response.items.map(normalizeRequestItem)
+    : []
+
   const hasIncompleteData =
     Boolean(response.hasPartialDataInPage) ||
+    Boolean(response.hasIncompleteData) ||
     normalizedItems.some(item => item.hasMissingData)
 
   return {

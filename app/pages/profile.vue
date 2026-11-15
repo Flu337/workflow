@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import type { ListDensity } from '~/types/workflow'
+import type { ListDensity } from '../../shared/types/workflow'
 import { usePreferencesStore } from '~/stores/preferences'
+import { useAuthStore } from '~/stores/auth'
 
 const preferencesStore = usePreferencesStore()
+const authStore = useAuthStore()
 const router = useRouter()
 
 const name = ref(preferencesStore.name)
@@ -12,8 +14,8 @@ const savedBanner = ref(false)
 
 onMounted(() => {
   preferencesStore.initFromStorage()
-  name.value = preferencesStore.name
-  email.value = preferencesStore.email
+  name.value = authStore.user?.name || preferencesStore.name
+  email.value = authStore.user?.email || preferencesStore.email
   density.value = preferencesStore.density
 })
 
@@ -49,8 +51,9 @@ const handleDensityChange = (val: string) => {
   preferencesStore.setDensity(nextDensity)
 }
 
-const handleLogout = () => {
-  router.push('/login')
+const handleLogout = async () => {
+  await authStore.logout(false)
+  await router.push('/login')
 }
 </script>
 
@@ -62,7 +65,7 @@ const handleLogout = () => {
     </p>
 
     <div class="dannye-profilia">
-      <OctagonAvatar :initials="preferencesStore.initials" />
+      <OctagonAvatar :initials="authStore.user?.initials || preferencesStore.initials" />
 
       <div class="wf-gpt-field">
         <WFGPTField
@@ -80,7 +83,7 @@ const handleLogout = () => {
         />
       </div>
 
-      <p class="rol-operator">Роль: оператор</p>
+      <p class="rol-operator">Роль: {{ (authStore.currentRoleLabel || 'оператор').toLowerCase() }}</p>
 
       <div class="octagon-button">
         <OctagonButton

@@ -2,19 +2,34 @@
 export {}
 declare global {
   const $fetch: typeof import('../fetch').$fetch
+  const ALLOWED_STATUS_TRANSITIONS: typeof import('../../shared/utils/statusTransitions').ALLOWED_STATUS_TRANSITIONS
+  const DEFAULT_ASSIGNEE_NAME: typeof import('../../app/utils/normalizeRequests').DEFAULT_ASSIGNEE_NAME
+  const DEFAULT_CUSTOMER_NAME: typeof import('../../app/utils/normalizeRequests').DEFAULT_CUSTOMER_NAME
+  const DEFAULT_REQUEST_TITLE: typeof import('../../app/utils/normalizeRequests').DEFAULT_REQUEST_TITLE
   const MOCK_REQUESTS: typeof import('../../app/utils/mockData').MOCK_REQUESTS
-  const PRIORITY_DUE_DATES: typeof import('../../app/types/workflow').PRIORITY_DUE_DATES
-  const PRIORITY_LABELS: typeof import('../../app/types/workflow').PRIORITY_LABELS
-  const STATUS_LABELS: typeof import('../../app/types/workflow').STATUS_LABELS
+  const PRIORITY_DUE_DATES: typeof import('../../shared/types/workflow').PRIORITY_DUE_DATES
+  const PRIORITY_LABELS: typeof import('../../shared/types/workflow').PRIORITY_LABELS
+  const ROLE_ALLOWED_TARGET_STATUSES: typeof import('../../shared/utils/statusTransitions').ROLE_ALLOWED_TARGET_STATUSES
+  const ROLE_LABELS: typeof import('../../shared/types/workflow').ROLE_LABELS
+  const STATUS_LABELS: typeof import('../../shared/types/workflow').STATUS_LABELS
   const abortNavigation: typeof import('../../node_modules/nuxt/dist/app/composables/router').abortNavigation
+  const addCommentInputSchema: typeof import('../../shared/utils/validation').addCommentInputSchema
   const addRouteMiddleware: typeof import('../../node_modules/nuxt/dist/app/composables/router').addRouteMiddleware
   const callOnce: typeof import('../../node_modules/nuxt/dist/app/composables/once').callOnce
+  const canUserAccessDashboard: typeof import('../../shared/utils/permissions').canUserAccessDashboard
+  const canUserAccessRequest: typeof import('../../shared/utils/permissions').canUserAccessRequest
+  const canUserAssignExecutor: typeof import('../../shared/utils/permissions').canUserAssignExecutor
+  const canUserChangePriority: typeof import('../../shared/utils/permissions').canUserChangePriority
+  const canUserCloseRequest: typeof import('../../shared/utils/permissions').canUserCloseRequest
+  const canUserCreateRequest: typeof import('../../shared/utils/permissions').canUserCreateRequest
+  const canUserResolveRequest: typeof import('../../shared/utils/permissions').canUserResolveRequest
   const cancelIdleCallback: typeof import('../../node_modules/nuxt/dist/app/compat/idle-callback').cancelIdleCallback
   const clearError: typeof import('../../node_modules/nuxt/dist/app/composables/error').clearError
   const clearNuxtData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').clearNuxtData
   const clearNuxtState: typeof import('../../node_modules/nuxt/dist/app/composables/state').clearNuxtState
   const computed: typeof import('vue').computed
   const createError: typeof import('../../node_modules/nuxt/dist/app/composables/error').createError
+  const createRequestInputSchema: typeof import('../../shared/utils/validation').createRequestInputSchema
   const createUseAsyncData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').createUseAsyncData
   const createUseFetch: typeof import('../../node_modules/nuxt/dist/app/composables/fetch').createUseFetch
   const customRef: typeof import('vue').customRef
@@ -35,6 +50,7 @@ declare global {
   const defineUseFetchAddon: typeof import('../../node_modules/nuxt/dist/app/composables/addons').defineUseFetchAddon
   const effect: typeof import('vue').effect
   const effectScope: typeof import('vue').effectScope
+  const getAllowedNextStatuses: typeof import('../../shared/utils/statusTransitions').getAllowedNextStatuses
   const getAppManifest: typeof import('../../node_modules/nuxt/dist/app/composables/manifest').getAppManifest
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
@@ -53,9 +69,11 @@ declare global {
   const isVue2: typeof import('../../node_modules/nuxt/dist/app/compat/vue-demi').isVue2
   const isVue3: typeof import('../../node_modules/nuxt/dist/app/compat/vue-demi').isVue3
   const loadPayload: typeof import('../../node_modules/nuxt/dist/app/composables/payload').loadPayload
+  const loginInputSchema: typeof import('../../shared/utils/validation').loginInputSchema
   const markRaw: typeof import('vue').markRaw
   const navigateTo: typeof import('../../node_modules/nuxt/dist/app/composables/router').navigateTo
   const nextTick: typeof import('vue').nextTick
+  const normalizeRequestDetail: typeof import('../../app/utils/normalizeRequests').normalizeRequestDetail
   const normalizeRequestItem: typeof import('../../app/utils/normalizeRequests').normalizeRequestItem
   const normalizeRequestsListResponse: typeof import('../../app/utils/normalizeRequests').normalizeRequestsListResponse
   const onActivated: typeof import('vue').onActivated
@@ -88,6 +106,7 @@ declare global {
   const ref: typeof import('vue').ref
   const refreshCookie: typeof import('../../node_modules/nuxt/dist/app/composables/cookie').refreshCookie
   const refreshNuxtData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').refreshNuxtData
+  const registerInputSchema: typeof import('../../shared/utils/validation').registerInputSchema
   const reloadNuxtApp: typeof import('../../node_modules/nuxt/dist/app/composables/chunk').reloadNuxtApp
   const requestIdleCallback: typeof import('../../node_modules/nuxt/dist/app/compat/idle-callback').requestIdleCallback
   const resolveComponent: typeof import('vue').resolveComponent
@@ -107,10 +126,12 @@ declare global {
   const tryUseNuxtApp: typeof import('../../node_modules/nuxt/dist/app/nuxt').tryUseNuxtApp
   const unref: typeof import('vue').unref
   const updateAppConfig: typeof import('../../node_modules/nuxt/dist/app/config').updateAppConfig
+  const updateRequestInputSchema: typeof import('../../shared/utils/validation').updateRequestInputSchema
   const useAnnouncer: typeof import('../../node_modules/nuxt/dist/app/composables/announcer').useAnnouncer
   const useAppConfig: typeof import('../../node_modules/nuxt/dist/app/config').useAppConfig
   const useAsyncData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').useAsyncData
   const useAttrs: typeof import('vue').useAttrs
+  const useAuthStore: typeof import('../../app/stores/auth').useAuthStore
   const useCookie: typeof import('../../node_modules/nuxt/dist/app/composables/cookie').useCookie
   const useCssModule: typeof import('vue').useCssModule
   const useCssVars: typeof import('vue').useCssVars
@@ -197,6 +218,7 @@ declare global {
   const useState: typeof import('../../node_modules/nuxt/dist/app/composables/state').useState
   const useTemplateRef: typeof import('vue').useTemplateRef
   const useTransitionState: typeof import('vue').useTransitionState
+  const validateStatusTransition: typeof import('../../shared/utils/statusTransitions').validateStatusTransition
   const watch: typeof import('vue').watch
   const watchEffect: typeof import('vue').watchEffect
   const watchPostEffect: typeof import('vue').watchPostEffect
@@ -223,8 +245,14 @@ declare global {
   export type { VueUnwrapStore, StoreRefs } from '../../app/utils/pinia'
   import('../../app/utils/pinia')
   // @ts-ignore
-  export type { RequestStatus, RequestPriority, RequestSortOrder, SortOrder, ListViewState, ListDensity, RequestCommentDto, RequestTimelineItemDto, RequestItemDto, RequestsMetricsDto, RequestsListResponseDto, RequestDetailResponseDto, UserDirectoryItemDto, CustomerDirectoryItemDto, CategoryDirectoryItemDto, RequestComment, RequestTimelineItem, WorkFlowRequest, NormalizedRequestsListResult, RequestsFilterQuery, UpdateRequestPayloadDto, UpdateRequestResponseDto, AddCommentPayloadDto, AddCommentResponseDto, CreateRequestPayloadDto, UndoMutationSnapshot, RollbackBannerState, FeedbackBannerState, UserPreferencesState } from '../../app/types/workflow'
-  import('../../app/types/workflow')
+  export type { StatusTransitionValidationInput, StatusTransitionValidationResult } from '../../shared/utils/statusTransitions'
+  import('../../shared/utils/statusTransitions')
+  // @ts-ignore
+  export type { ValidationIssue, SafeParseResult, SchemaValidator } from '../../shared/utils/validation'
+  import('../../shared/utils/validation')
+  // @ts-ignore
+  export type { UserRole, RequestStatus, RequestPriority, RequestSortOrder, SortOrder, ListViewState, ListDensity, RequestCommentDto, RequestTimelineItemDto, RequestAttachmentDto, RequestItemDto, RequestsMetricsDto, RequestsListResponseDto, RequestDetailResponseDto, UserDirectoryItemDto, CustomerDirectoryItemDto, CategoryDirectoryItemDto, SessionUserDto, AuthSessionResponseDto, LoginPayloadDto, RegisterPayloadDto, RequestComment, RequestTimelineItem, WorkFlowRequest, NormalizedRequestsListResult, RequestsFilterQuery, UpdateRequestPayloadDto, UpdateRequestResponseDto, AddCommentPayloadDto, AddCommentResponseDto, CreateRequestPayloadDto, UndoMutationSnapshot, RollbackBannerState, FeedbackBannerState, UserPreferencesState } from '../../shared/types/workflow'
+  import('../../shared/types/workflow')
   // @ts-ignore
   export type { OptimisticRequestOverride } from '../../app/stores/requestUi'
   import('../../app/stores/requestUi')
@@ -234,19 +262,34 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface ComponentCustomProperties {
     readonly $fetch: UnwrapRef<typeof import('../fetch')['$fetch']>
+    readonly ALLOWED_STATUS_TRANSITIONS: UnwrapRef<typeof import('../../shared/utils/statusTransitions')['ALLOWED_STATUS_TRANSITIONS']>
+    readonly DEFAULT_ASSIGNEE_NAME: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['DEFAULT_ASSIGNEE_NAME']>
+    readonly DEFAULT_CUSTOMER_NAME: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['DEFAULT_CUSTOMER_NAME']>
+    readonly DEFAULT_REQUEST_TITLE: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['DEFAULT_REQUEST_TITLE']>
     readonly MOCK_REQUESTS: UnwrapRef<typeof import('../../app/utils/mockData')['MOCK_REQUESTS']>
-    readonly PRIORITY_DUE_DATES: UnwrapRef<typeof import('../../app/types/workflow')['PRIORITY_DUE_DATES']>
-    readonly PRIORITY_LABELS: UnwrapRef<typeof import('../../app/types/workflow')['PRIORITY_LABELS']>
-    readonly STATUS_LABELS: UnwrapRef<typeof import('../../app/types/workflow')['STATUS_LABELS']>
+    readonly PRIORITY_DUE_DATES: UnwrapRef<typeof import('../../shared/types/workflow')['PRIORITY_DUE_DATES']>
+    readonly PRIORITY_LABELS: UnwrapRef<typeof import('../../shared/types/workflow')['PRIORITY_LABELS']>
+    readonly ROLE_ALLOWED_TARGET_STATUSES: UnwrapRef<typeof import('../../shared/utils/statusTransitions')['ROLE_ALLOWED_TARGET_STATUSES']>
+    readonly ROLE_LABELS: UnwrapRef<typeof import('../../shared/types/workflow')['ROLE_LABELS']>
+    readonly STATUS_LABELS: UnwrapRef<typeof import('../../shared/types/workflow')['STATUS_LABELS']>
     readonly abortNavigation: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['abortNavigation']>
+    readonly addCommentInputSchema: UnwrapRef<typeof import('../../shared/utils/validation')['addCommentInputSchema']>
     readonly addRouteMiddleware: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['addRouteMiddleware']>
     readonly callOnce: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/once')['callOnce']>
+    readonly canUserAccessDashboard: UnwrapRef<typeof import('../../shared/utils/permissions')['canUserAccessDashboard']>
+    readonly canUserAccessRequest: UnwrapRef<typeof import('../../shared/utils/permissions')['canUserAccessRequest']>
+    readonly canUserAssignExecutor: UnwrapRef<typeof import('../../shared/utils/permissions')['canUserAssignExecutor']>
+    readonly canUserChangePriority: UnwrapRef<typeof import('../../shared/utils/permissions')['canUserChangePriority']>
+    readonly canUserCloseRequest: UnwrapRef<typeof import('../../shared/utils/permissions')['canUserCloseRequest']>
+    readonly canUserCreateRequest: UnwrapRef<typeof import('../../shared/utils/permissions')['canUserCreateRequest']>
+    readonly canUserResolveRequest: UnwrapRef<typeof import('../../shared/utils/permissions')['canUserResolveRequest']>
     readonly cancelIdleCallback: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/compat/idle-callback')['cancelIdleCallback']>
     readonly clearError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['clearError']>
     readonly clearNuxtData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['clearNuxtData']>
     readonly clearNuxtState: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/state')['clearNuxtState']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['createError']>
+    readonly createRequestInputSchema: UnwrapRef<typeof import('../../shared/utils/validation')['createRequestInputSchema']>
     readonly createUseAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['createUseAsyncData']>
     readonly createUseFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/fetch')['createUseFetch']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
@@ -267,6 +310,7 @@ declare module 'vue' {
     readonly defineUseFetchAddon: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/addons')['defineUseFetchAddon']>
     readonly effect: UnwrapRef<typeof import('vue')['effect']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly getAllowedNextStatuses: UnwrapRef<typeof import('../../shared/utils/statusTransitions')['getAllowedNextStatuses']>
     readonly getAppManifest: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/manifest')['getAppManifest']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
@@ -285,9 +329,11 @@ declare module 'vue' {
     readonly isVue2: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/compat/vue-demi')['isVue2']>
     readonly isVue3: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/compat/vue-demi')['isVue3']>
     readonly loadPayload: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/payload')['loadPayload']>
+    readonly loginInputSchema: UnwrapRef<typeof import('../../shared/utils/validation')['loginInputSchema']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
     readonly navigateTo: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['navigateTo']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
+    readonly normalizeRequestDetail: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['normalizeRequestDetail']>
     readonly normalizeRequestItem: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['normalizeRequestItem']>
     readonly normalizeRequestsListResponse: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['normalizeRequestsListResponse']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
@@ -320,6 +366,7 @@ declare module 'vue' {
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
     readonly refreshCookie: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['refreshCookie']>
     readonly refreshNuxtData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['refreshNuxtData']>
+    readonly registerInputSchema: UnwrapRef<typeof import('../../shared/utils/validation')['registerInputSchema']>
     readonly reloadNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/chunk')['reloadNuxtApp']>
     readonly requestIdleCallback: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/compat/idle-callback')['requestIdleCallback']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
@@ -339,10 +386,12 @@ declare module 'vue' {
     readonly tryUseNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['tryUseNuxtApp']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly updateAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/config')['updateAppConfig']>
+    readonly updateRequestInputSchema: UnwrapRef<typeof import('../../shared/utils/validation')['updateRequestInputSchema']>
     readonly useAnnouncer: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/announcer')['useAnnouncer']>
     readonly useAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/config')['useAppConfig']>
     readonly useAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useAuthStore: UnwrapRef<typeof import('../../app/stores/auth')['useAuthStore']>
     readonly useCookie: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['useCookie']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
@@ -429,6 +478,7 @@ declare module 'vue' {
     readonly useState: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/state')['useState']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
     readonly useTransitionState: UnwrapRef<typeof import('vue')['useTransitionState']>
+    readonly validateStatusTransition: UnwrapRef<typeof import('../../shared/utils/statusTransitions')['validateStatusTransition']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

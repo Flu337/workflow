@@ -1,12 +1,20 @@
 declare global {
+  const ALLOWED_STATUS_TRANSITIONS: typeof import('../../shared/utils/statusTransitions').ALLOWED_STATUS_TRANSITIONS
   const H3Error: typeof import('../../node_modules/h3/dist/index').H3Error
   const H3Event: typeof import('../../node_modules/h3/dist/index').H3Event
+  const POSTGRES_SCHEMA_SQL: typeof import('../../server/utils/postgresSchema').POSTGRES_SCHEMA_SQL
+  const PRIORITY_DUE_DATES: typeof import('../../shared/types/workflow').PRIORITY_DUE_DATES
+  const PRIORITY_LABELS: typeof import('../../shared/types/workflow').PRIORITY_LABELS
+  const ROLE_ALLOWED_TARGET_STATUSES: typeof import('../../shared/utils/statusTransitions').ROLE_ALLOWED_TARGET_STATUSES
+  const ROLE_LABELS: typeof import('../../shared/types/workflow').ROLE_LABELS
   const SERVER_CATEGORIES_DB: typeof import('../../server/utils/db').SERVER_CATEGORIES_DB
   const SERVER_CUSTOMERS_DB: typeof import('../../server/utils/db').SERVER_CUSTOMERS_DB
   const SERVER_REQUESTS_DB: typeof import('../../server/utils/db').SERVER_REQUESTS_DB
   const SERVER_USERS_DB: typeof import('../../server/utils/db').SERVER_USERS_DB
+  const STATUS_LABELS: typeof import('../../shared/types/workflow').STATUS_LABELS
   const __buildAssetsURL: typeof import('../../node_modules/@nuxt/nitro-server/dist/runtime/utils/paths').buildAssetsURL
   const __publicAssetsURL: typeof import('../../node_modules/@nuxt/nitro-server/dist/runtime/utils/paths').publicAssetsURL
+  const addCommentInputSchema: typeof import('../../shared/utils/validation').addCommentInputSchema
   const appendCorsHeaders: typeof import('../../node_modules/h3/dist/index').appendCorsHeaders
   const appendCorsPreflightHeaders: typeof import('../../node_modules/h3/dist/index').appendCorsPreflightHeaders
   const appendHeader: typeof import('../../node_modules/h3/dist/index').appendHeader
@@ -17,14 +25,24 @@ declare global {
   const cachedEventHandler: typeof import('../../node_modules/nitropack/dist/runtime/internal/cache').cachedEventHandler
   const cachedFunction: typeof import('../../node_modules/nitropack/dist/runtime/internal/cache').cachedFunction
   const callNodeListener: typeof import('../../node_modules/h3/dist/index').callNodeListener
+  const canUserAccessDashboard: typeof import('../../shared/utils/permissions').canUserAccessDashboard
+  const canUserAccessRequest: typeof import('../../shared/utils/permissions').canUserAccessRequest
+  const canUserAssignExecutor: typeof import('../../shared/utils/permissions').canUserAssignExecutor
+  const canUserChangePriority: typeof import('../../shared/utils/permissions').canUserChangePriority
+  const canUserCloseRequest: typeof import('../../shared/utils/permissions').canUserCloseRequest
+  const canUserCreateRequest: typeof import('../../shared/utils/permissions').canUserCreateRequest
+  const canUserResolveRequest: typeof import('../../shared/utils/permissions').canUserResolveRequest
   const clearResponseHeaders: typeof import('../../node_modules/h3/dist/index').clearResponseHeaders
+  const clearServerSession: typeof import('../../server/utils/auth').clearServerSession
   const clearSession: typeof import('../../node_modules/h3/dist/index').clearSession
   const createApp: typeof import('../../node_modules/h3/dist/index').createApp
   const createAppEventHandler: typeof import('../../node_modules/h3/dist/index').createAppEventHandler
   const createError: typeof import('../../node_modules/h3/dist/index').createError
   const createEvent: typeof import('../../node_modules/h3/dist/index').createEvent
   const createEventStream: typeof import('../../node_modules/h3/dist/index').createEventStream
+  const createRequestInputSchema: typeof import('../../shared/utils/validation').createRequestInputSchema
   const createRouter: typeof import('../../node_modules/h3/dist/index').createRouter
+  const createServerSession: typeof import('../../server/utils/auth').createServerSession
   const defaultContentType: typeof import('../../node_modules/h3/dist/index').defaultContentType
   const defineAppConfig: typeof import('../../node_modules/@nuxt/nitro-server/dist/runtime/utils/config').defineAppConfig
   const defineCachedEventHandler: typeof import('../../node_modules/nitropack/dist/runtime/internal/cache').defineCachedEventHandler
@@ -49,10 +67,12 @@ declare global {
   const fromNodeMiddleware: typeof import('../../node_modules/h3/dist/index').fromNodeMiddleware
   const fromPlainHandler: typeof import('../../node_modules/h3/dist/index').fromPlainHandler
   const fromWebHandler: typeof import('../../node_modules/h3/dist/index').fromWebHandler
+  const getAllowedNextStatuses: typeof import('../../shared/utils/statusTransitions').getAllowedNextStatuses
   const getCookie: typeof import('../../node_modules/h3/dist/index').getCookie
   const getHeader: typeof import('../../node_modules/h3/dist/index').getHeader
   const getHeaders: typeof import('../../node_modules/h3/dist/index').getHeaders
   const getMethod: typeof import('../../node_modules/h3/dist/index').getMethod
+  const getPostgresConfig: typeof import('../../server/utils/postgresSchema').getPostgresConfig
   const getProxyRequestHeaders: typeof import('../../node_modules/h3/dist/index').getProxyRequestHeaders
   const getQuery: typeof import('../../node_modules/h3/dist/index').getQuery
   const getRequestFingerprint: typeof import('../../node_modules/h3/dist/index').getRequestFingerprint
@@ -85,6 +105,7 @@ declare global {
   const isStream: typeof import('../../node_modules/h3/dist/index').isStream
   const isWebResponse: typeof import('../../node_modules/h3/dist/index').isWebResponse
   const lazyEventHandler: typeof import('../../node_modules/h3/dist/index').lazyEventHandler
+  const loginInputSchema: typeof import('../../shared/utils/validation').loginInputSchema
   const nitroPlugin: typeof import('../../node_modules/nitropack/dist/runtime/internal/plugin').nitroPlugin
   const parseCookies: typeof import('../../node_modules/h3/dist/index').parseCookies
   const promisifyNodeListener: typeof import('../../node_modules/h3/dist/index').promisifyNodeListener
@@ -94,7 +115,11 @@ declare global {
   const readMultipartFormData: typeof import('../../node_modules/h3/dist/index').readMultipartFormData
   const readRawBody: typeof import('../../node_modules/h3/dist/index').readRawBody
   const readValidatedBody: typeof import('../../node_modules/h3/dist/index').readValidatedBody
+  const registerInputSchema: typeof import('../../shared/utils/validation').registerInputSchema
   const removeResponseHeader: typeof import('../../node_modules/h3/dist/index').removeResponseHeader
+  const requireAuthUser: typeof import('../../server/utils/auth').requireAuthUser
+  const requireRoles: typeof import('../../server/utils/auth').requireRoles
+  const resolveSessionFromEvent: typeof import('../../server/utils/auth').resolveSessionFromEvent
   const runTask: typeof import('../../node_modules/nitropack/dist/runtime/internal/task').runTask
   const sanitizeStatusCode: typeof import('../../node_modules/h3/dist/index').sanitizeStatusCode
   const sanitizeStatusMessage: typeof import('../../node_modules/h3/dist/index').sanitizeStatusMessage
@@ -118,9 +143,11 @@ declare global {
   const toEventHandler: typeof import('../../node_modules/h3/dist/index').toEventHandler
   const toNodeListener: typeof import('../../node_modules/h3/dist/index').toNodeListener
   const toPlainHandler: typeof import('../../node_modules/h3/dist/index').toPlainHandler
+  const toSessionUserDto: typeof import('../../server/utils/auth').toSessionUserDto
   const toWebHandler: typeof import('../../node_modules/h3/dist/index').toWebHandler
   const toWebRequest: typeof import('../../node_modules/h3/dist/index').toWebRequest
   const unsealSession: typeof import('../../node_modules/h3/dist/index').unsealSession
+  const updateRequestInputSchema: typeof import('../../shared/utils/validation').updateRequestInputSchema
   const updateSession: typeof import('../../node_modules/h3/dist/index').updateSession
   const useAppConfig: typeof import('../../node_modules/@nuxt/nitro-server/dist/runtime/utils/app-config').useAppConfig
   const useBase: typeof import('../../node_modules/h3/dist/index').useBase
@@ -129,6 +156,7 @@ declare global {
   const useRuntimeConfig: typeof import('../../node_modules/nitropack/dist/runtime/internal/config').useRuntimeConfig
   const useSession: typeof import('../../node_modules/h3/dist/index').useSession
   const useStorage: typeof import('../../node_modules/nitropack/dist/runtime/internal/storage').useStorage
+  const validateStatusTransition: typeof import('../../shared/utils/statusTransitions').validateStatusTransition
   const writeEarlyHints: typeof import('../../node_modules/h3/dist/index').writeEarlyHints
 }
 // for type re-export
@@ -136,6 +164,18 @@ declare global {
   // @ts-ignore
   export type { EventHandler, EventHandlerRequest, EventHandlerResponse, EventHandlerObject, H3EventContext } from '../../node_modules/h3/dist/index'
   import('../../node_modules/h3/dist/index')
+  // @ts-ignore
+  export type { StatusTransitionValidationInput, StatusTransitionValidationResult } from '../../shared/utils/statusTransitions'
+  import('../../shared/utils/statusTransitions')
+  // @ts-ignore
+  export type { ValidationIssue, SafeParseResult, SchemaValidator } from '../../shared/utils/validation'
+  import('../../shared/utils/validation')
+  // @ts-ignore
+  export type { UserRole, RequestStatus, RequestPriority, RequestSortOrder, SortOrder, ListViewState, ListDensity, RequestCommentDto, RequestTimelineItemDto, RequestAttachmentDto, RequestItemDto, RequestsMetricsDto, RequestsListResponseDto, RequestDetailResponseDto, UserDirectoryItemDto, CustomerDirectoryItemDto, CategoryDirectoryItemDto, SessionUserDto, AuthSessionResponseDto, LoginPayloadDto, RegisterPayloadDto, RequestComment, RequestTimelineItem, WorkFlowRequest, NormalizedRequestsListResult, RequestsFilterQuery, UpdateRequestPayloadDto, UpdateRequestResponseDto, AddCommentPayloadDto, AddCommentResponseDto, CreateRequestPayloadDto, UndoMutationSnapshot, RollbackBannerState, FeedbackBannerState, UserPreferencesState } from '../../shared/types/workflow'
+  import('../../shared/types/workflow')
+  // @ts-ignore
+  export type { PostgresConnectionConfig } from '../../server/utils/postgresSchema'
+  import('../../server/utils/postgresSchema')
 }
 export { H3Event, H3Error, appendCorsHeaders, appendCorsPreflightHeaders, appendHeader, appendHeaders, appendResponseHeader, appendResponseHeaders, assertMethod, callNodeListener, clearResponseHeaders, clearSession, createApp, createAppEventHandler, createError, createEvent, createEventStream, createRouter, defaultContentType, defineEventHandler, defineLazyEventHandler, defineNodeListener, defineNodeMiddleware, defineRequestMiddleware, defineResponseMiddleware, defineWebSocket, defineWebSocketHandler, deleteCookie, dynamicEventHandler, eventHandler, fetchWithEvent, fromNodeMiddleware, fromPlainHandler, fromWebHandler, getCookie, getHeader, getHeaders, getMethod, getProxyRequestHeaders, getQuery, getRequestFingerprint, getRequestHeader, getRequestHeaders, getRequestHost, getRequestIP, getRequestPath, getRequestProtocol, getRequestURL, getRequestWebStream, getResponseHeader, getResponseHeaders, getResponseStatus, getResponseStatusText, getRouterParam, getRouterParams, getSession, getValidatedQuery, getValidatedRouterParams, handleCacheHeaders, handleCors, isCorsOriginAllowed, isError, isEvent, isEventHandler, isMethod, isPreflightRequest, isStream, isWebResponse, lazyEventHandler, parseCookies, promisifyNodeListener, proxyRequest, readBody, readFormData, readMultipartFormData, readRawBody, readValidatedBody, removeResponseHeader, sanitizeStatusCode, sanitizeStatusMessage, sealSession, send, sendError, sendIterable, sendNoContent, sendProxy, sendRedirect, sendStream, sendWebResponse, serveStatic, setCookie, setHeader, setHeaders, setResponseHeader, setResponseHeaders, setResponseStatus, splitCookiesString, toEventHandler, toNodeListener, toPlainHandler, toWebHandler, toWebRequest, unsealSession, updateSession, useBase, useSession, writeEarlyHints } from 'h3';
 export { useNitroApp } from 'nitropack/runtime/internal/app';
@@ -152,4 +192,10 @@ export { defineNitroErrorHandler } from 'nitropack/runtime/internal/error/utils'
 export { buildAssetsURL as __buildAssetsURL, publicAssetsURL as __publicAssetsURL } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/nitro-server/dist/runtime/utils/paths';
 export { defineAppConfig } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/nitro-server/dist/runtime/utils/config';
 export { useAppConfig } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/nitro-server/dist/runtime/utils/app-config';
+export { canUserAccessRequest, canUserAssignExecutor, canUserChangePriority, canUserCloseRequest, canUserResolveRequest, canUserCreateRequest, canUserAccessDashboard } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/permissions';
+export { ALLOWED_STATUS_TRANSITIONS, ROLE_ALLOWED_TARGET_STATUSES, getAllowedNextStatuses, validateStatusTransition } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/statusTransitions';
+export { loginInputSchema, registerInputSchema, createRequestInputSchema, updateRequestInputSchema, addCommentInputSchema } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/validation';
+export { ROLE_LABELS, STATUS_LABELS, PRIORITY_LABELS, PRIORITY_DUE_DATES } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/types/workflow';
+export { toSessionUserDto, createServerSession, clearServerSession, resolveSessionFromEvent, requireAuthUser, requireRoles } from 'C:/Users/5LU/Desktop/workflow-nuxt4/server/utils/auth';
 export { SERVER_REQUESTS_DB, SERVER_USERS_DB, SERVER_CUSTOMERS_DB, SERVER_CATEGORIES_DB } from 'C:/Users/5LU/Desktop/workflow-nuxt4/server/utils/db';
+export { POSTGRES_SCHEMA_SQL, getPostgresConfig } from 'C:/Users/5LU/Desktop/workflow-nuxt4/server/utils/postgresSchema';

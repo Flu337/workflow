@@ -6,5 +6,36 @@ declare global {
   const defineAppConfig: <C extends import('nuxt/schema').AppConfigInput>(config: C) => C
   const createError: typeof import('h3')['createError']
   const setResponseStatus: typeof import('h3')['setResponseStatus']
-
+  const ALLOWED_STATUS_TRANSITIONS: typeof import('../../shared/utils/statusTransitions').ALLOWED_STATUS_TRANSITIONS
+  const PRIORITY_DUE_DATES: typeof import('../../shared/types/workflow').PRIORITY_DUE_DATES
+  const PRIORITY_LABELS: typeof import('../../shared/types/workflow').PRIORITY_LABELS
+  const ROLE_ALLOWED_TARGET_STATUSES: typeof import('../../shared/utils/statusTransitions').ROLE_ALLOWED_TARGET_STATUSES
+  const ROLE_LABELS: typeof import('../../shared/types/workflow').ROLE_LABELS
+  const STATUS_LABELS: typeof import('../../shared/types/workflow').STATUS_LABELS
+  const addCommentInputSchema: typeof import('../../shared/utils/validation').addCommentInputSchema
+  const canUserAccessDashboard: typeof import('../../shared/utils/permissions').canUserAccessDashboard
+  const canUserAccessRequest: typeof import('../../shared/utils/permissions').canUserAccessRequest
+  const canUserAssignExecutor: typeof import('../../shared/utils/permissions').canUserAssignExecutor
+  const canUserChangePriority: typeof import('../../shared/utils/permissions').canUserChangePriority
+  const canUserCloseRequest: typeof import('../../shared/utils/permissions').canUserCloseRequest
+  const canUserCreateRequest: typeof import('../../shared/utils/permissions').canUserCreateRequest
+  const canUserResolveRequest: typeof import('../../shared/utils/permissions').canUserResolveRequest
+  const createRequestInputSchema: typeof import('../../shared/utils/validation').createRequestInputSchema
+  const getAllowedNextStatuses: typeof import('../../shared/utils/statusTransitions').getAllowedNextStatuses
+  const loginInputSchema: typeof import('../../shared/utils/validation').loginInputSchema
+  const registerInputSchema: typeof import('../../shared/utils/validation').registerInputSchema
+  const updateRequestInputSchema: typeof import('../../shared/utils/validation').updateRequestInputSchema
+  const validateStatusTransition: typeof import('../../shared/utils/statusTransitions').validateStatusTransition
+}
+// for type re-export
+declare global {
+  // @ts-ignore
+  export type { StatusTransitionValidationInput, StatusTransitionValidationResult } from '../../shared/utils/statusTransitions'
+  import('../../shared/utils/statusTransitions')
+  // @ts-ignore
+  export type { ValidationIssue, SafeParseResult, SchemaValidator } from '../../shared/utils/validation'
+  import('../../shared/utils/validation')
+  // @ts-ignore
+  export type { UserRole, RequestStatus, RequestPriority, RequestSortOrder, SortOrder, ListViewState, ListDensity, RequestCommentDto, RequestTimelineItemDto, RequestAttachmentDto, RequestItemDto, RequestsMetricsDto, RequestsListResponseDto, RequestDetailResponseDto, UserDirectoryItemDto, CustomerDirectoryItemDto, CategoryDirectoryItemDto, SessionUserDto, AuthSessionResponseDto, LoginPayloadDto, RegisterPayloadDto, RequestComment, RequestTimelineItem, WorkFlowRequest, NormalizedRequestsListResult, RequestsFilterQuery, UpdateRequestPayloadDto, UpdateRequestResponseDto, AddCommentPayloadDto, AddCommentResponseDto, CreateRequestPayloadDto, UndoMutationSnapshot, RollbackBannerState, FeedbackBannerState, UserPreferencesState } from '../../shared/types/workflow'
+  import('../../shared/types/workflow')
 }
