@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PRIORITY_LABELS, type RequestPriority } from '~/utils/types'
+import { PRIORITY_LABELS, type RequestPriority } from '~/types/workflow'
 
 const props = withDefaults(
   defineProps<{

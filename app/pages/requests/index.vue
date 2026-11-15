@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import type { ListViewState } from '~/utils/types'
+import type {
+  ListViewState,
+  RequestsListResponseDto,
+  UserDirectoryItemDto,
+  CustomerDirectoryItemDto,
+  CategoryDirectoryItemDto
+} from '~/types/workflow'
+import { normalizeRequestsListResponse } from '~/utils/normalizeRequests'
+
+const route = useRoute()
+const router = useRouter()
 
 const {
   searchQuery,
@@ -8,15 +18,92 @@ const {
   assigneeFilter,
   sortOrder,
   currentPage,
+  simulateError,
   pageSize,
   viewState,
   userProfile,
   isCreateModalOpen,
-  paginatedRequests,
-  totalFiltered,
-  totalPages,
-  simulateRetryLoad
+  hasActiveFilters,
+  initFiltersFromRoute,
+  buildRouteQuery,
+  resetSearch,
+  resetFilters
 } = useRequests()
+
+// восстановление состояния фильтров из query при открытии ссылки
+initFiltersFromRoute(route.query as Record<string, string | (string | null)[] | null | undefined>)
+
+const debouncedSearch = useDebounce(searchQuery, 300)
+
+// загрузка справочников через useFetch
+const { data: usersDirectory } = await useFetch<UserDirectoryItemDto[]>('/api/users', {
+  key: 'wf-users-directory',
+  default: () => []
+})
+
+await useFetch<CustomerDirectoryItemDto[]>('/api/customers', {
+  key: 'wf-customers-directory',
+  default: () => []
+})
+
+await useFetch<CategoryDirectoryItemDto[]>('/api/categories', {
+  key: 'wf-categories-directory',
+  default: () => []
+})
+
+// реактивный запрос списка заявок с параметрами фильтрации и пагинации
+const apiQuery = computed(() => ({
+  search: debouncedSearch.value.trim() || undefined,
+  status: statusFilter.value !== 'all' ? statusFilter.value : undefined,
+  priority: priorityFilter.value !== 'all' ? priorityFilter.value : undefined,
+  assignee: assigneeFilter.value !== 'all' ? assigneeFilter.value : undefined,
+  sort: sortOrder.value,
+  page: currentPage.value,
+  limit: pageSize,
+  simulateError: simulateError.value || undefined
+}))
+
+const {
+  data: rawRequestsResponse,
+  status: fetchStatus,
+  error: fetchError,
+  refresh: refreshRequests
+} = await useFetch<RequestsListResponseDto>('/api/requests', {
+  key: 'wf-requests-list',
+  query: apiQuery,
+  watch: [apiQuery]
+})
+
+// единая нормализация ответа списка заявок
+const normalizedList = computed(() => normalizeRequestsListResponse(rawRequestsResponse.value))
+
+const displayedRequests = computed(() => normalizedList.value.items)
+const totalFiltered = computed(() => normalizedList.value.total)
+const totalPages = computed(() => normalizedList.value.totalPages)
+const hasIncompleteData = computed(() => normalizedList.value.hasIncompleteData)
+
+const kpiItems = computed(() => [
+  {
+    title: 'Новые заявки',
+    value: normalizedList.value.metrics.newCount,
+    subtitle: 'Ожидают назначения'
+  },
+  {
+    title: 'В работе',
+    value: normalizedList.value.metrics.inProgressCount,
+    subtitle: 'Назначены исполнителям'
+  },
+  {
+    title: 'Ожидают ответа',
+    value: normalizedList.value.metrics.waitingCount,
+    subtitle: 'Нужна информация'
+  },
+  {
+    title: 'Решены',
+    value: normalizedList.value.metrics.resolvedCount,
+    subtitle: 'За эту неделю'
+  }
+])
 
 const statusOptions = [
   { label: 'Все статусы', value: 'all' },
@@ -37,12 +124,27 @@ const priorityOptions = [
   { label: 'Низкий', value: 'low' }
 ]
 
-const assigneeOptions = [
-  { label: 'Все заявки', value: 'all' },
-  { label: 'Не назначен', value: 'unassigned' },
-  { label: 'Брунгильда Б.', value: 'Брунгильда Б.' },
-  { label: 'Олег С.', value: 'Олег С.' }
-]
+const assigneeOptions = computed(() => {
+  const base = [
+    { label: 'Все заявки', value: 'all' },
+    { label: 'Не назначен', value: 'unassigned' }
+  ]
+  const fromUsers = (usersDirectory.value || [])
+    .filter(u => u.role !== 'Оператор')
+    .map(u => ({
+      label: u.shortName,
+      value: u.shortName
+    }))
+
+  if (fromUsers.length === 0) {
+    return [
+      ...base,
+      { label: 'Брунгильда Б.', value: 'Брунгильда Б.' },
+      { label: 'Олег С.', value: 'Олег С.' }
+    ]
+  }
+  return [...base, ...fromUsers]
+})
 
 const sortOptions = [
   { label: 'Сначала новые', value: 'newest' },
@@ -50,19 +152,57 @@ const sortOptions = [
   { label: 'По приоритету', value: 'priority' }
 ]
 
-watch([searchQuery, statusFilter, priorityFilter, assigneeFilter, sortOrder], () => {
+watch([debouncedSearch, statusFilter, priorityFilter, assigneeFilter, sortOrder], () => {
   currentPage.value = 1
 })
+
+// синхронизация состояния фильтров и пагинации с параметрами адресной строки
+watch(
+  [debouncedSearch, statusFilter, priorityFilter, assigneeFilter, sortOrder, currentPage, simulateError],
+  () => {
+    const nextQuery = buildRouteQuery(debouncedSearch.value)
+    router.replace({ query: nextQuery })
+  }
+)
+
+watch(
+  () => route.query,
+  (newQuery) => {
+    initFiltersFromRoute(newQuery as Record<string, string | (string | null)[] | null | undefined>)
+  }
+)
 
 // определение активного состояния списка
 const effectiveState = computed<ListViewState>(() => {
   if (viewState.value !== 'ready') {
     return viewState.value
   }
+  if (fetchError.value) {
+    return 'error'
+  }
+  if (fetchStatus.value === 'pending' && !rawRequestsResponse.value) {
+    return 'loading'
+  }
   if (totalFiltered.value === 0) {
-    return 'empty'
+    return hasActiveFilters.value ? 'no-results' : 'empty'
   }
   return 'ready'
+})
+
+const errorStatusCode = computed<number | null>(() => {
+  const err = fetchError.value as { statusCode?: number; status?: number } | null
+  if (err?.statusCode) return err.statusCode
+  if (err?.status) return err.status
+  if (simulateError.value === '429') return 429
+  if (simulateError.value === '500') return 500
+  return null
+})
+
+const errorSubtitleText = computed<string>(() => {
+  if (errorStatusCode.value === 429) {
+    return 'Слишком много запросов (HTTP 429). Подождите немного и попробуйте ещё раз.'
+  }
+  return 'Сервис временно недоступен. Попробуйте ещё раз.'
 })
 
 const paginationLabel = computed(() => {
@@ -82,20 +222,57 @@ const openCreateModal = () => {
   isCreateModalOpen.value = true
 }
 
-const setDemoState = (state: ListViewState) => {
+const setDemoState = async (state: ListViewState, errCode = '') => {
+  simulateError.value = errCode
   viewState.value = state
+  if (state === 'ready' || errCode) {
+    await refreshRequests()
+  }
+}
+
+const handleRetryLoad = async () => {
+  simulateError.value = ''
+  viewState.value = 'ready'
+  await refreshRequests()
+}
+
+const handleResetSearch = () => {
+  resetSearch()
+}
+
+const handleResetAllFilters = () => {
+  resetFilters()
 }
 </script>
 
 <template>
   <div class="soderzhanie">
-    <template v-if="viewState === 'ready'">
+    <template v-if="effectiveState === 'ready'">
       <p class="rabochii-den-pod-kontrolem">Рабочий день под контролем</p>
       <p class="zaiavki-kotorye-trebuiut-vashego">
         Заявки, которые требуют вашего внимания
       </p>
 
-      <WFGPTKpiCards />
+      <!-- баннер результатов активного поиска из макета 2.02 -->
+      <div v-if="debouncedSearch.trim()" class="soobshchenie-ob-izmenenii">
+        <p class="po-zaprosu-crm-naideno-1">
+          По запросу «{{ debouncedSearch.trim() }}» найдено: {{ totalFiltered }}
+        </p>
+        <OctagonButton
+          variant="secondary"
+          label23251="Сбросить поиск"
+          @click="handleResetSearch"
+        />
+      </div>
+
+      <!-- предупреждающая плашка при неполных данных из макета 2.06 -->
+      <div v-if="hasIncompleteData" class="soobshchenie-ob-izmenenii">
+        <p class="chast-dannykh-zaiavki-nedostupna-ostal">
+          Часть данных заявки недоступна. Остальные обращения отображаются.
+        </p>
+      </div>
+
+      <WFGPTKpiCards :items="kpiItems" />
 
       <div class="zaiavki-zagolovok-i-fil-tr">
         <p class="zaiavki-2">Заявки</p>
@@ -115,44 +292,60 @@ const setDemoState = (state: ListViewState) => {
         />
       </div>
 
-      <!-- переключатель состояний списка по тз -->
+      <!-- переключатель состояний списка и симуляции ошибок api -->
       <div class="demo-state-switcher" role="group" aria-label="Демонстрация состояний списка">
         <button
           type="button"
           class="demo-state-btn"
-          :class="{ 'is-active': viewState === 'ready' }"
-          @click="setDemoState('ready')"
+          :class="{ 'is-active': effectiveState === 'ready' && !simulateError }"
+          @click="setDemoState('ready', '')"
         >
           Список
         </button>
         <button
           type="button"
           class="demo-state-btn"
-          :class="{ 'is-active': viewState === 'loading' }"
-          @click="setDemoState('loading')"
+          :class="{ 'is-active': effectiveState === 'loading' }"
+          @click="setDemoState('loading', '')"
         >
           Загрузка
         </button>
         <button
           type="button"
           class="demo-state-btn"
-          :class="{ 'is-active': viewState === 'empty' }"
-          @click="setDemoState('empty')"
+          :class="{ 'is-active': effectiveState === 'empty' }"
+          @click="setDemoState('empty', '')"
         >
           Пустой список
         </button>
         <button
           type="button"
           class="demo-state-btn"
-          :class="{ 'is-active': viewState === 'error' }"
-          @click="setDemoState('error')"
+          :class="{ 'is-active': effectiveState === 'no-results' }"
+          @click="setDemoState('no-results', '')"
         >
-          Ошибка
+          Нет результатов
+        </button>
+        <button
+          type="button"
+          class="demo-state-btn"
+          :class="{ 'is-active': simulateError === '429' }"
+          @click="setDemoState('ready', '429')"
+        >
+          Ошибка 429
+        </button>
+        <button
+          type="button"
+          class="demo-state-btn"
+          :class="{ 'is-active': simulateError === '500' || viewState === 'error' }"
+          @click="setDemoState('ready', '500')"
+        >
+          Ошибка 500
         </button>
       </div>
     </div>
 
-    <div class="fil-try" :class="{ 'is-state-compact': viewState !== 'ready' }">
+    <div class="fil-try" :class="{ 'is-state-compact': effectiveState !== 'ready' }">
       <div class="wf-gpt-field search-field">
         <WFGPTField
           v-model="searchQuery"
@@ -182,7 +375,7 @@ const setDemoState = (state: ListViewState) => {
         />
       </div>
 
-      <div v-if="viewState === 'ready'" class="fil-tr-naznachenie filter-field">
+      <div v-if="effectiveState === 'ready'" class="fil-tr-naznachenie filter-field">
         <WFGPTField
           v-model="assigneeFilter"
           label23270="Назначение"
@@ -192,7 +385,7 @@ const setDemoState = (state: ListViewState) => {
         />
       </div>
 
-      <div v-if="viewState === 'ready'" class="sortirovka-zaiavok filter-field">
+      <div v-if="effectiveState === 'ready'" class="sortirovka-zaiavok filter-field">
         <WFGPTField
           v-model="sortOrder"
           label23270="Сортировка"
@@ -208,6 +401,20 @@ const setDemoState = (state: ListViewState) => {
       <div v-for="n in 6" :key="n" class="skeleton-row">
         <p class="skeleton-text">—          —                              —</p>
       </div>
+    </div>
+
+    <!-- экран пустого результата поиска и фильтрации из макета 2.04 -->
+    <div v-else-if="effectiveState === 'no-results'" class="sostoianie-spiska">
+      <OctagonIconSearch />
+      <p class="nichego-ne-naideno">Ничего не найдено</p>
+      <p class="poprobuite-izmenit-zapros-ili-sbrosit">
+        Попробуйте изменить запрос или сбросить фильтры.
+      </p>
+      <OctagonButton
+        variant="secondary"
+        label23251="Сбросить фильтры"
+        @click="handleResetAllFilters"
+      />
     </div>
 
     <div v-else-if="effectiveState === 'empty'" class="sostoianie-spiska">
@@ -226,11 +433,11 @@ const setDemoState = (state: ListViewState) => {
       <OctagonIconAlert />
       <p class="ne-udalos-zagruzit-zaiavki">Не удалось загрузить заявки</p>
       <p class="servis-vremenno-nedostupen-poprobuite">
-        Сервис временно недоступен. Попробуйте ещё раз.
+        {{ errorSubtitleText }}
       </p>
       <OctagonButton
         label23251="Повторить загрузку"
-        @click="simulateRetryLoad"
+        @click="handleRetryLoad"
       />
     </div>
 
@@ -246,7 +453,7 @@ const setDemoState = (state: ListViewState) => {
         </div>
 
         <div
-          v-for="req in paginatedRequests"
+          v-for="req in displayedRequests"
           :key="req.id"
           class="wf-gpt-request-row"
         >
@@ -264,27 +471,29 @@ const setDemoState = (state: ListViewState) => {
 
       <div class="paginatsiia">
         <p class="pokazano-1-12-iz-24">{{ paginationLabel }}</p>
-        <OctagonButton
-          variant="secondary"
-          :state="currentPage <= 1 ? 'disabled' : 'default'"
-          :disabled="currentPage <= 1"
-          label23251="Назад"
-          @click="setPage(currentPage - 1)"
-        />
-        <OctagonButton
-          v-for="p in totalPages"
-          :key="p"
-          :variant="currentPage === p ? 'secondary' : 'ghost'"
-          :label23251="String(p)"
-          @click="setPage(p)"
-        />
-        <OctagonButton
-          variant="secondary"
-          :state="currentPage >= totalPages ? 'disabled' : 'default'"
-          :disabled="currentPage >= totalPages"
-          label23251="Далее"
-          @click="setPage(currentPage + 1)"
-        />
+        <template v-if="totalPages > 1">
+          <OctagonButton
+            variant="secondary"
+            :state="currentPage <= 1 ? 'disabled' : 'default'"
+            :disabled="currentPage <= 1"
+            label23251="Назад"
+            @click="setPage(currentPage - 1)"
+          />
+          <OctagonButton
+            v-for="p in totalPages"
+            :key="p"
+            :variant="currentPage === p ? 'secondary' : 'ghost'"
+            :label23251="String(p)"
+            @click="setPage(p)"
+          />
+          <OctagonButton
+            variant="secondary"
+            :state="currentPage >= totalPages ? 'disabled' : 'default'"
+            :disabled="currentPage >= totalPages"
+            label23251="Далее"
+            @click="setPage(currentPage + 1)"
+          />
+        </template>
       </div>
     </template>
   </div>
@@ -320,6 +529,30 @@ const setDemoState = (state: ListViewState) => {
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
+}
+
+.soobshchenie-ob-izmenenii {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+}
+
+.po-zaprosu-crm-naideno-1,
+.chast-dannykh-zaiavki-nedostupna-ostal {
+  align-self: stretch;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
 }
 
 .zaiavki-zagolovok-i-fil-tr {
@@ -468,6 +701,7 @@ const setDemoState = (state: ListViewState) => {
   text-overflow: ellipsis;
 }
 
+.nichego-ne-naideno,
 .zaiavok-poka-net,
 .ne-udalos-zagruzit-zaiavki {
   align-self: stretch;
@@ -479,6 +713,7 @@ const setDemoState = (state: ListViewState) => {
   text-align: center;
 }
 
+.poprobuite-izmenit-zapros-ili-sbrosit,
 .obrashcheniia-poiaviatsia-zdes-posle,
 .servis-vremenno-nedostupen-poprobuite {
   align-self: stretch;

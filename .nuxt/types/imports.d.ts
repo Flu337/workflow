@@ -3,8 +3,8 @@ export {}
 declare global {
   const $fetch: typeof import('../fetch').$fetch
   const MOCK_REQUESTS: typeof import('../../app/utils/mockData').MOCK_REQUESTS
-  const PRIORITY_LABELS: typeof import('../../app/utils/types').PRIORITY_LABELS
-  const STATUS_LABELS: typeof import('../../app/utils/types').STATUS_LABELS
+  const PRIORITY_LABELS: typeof import('../../app/types/workflow').PRIORITY_LABELS
+  const STATUS_LABELS: typeof import('../../app/types/workflow').STATUS_LABELS
   const abortNavigation: typeof import('../../node_modules/nuxt/dist/app/composables/router').abortNavigation
   const addRouteMiddleware: typeof import('../../node_modules/nuxt/dist/app/composables/router').addRouteMiddleware
   const callOnce: typeof import('../../node_modules/nuxt/dist/app/composables/once').callOnce
@@ -54,6 +54,8 @@ declare global {
   const markRaw: typeof import('vue').markRaw
   const navigateTo: typeof import('../../node_modules/nuxt/dist/app/composables/router').navigateTo
   const nextTick: typeof import('vue').nextTick
+  const normalizeRequestItem: typeof import('../../app/utils/normalizeRequests').normalizeRequestItem
+  const normalizeRequestsListResponse: typeof import('../../app/utils/normalizeRequests').normalizeRequestsListResponse
   const onActivated: typeof import('vue').onActivated
   const onBeforeMount: typeof import('vue').onBeforeMount
   const onBeforeRouteLeave: typeof import('vue-router').onBeforeRouteLeave
@@ -109,6 +111,7 @@ declare global {
   const useCookie: typeof import('../../node_modules/nuxt/dist/app/composables/cookie').useCookie
   const useCssModule: typeof import('vue').useCssModule
   const useCssVars: typeof import('vue').useCssVars
+  const useDebounce: typeof import('../../app/composables/useDebounce').useDebounce
   const useError: typeof import('../../node_modules/nuxt/dist/app/composables/error').useError
   const useFetch: typeof import('../../node_modules/nuxt/dist/app/composables/fetch').useFetch
   const useHead: typeof import('../../node_modules/nuxt/dist/app/composables/head').useHead
@@ -212,8 +215,8 @@ declare global {
   export type { PageMeta } from '../../node_modules/nuxt/dist/app/composables/pages'
   import('../../node_modules/nuxt/dist/app/composables/pages')
   // @ts-ignore
-  export type { RequestStatus, RequestPriority, ListViewState, ListDensity, RequestComment, RequestTimelineItem, WorkFlowRequest } from '../../app/utils/types'
-  import('../../app/utils/types')
+  export type { RequestStatus, RequestPriority, RequestSortOrder, ListViewState, ListDensity, RequestCommentDto, RequestTimelineItemDto, RequestItemDto, RequestsMetricsDto, RequestsListResponseDto, RequestDetailResponseDto, UserDirectoryItemDto, CustomerDirectoryItemDto, CategoryDirectoryItemDto, WorkFlowRequest, NormalizedRequestsListResult } from '../../app/types/workflow'
+  import('../../app/types/workflow')
 }
 // for vue template auto import
 import { UnwrapRef } from 'vue'
@@ -221,8 +224,8 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly $fetch: UnwrapRef<typeof import('../fetch')['$fetch']>
     readonly MOCK_REQUESTS: UnwrapRef<typeof import('../../app/utils/mockData')['MOCK_REQUESTS']>
-    readonly PRIORITY_LABELS: UnwrapRef<typeof import('../../app/utils/types')['PRIORITY_LABELS']>
-    readonly STATUS_LABELS: UnwrapRef<typeof import('../../app/utils/types')['STATUS_LABELS']>
+    readonly PRIORITY_LABELS: UnwrapRef<typeof import('../../app/types/workflow')['PRIORITY_LABELS']>
+    readonly STATUS_LABELS: UnwrapRef<typeof import('../../app/types/workflow')['STATUS_LABELS']>
     readonly abortNavigation: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['abortNavigation']>
     readonly addRouteMiddleware: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['addRouteMiddleware']>
     readonly callOnce: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/once')['callOnce']>
@@ -272,6 +275,8 @@ declare module 'vue' {
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
     readonly navigateTo: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['navigateTo']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
+    readonly normalizeRequestItem: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['normalizeRequestItem']>
+    readonly normalizeRequestsListResponse: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['normalizeRequestsListResponse']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
     readonly onBeforeRouteLeave: UnwrapRef<typeof import('vue-router')['onBeforeRouteLeave']>
@@ -327,6 +332,7 @@ declare module 'vue' {
     readonly useCookie: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['useCookie']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
+    readonly useDebounce: UnwrapRef<typeof import('../../app/composables/useDebounce')['useDebounce']>
     readonly useError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['useError']>
     readonly useFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/fetch')['useFetch']>
     readonly useHead: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/head')['useHead']>

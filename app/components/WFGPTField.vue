@@ -44,11 +44,11 @@ const isDropdownOpen = ref(false)
 const activeIndex = ref(0)
 const fieldRef = ref<HTMLElement | null>(null)
 
-const currentOptionLabel = computed(() => {
+const currentOptionText = computed(() => {
   if (!isSelectMode.value) return ''
   const found = props.options.find(opt => opt.value === props.modelValue)
-  if (found) return `${found.label}  ▾`
-  return props.value
+  if (found) return found.label
+  return props.value.replace(/\s*▾\s*$/, '')
 })
 
 const toggleDropdown = () => {
@@ -73,8 +73,11 @@ const handleSelectKeydown = (e: KeyboardEvent) => {
     e.preventDefault()
     if (!isDropdownOpen.value) {
       toggleDropdown()
-    } else if (props.options[activeIndex.value]) {
-      selectOption(props.options[activeIndex.value])
+    } else {
+      const currentOption = props.options[activeIndex.value]
+      if (currentOption) {
+        selectOption(currentOption)
+      }
     }
   } else if (e.key === 'Escape') {
     if (isDropdownOpen.value) {
@@ -141,7 +144,8 @@ onBeforeUnmount(() => {
       @click="toggleDropdown"
       @keydown="handleSelectKeydown"
     >
-      <span class="select-value-text">{{ currentOptionLabel }}</span>
+      <span class="select-value-text">{{ currentOptionText }}</span>
+      <span class="strelka-raskrytiia">▾</span>
       <ul v-if="isDropdownOpen" class="select-dropdown" role="listbox">
         <li
           v-for="(opt, idx) in options"
@@ -265,8 +269,7 @@ onBeforeUnmount(() => {
   cursor: not-allowed;
 }
 
-.static-value-text,
-.select-value-text {
+.static-value-text {
   flex: 1 1 0;
   width: 100%;
   color: var(--color-text-secondary, #B9B3D4);
@@ -274,9 +277,31 @@ onBeforeUnmount(() => {
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* перенос длинных фио исполнителей без поломки верстки */
+.select-value-text {
+  flex: 1 1 0;
+  min-width: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.strelka-raskrytiia {
+  flex-shrink: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
 }
 
 .select-box {
@@ -308,6 +333,8 @@ onBeforeUnmount(() => {
   font-weight: 400;
   line-height: 20px;
   cursor: pointer;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   transition: background-color 0.12s ease, color 0.12s ease;
 }
 

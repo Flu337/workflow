@@ -1,24 +1,36 @@
-# WorkFlow — Система управления заявками (Этап 1, Nuxt 4 + TypeScript)
+# WorkFlow — Система управления заявками (Этап 2: Реальные данные и API, Nuxt 4 + TypeScript)
 
-Проект выполнен строго по техническому заданию Этапа 1 и исходникам вёрстки для трёх разрешений (`1280px`, `768px`, `360px`).
+Проект дополнен функционалом Этапа 2 строго по техническому заданию и исходникам вёрстки (`1280px`, `768px`, `360px`).
 
-## Стек и архитектура
-- **Фреймворк**: Nuxt 4 (`compatibilityVersion: 4`) + Vue 3 + TypeScript.
-- **Синтаксис компонентов**: во всех `.vue` файлах используется `<script setup lang="ts">`.
-- **Локальные данные**: 24 реалистичные заявки в `app/utils/mockData.ts` (первые 12 полностью повторяют макет `#1042`–`#1031`, включая данные для `timeline` и `comments`).
-- **Адаптивность**: все экраны объединены из трёх `.txt` файлов (`1280px` Desktop, `768px` Tablet, `360px` Mobile).
-- **UI-состояния и доступность**: реализованы состояния `default`, `hover`, `focus` (`:focus-visible`) и `disabled`, а также навигация с клавиатуры (`Tab`, `Enter`, `Escape`, стрелки `ArrowUp`/`ArrowDown` в выпадающих фильтрах и модальном окне).
+## Что реализовано в Этапе 2
+1. **Серверные API-роуты (`server/api/`)**:
+   - `GET /api/requests` (`server/api/requests/index.get.ts`): 24 заявки (`#1042`–`#1019`), фильтрация по `status`, `priority`, `assignee`, поиск по `search`, сортировка по `sort` (`newest` / `oldest` / `priority`), пагинация (`page`, `limit`), проверка неполных данных на заявке `#1038` (отсутствуют `title` и `customer`), а также симуляция ошибок HTTP `429` и `500` через `?simulateError=429` или `?simulateError=500`.
+   - `GET /api/requests/:id` (`server/api/requests/[id].get.ts`): детальная карточка заявки с `timeline` и `comments`, возврат `404` для несуществующих ID, симуляция `429` и `500`, а также режим проверки длинного заголовка и ФИО (`?long=1`).
+   - `GET /api/users` (`server/api/users/index.get.ts`), `GET /api/customers` (`server/api/customers/index.get.ts`), `GET /api/categories` (`server/api/categories/index.get.ts`): серверные справочники.
+2. **Типы и единая нормализация данных**:
+   - Строгие TypeScript-интерфейсы DTO и клиентских моделей в `app/types/workflow.ts` (без `any`).
+   - Единая функция преобразования `normalizeRequestItem` и `normalizeRequestsListResponse` в `app/utils/normalizeRequests.ts` с подстановкой `«Без названия»` и `«Клиент не указан»` и возвратом флага `hasIncompleteData`.
+3. **Composables и синхронизация с URL**:
+   - `app/composables/useDebounce.ts` для задержки поискового запроса.
+   - `app/composables/useRequests.ts` с синхронизацией фильтров, поиска, сортировки и страницы с `route.query` и восстановлением состояния по прямой ссылке.
+4. **Новые состояния UI из архива**:
+   - Баннер активного поиска (`«По запросу «...» найдено: N»` + кнопка `«Сбросить поиск»`).
+   - Плашка неполных данных (`«Часть данных заявки недоступна. Остальные обращения отображаются.»`).
+   - Пустой результат фильтрации/поиска (`OctagonIconSearch` + `«Ничего не найдено»` + кнопка `«Сбросить фильтры»`).
+   - Пагинация на 2 страницы (`«Показано 1–12 из 24»` и `«Показано 13–24 из 24»`).
+   - Skeleton loading и Error state (HTTP 429 / 500 + повторная загрузка через `refresh()`) для списка заявок и карточки заявки `/requests/[id]`.
+   - Корректный перенос длинных заголовков и длинных ФИО исполнителей.
 
 ## Структура проекта
 
 ```text
 app/
 ├── app.vue
-├── error.vue                        # Страница системной ошибки 404
+├── error.vue
 ├── assets/
 │   ├── css/
-│   │   └── main.css                 # Глобальные CSS-переменные и интерактивные состояния
-│   └── images/                      # Исходные SVG и PNG ассеты
+│   │   └── main.css
+│   └── images/
 ├── components/
 │   ├── OctagonAvatar.vue
 │   ├── OctagonButton.vue
@@ -26,6 +38,7 @@ app/
 │   ├── OctagonIconBell.vue
 │   ├── OctagonIconInboxEmpty.vue
 │   ├── OctagonIconMenu.vue
+│   ├── OctagonIconSearch.vue
 │   ├── OctagonPriorityBadge.vue
 │   ├── OctagonStatusBadge.vue
 │   ├── WFGPTCreateRequestModal.vue
@@ -34,27 +47,43 @@ app/
 │   ├── WFGPTRequestRow.vue
 │   └── WFGPTTextarea.vue
 ├── composables/
-│   └── useRequests.ts               # Реактивное состояние, фильтрация, сортировка, состояния списка
+│   ├── useDebounce.ts
+│   └── useRequests.ts
 ├── layouts/
-│   ├── default.vue                  # Общий layout приложения (/dashboard, /requests, /requests/:id, /profile)
-│   └── public.vue                   # Публичный layout (/ и /login)
+│   ├── default.vue
+│   └── public.vue
 ├── pages/
-│   ├── index.vue                    # Главная страница (/)
-│   ├── login.vue                    # Страница входа (/login)
-│   ├── dashboard.vue                # Обзор (/dashboard)
-│   ├── profile.vue                  # Профиль (/profile)
+│   ├── index.vue
+│   ├── login.vue
+│   ├── dashboard.vue
+│   ├── profile.vue
 │   └── requests/
-│       ├── index.vue                # Все заявки (/requests) + состояния Loading, Empty, Error
-│       └── [id].vue                 # Детали заявки (/requests/:id) с timeline и комментариями
+│       ├── index.vue
+│       └── [id].vue
+├── types/
+│   ├── index.ts
+│   └── workflow.ts
 └── utils/
-    ├── mockData.ts                  # Локальные mock-данные (24 заявки)
-    └── types.ts                     # TypeScript-интерфейсы и константы
+    ├── mockData.ts
+    ├── normalizeRequests.ts
+    └── types.ts
+server/
+├── api/
+│   ├── categories/
+│   │   └── index.get.ts
+│   ├── customers/
+│   │   └── index.get.ts
+│   ├── requests/
+│   │   ├── [id].get.ts
+│   │   └── index.get.ts
+│   └── users/
+│       └── index.get.ts
+└── utils/
+    └── db.ts
 ```
 
-## Запуск проекта локально
+## Запуск проекта
 
 ```bash
 npm install && npm run dev
 ```
-
-Приложение будет доступно по адресу `http://localhost:3000`.

@@ -34,7 +34,9 @@ export { requestIdleCallback, cancelIdleCallback } from '#app/compat/idle-callba
 export { setInterval } from '#app/compat/interval';
 export { definePageMeta, PageMeta } from '#app/composables/pages';
 export { defineLazyHydrationComponent } from '#app/composables/lazy-hydration';
+export { useDebounce } from '../app/composables/useDebounce';
 export { useRequests } from '../app/composables/useRequests';
 export { MOCK_REQUESTS } from '../app/utils/mockData';
-export { STATUS_LABELS, PRIORITY_LABELS, RequestStatus, RequestPriority, ListViewState, ListDensity, RequestComment, RequestTimelineItem, WorkFlowRequest } from '../app/utils/types';
+export { normalizeRequestItem, normalizeRequestsListResponse } from '../app/utils/normalizeRequests';
+export { STATUS_LABELS, PRIORITY_LABELS, RequestStatus, RequestPriority, RequestSortOrder, ListViewState, ListDensity, RequestCommentDto, RequestTimelineItemDto, RequestItemDto, RequestsMetricsDto, RequestsListResponseDto, RequestDetailResponseDto, UserDirectoryItemDto, CustomerDirectoryItemDto, CategoryDirectoryItemDto, WorkFlowRequest, NormalizedRequestsListResult } from '../app/types/workflow';
 export { useNuxtDevTools } from '../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';

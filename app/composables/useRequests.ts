@@ -4,9 +4,10 @@ import type {
   WorkFlowRequest,
   RequestStatus,
   RequestPriority,
+  RequestSortOrder,
   ListViewState,
   ListDensity
-} from '~/utils/types'
+} from '~/types/workflow'
 
 export const useRequests = () => {
   const requests = useState<WorkFlowRequest[]>('wf-requests', () =>
@@ -21,8 +22,9 @@ export const useRequests = () => {
   const statusFilter = useState<RequestStatus | 'all'>('wf-filter-status', () => 'all')
   const priorityFilter = useState<RequestPriority | 'all'>('wf-filter-priority', () => 'all')
   const assigneeFilter = useState<string>('wf-filter-assignee', () => 'all')
-  const sortOrder = useState<'newest' | 'oldest' | 'priority'>('wf-sort-order', () => 'newest')
+  const sortOrder = useState<RequestSortOrder>('wf-sort-order', () => 'newest')
   const currentPage = useState<number>('wf-current-page', () => 1)
+  const simulateError = useState<string>('wf-simulate-error', () => '')
   const pageSize = 12
 
   // состояние отображения списка для демонстрации сценариев
@@ -38,6 +40,72 @@ export const useRequests = () => {
 
   const isCreateModalOpen = useState<boolean>('wf-create-modal-open', () => false)
 
+  // восстановление фильтров и пагинации из query параметров ссылки
+  const initFiltersFromRoute = (query: Record<string, string | (string | null)[] | null | undefined>) => {
+    const qSearch = Array.isArray(query.search) ? query.search[0] : query.search
+    searchQuery.value = typeof qSearch === 'string' ? qSearch : ''
+
+    const qStatus = Array.isArray(query.status) ? query.status[0] : query.status
+    statusFilter.value =
+      typeof qStatus === 'string' && qStatus ? (qStatus as RequestStatus | 'all') : 'all'
+
+    const qPriority = Array.isArray(query.priority) ? query.priority[0] : query.priority
+    priorityFilter.value =
+      typeof qPriority === 'string' && qPriority ? (qPriority as RequestPriority | 'all') : 'all'
+
+    const qAssignee = Array.isArray(query.assignee) ? query.assignee[0] : query.assignee
+    assigneeFilter.value = typeof qAssignee === 'string' && qAssignee ? qAssignee : 'all'
+
+    const qSort = Array.isArray(query.sort) ? query.sort[0] : query.sort
+    sortOrder.value =
+      qSort === 'oldest' || qSort === 'priority' ? qSort : 'newest'
+
+    const qPage = Array.isArray(query.page) ? query.page[0] : query.page
+    const parsedPage = Number(qPage)
+    currentPage.value = Number.isFinite(parsedPage) && parsedPage >= 1 ? Math.floor(parsedPage) : 1
+
+    const qErr = Array.isArray(query.simulateError) ? query.simulateError[0] : query.simulateError
+    simulateError.value = typeof qErr === 'string' ? qErr : ''
+  }
+
+  // формирование объекта query параметров для синхронизации с роутером
+  const buildRouteQuery = (debouncedSearchValue: string): Record<string, string> => {
+    const nextQuery: Record<string, string> = {}
+
+    if (debouncedSearchValue.trim()) {
+      nextQuery.search = debouncedSearchValue.trim()
+    }
+    if (statusFilter.value !== 'all') {
+      nextQuery.status = statusFilter.value
+    }
+    if (priorityFilter.value !== 'all') {
+      nextQuery.priority = priorityFilter.value
+    }
+    if (assigneeFilter.value !== 'all') {
+      nextQuery.assignee = assigneeFilter.value
+    }
+    if (sortOrder.value !== 'newest') {
+      nextQuery.sort = sortOrder.value
+    }
+    if (currentPage.value > 1) {
+      nextQuery.page = String(currentPage.value)
+    }
+    if (simulateError.value) {
+      nextQuery.simulateError = simulateError.value
+    }
+
+    return nextQuery
+  }
+
+  const hasActiveFilters = computed<boolean>(() => {
+    return (
+      Boolean(searchQuery.value.trim()) ||
+      statusFilter.value !== 'all' ||
+      priorityFilter.value !== 'all' ||
+      assigneeFilter.value !== 'all'
+    )
+  })
+
   const priorityRank: Record<RequestPriority, number> = {
     critical: 4,
     high: 3,
@@ -45,7 +113,6 @@ export const useRequests = () => {
     low: 1
   }
 
-  // фильтрация и сортировка заявок
   const filteredRequests = computed<WorkFlowRequest[]>(() => {
     let result = [...requests.value]
 
@@ -195,8 +262,8 @@ export const useRequests = () => {
     const newReq: WorkFlowRequest = {
       id: nextId,
       code: `#${nextId}`,
-      title: payload.title.trim() || 'Новое обращение',
-      customer: payload.customer.trim() || 'АО «Вектор»',
+      title: payload.title.trim() || 'Без названия',
+      customer: payload.customer.trim() || 'Клиент не указан',
       assignee: 'Не назначен',
       status: 'new',
       priority: payload.priority,
@@ -211,13 +278,19 @@ export const useRequests = () => {
           time: timeStr,
           text: `${userProfile.value.name.split(' ')[0]} создал(а) заявку`
         }
-      ]
+      ],
+      hasMissingData: !payload.title.trim() || !payload.customer.trim()
     }
 
     requests.value.unshift(newReq)
     viewState.value = 'ready'
     currentPage.value = 1
     return newReq
+  }
+
+  const resetSearch = () => {
+    searchQuery.value = ''
+    currentPage.value = 1
   }
 
   const resetFilters = () => {
@@ -227,13 +300,13 @@ export const useRequests = () => {
     assigneeFilter.value = 'all'
     sortOrder.value = 'newest'
     currentPage.value = 1
+    simulateError.value = ''
+    viewState.value = 'ready'
   }
 
   const simulateRetryLoad = () => {
-    viewState.value = 'loading'
-    setTimeout(() => {
-      viewState.value = 'ready'
-    }, 600)
+    simulateError.value = ''
+    viewState.value = 'ready'
   }
 
   return {
@@ -244,20 +317,25 @@ export const useRequests = () => {
     assigneeFilter,
     sortOrder,
     currentPage,
+    simulateError,
     pageSize,
     viewState,
     userProfile,
     isCreateModalOpen,
+    hasActiveFilters,
     filteredRequests,
     paginatedRequests,
     totalFiltered,
     totalPages,
     latestRequests,
     metrics,
+    initFiltersFromRoute,
+    buildRouteQuery,
     getRequestById,
     addComment,
     updateRequestParams,
     createNewRequest,
+    resetSearch,
     resetFilters,
     simulateRetryLoad
   }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RequestPriority } from '~/utils/types'
+import type { RequestPriority } from '~/types/workflow'
 
 const props = defineProps<{
   modelValue: boolean

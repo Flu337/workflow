@@ -1,6 +1,47 @@
 <script setup lang="ts">
-const { latestRequests, userProfile } = useRequests()
+import type { RequestsListResponseDto } from '~/types/workflow'
+import { normalizeRequestsListResponse } from '~/utils/normalizeRequests'
+
+const { userProfile } = useRequests()
 const router = useRouter()
+
+const { data: rawDashboardResponse } = await useFetch<RequestsListResponseDto>('/api/requests', {
+  key: 'wf-dashboard-latest',
+  query: {
+    page: 1,
+    limit: 3,
+    sort: 'newest'
+  }
+})
+
+const normalizedDashboard = computed(() =>
+  normalizeRequestsListResponse(rawDashboardResponse.value)
+)
+
+const latestRequests = computed(() => normalizedDashboard.value.items)
+
+const kpiItems = computed(() => [
+  {
+    title: 'Новые заявки',
+    value: normalizedDashboard.value.metrics.newCount,
+    subtitle: 'Ожидают назначения'
+  },
+  {
+    title: 'В работе',
+    value: normalizedDashboard.value.metrics.inProgressCount,
+    subtitle: 'Назначены исполнителям'
+  },
+  {
+    title: 'Ожидают ответа',
+    value: normalizedDashboard.value.metrics.waitingCount,
+    subtitle: 'Нужна информация'
+  },
+  {
+    title: 'Решены',
+    value: normalizedDashboard.value.metrics.resolvedCount,
+    subtitle: 'За эту неделю'
+  }
+])
 
 const goToAllRequests = () => {
   router.push('/requests')
@@ -12,7 +53,7 @@ const goToAllRequests = () => {
     <p class="obzor-2">Обзор</p>
     <p class="obzor-raboty-podderzhki">Обзор работы поддержки</p>
 
-    <WFGPTKpiCards />
+    <WFGPTKpiCards :items="kpiItems" />
 
     <div class="zaiavki-zagolovok-i-fil-tr">
       <p class="poslednie-zaiavki">Последние заявки</p>

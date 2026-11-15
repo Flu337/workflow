@@ -1,6 +1,10 @@
 declare global {
   const H3Error: typeof import('../../node_modules/h3/dist/index').H3Error
   const H3Event: typeof import('../../node_modules/h3/dist/index').H3Event
+  const SERVER_CATEGORIES_DB: typeof import('../../server/utils/db').SERVER_CATEGORIES_DB
+  const SERVER_CUSTOMERS_DB: typeof import('../../server/utils/db').SERVER_CUSTOMERS_DB
+  const SERVER_REQUESTS_DB: typeof import('../../server/utils/db').SERVER_REQUESTS_DB
+  const SERVER_USERS_DB: typeof import('../../server/utils/db').SERVER_USERS_DB
   const __buildAssetsURL: typeof import('../../node_modules/@nuxt/nitro-server/dist/runtime/utils/paths').buildAssetsURL
   const __publicAssetsURL: typeof import('../../node_modules/@nuxt/nitro-server/dist/runtime/utils/paths').publicAssetsURL
   const appendCorsHeaders: typeof import('../../node_modules/h3/dist/index').appendCorsHeaders
@@ -148,3 +152,4 @@ export { defineNitroErrorHandler } from 'nitropack/runtime/internal/error/utils'
 export { buildAssetsURL as __buildAssetsURL, publicAssetsURL as __publicAssetsURL } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/nitro-server/dist/runtime/utils/paths';
 export { defineAppConfig } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/nitro-server/dist/runtime/utils/config';
 export { useAppConfig } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/nitro-server/dist/runtime/utils/app-config';
+export { SERVER_REQUESTS_DB, SERVER_USERS_DB, SERVER_CUSTOMERS_DB, SERVER_CATEGORIES_DB } from 'C:/Users/5LU/Desktop/workflow-nuxt4/server/utils/db';

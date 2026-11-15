@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ListDensity } from '~/utils/types'
+import type { ListDensity } from '~/types/workflow'
 
 const { userProfile } = useRequests()
 const router = useRouter()

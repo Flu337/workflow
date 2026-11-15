@@ -20,6 +20,7 @@ export const OctagonIconAlert: typeof import("../app/components/OctagonIconAlert
 export const OctagonIconBell: typeof import("../app/components/OctagonIconBell.vue")['default']
 export const OctagonIconInboxEmpty: typeof import("../app/components/OctagonIconInboxEmpty.vue")['default']
 export const OctagonIconMenu: typeof import("../app/components/OctagonIconMenu.vue")['default']
+export const OctagonIconSearch: typeof import("../app/components/OctagonIconSearch.vue")['default']
 export const OctagonPriorityBadge: typeof import("../app/components/OctagonPriorityBadge.vue")['default']
 export const OctagonStatusBadge: typeof import("../app/components/OctagonStatusBadge.vue")['default']
 export const WFGPTCreateRequestModal: typeof import("../app/components/WFGPTCreateRequestModal.vue")['default']
@@ -127,6 +128,7 @@ export const LazyOctagonIconAlert: LazyComponent<typeof import("../app/component
 export const LazyOctagonIconBell: LazyComponent<typeof import("../app/components/OctagonIconBell.vue")['default']>
 export const LazyOctagonIconInboxEmpty: LazyComponent<typeof import("../app/components/OctagonIconInboxEmpty.vue")['default']>
 export const LazyOctagonIconMenu: LazyComponent<typeof import("../app/components/OctagonIconMenu.vue")['default']>
+export const LazyOctagonIconSearch: LazyComponent<typeof import("../app/components/OctagonIconSearch.vue")['default']>
 export const LazyOctagonPriorityBadge: LazyComponent<typeof import("../app/components/OctagonPriorityBadge.vue")['default']>
 export const LazyOctagonStatusBadge: LazyComponent<typeof import("../app/components/OctagonStatusBadge.vue")['default']>
 export const LazyWFGPTCreateRequestModal: LazyComponent<typeof import("../app/components/WFGPTCreateRequestModal.vue")['default']>

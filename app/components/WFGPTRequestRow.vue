@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RequestStatus, RequestPriority } from '~/utils/types'
+import type { RequestStatus, RequestPriority } from '~/types/workflow'
 
 const props = withDefaults(
   defineProps<{
@@ -25,6 +25,9 @@ const props = withDefaults(
 const router = useRouter()
 
 const routeId = computed(() => props.id.replace(/^#/, ''))
+const safeTitle = computed(() => (props.title && props.title.trim() ? props.title.trim() : 'Без названия'))
+const safeCustomer = computed(() => (props.customer && props.customer.trim() ? props.customer.trim() : 'Клиент не указан'))
+const safeAssignee = computed(() => (props.assignee && props.assignee.trim() ? props.assignee.trim() : 'Не назначен'))
 
 const navigateToDetail = () => {
   router.push(`/requests/${routeId.value}`)
@@ -44,15 +47,15 @@ const handleKeydown = (e: KeyboardEvent) => {
     :class="{ 'is-compact': compact }"
     role="link"
     tabindex="0"
-    :aria-label="`Заявка ${id}: ${title}`"
+    :aria-label="`Заявка ${id}: ${safeTitle}`"
     @click="navigateToDetail"
     @keydown="handleKeydown"
   >
     <div class="row-desktop-tablet">
       <p class="col-id">{{ id }}</p>
-      <p class="col-title">{{ title }}</p>
-      <p class="col-customer">{{ customer }}</p>
-      <p class="col-assignee">{{ assignee }}</p>
+      <p class="col-title">{{ safeTitle }}</p>
+      <p class="col-customer">{{ safeCustomer }}</p>
+      <p class="col-assignee">{{ safeAssignee }}</p>
       <div class="col-status">
         <OctagonStatusBadge :status="status" />
       </div>
@@ -63,10 +66,10 @@ const handleKeydown = (e: KeyboardEvent) => {
 
     <div class="row-mobile">
       <p class="mobile-id">{{ id }}</p>
-      <p class="mobile-title">{{ title }}</p>
+      <p class="mobile-title">{{ safeTitle }}</p>
       <div class="mobile-customer-assignee">
-        <p class="mobile-customer">{{ customer }}</p>
-        <p class="mobile-assignee">{{ assignee }}</p>
+        <p class="mobile-customer">{{ safeCustomer }}</p>
+        <p class="mobile-assignee">{{ safeAssignee }}</p>
       </div>
       <div class="mobile-status-priority">
         <div class="mobile-col-status">
@@ -109,13 +112,14 @@ const handleKeydown = (e: KeyboardEvent) => {
   display: flex;
   flex-direction: row;
   gap: 12px;
-  padding: 0px 16px;
+  padding: 10px 16px;
   justify-content: flex-start;
   align-items: center;
 }
 
 .wf-gpt-request-row-item.is-compact .row-desktop-tablet {
   min-height: 44px;
+  padding: 6px 16px;
 }
 
 .row-mobile {
@@ -132,6 +136,7 @@ const handleKeydown = (e: KeyboardEvent) => {
   line-height: 16px;
 }
 
+/* перенос длинных заголовков и имен в строке таблицы */
 .col-title {
   flex: 1 1 0;
   min-width: 0;
@@ -140,9 +145,8 @@ const handleKeydown = (e: KeyboardEvent) => {
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .col-customer {
@@ -153,9 +157,8 @@ const handleKeydown = (e: KeyboardEvent) => {
   font-size: 12px;
   font-weight: 500;
   line-height: 16px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .col-assignee {
@@ -166,9 +169,8 @@ const handleKeydown = (e: KeyboardEvent) => {
   font-size: 12px;
   font-weight: 500;
   line-height: 16px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .col-status {
@@ -228,6 +230,8 @@ const handleKeydown = (e: KeyboardEvent) => {
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .mobile-customer-assignee {
@@ -246,6 +250,8 @@ const handleKeydown = (e: KeyboardEvent) => {
     font-size: 12px;
     font-weight: 500;
     line-height: 16px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .mobile-status-priority {

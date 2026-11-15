@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { STATUS_LABELS, type RequestStatus } from '~/utils/types'
+import { STATUS_LABELS, type RequestStatus } from '~/types/workflow'
 
 const props = withDefaults(
   defineProps<{
