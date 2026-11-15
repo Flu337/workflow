@@ -35,9 +35,9 @@ const closeModal = () => {
   emit('update:modelValue', false)
 }
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (!title.value.trim()) return
-  const created = createNewRequest({
+  const created = await createNewRequest({
     title: title.value,
     customer: customer.value,
     category: category.value,

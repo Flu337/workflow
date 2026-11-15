@@ -70,6 +70,9 @@
       "#server/*": [
         "../server/*"
       ],
+      "pinia": [
+        "~/utils/pinia"
+      ],
       "#app": [
         "../node_modules/nuxt/dist/app"
       ],

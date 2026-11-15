@@ -3,6 +3,7 @@ export {}
 declare global {
   const $fetch: typeof import('../fetch').$fetch
   const MOCK_REQUESTS: typeof import('../../app/utils/mockData').MOCK_REQUESTS
+  const PRIORITY_DUE_DATES: typeof import('../../app/types/workflow').PRIORITY_DUE_DATES
   const PRIORITY_LABELS: typeof import('../../app/types/workflow').PRIORITY_LABELS
   const STATUS_LABELS: typeof import('../../app/types/workflow').STATUS_LABELS
   const abortNavigation: typeof import('../../node_modules/nuxt/dist/app/composables/router').abortNavigation
@@ -29,6 +30,7 @@ declare global {
   const definePayloadPlugin: typeof import('../../node_modules/nuxt/dist/app/nuxt').definePayloadPlugin
   const definePayloadReducer: typeof import('../../node_modules/nuxt/dist/app/composables/payload').definePayloadReducer
   const definePayloadReviver: typeof import('../../node_modules/nuxt/dist/app/composables/payload').definePayloadReviver
+  const defineStore: typeof import('../../app/utils/pinia').defineStore
   const defineUseAsyncDataAddon: typeof import('../../node_modules/nuxt/dist/app/composables/addons').defineUseAsyncDataAddon
   const defineUseFetchAddon: typeof import('../../node_modules/nuxt/dist/app/composables/addons').defineUseFetchAddon
   const effect: typeof import('vue').effect
@@ -96,6 +98,7 @@ declare global {
   const shallowReadonly: typeof import('vue').shallowReadonly
   const shallowRef: typeof import('vue').shallowRef
   const showError: typeof import('../../node_modules/nuxt/dist/app/composables/error').showError
+  const storeToRefs: typeof import('../../app/utils/pinia').storeToRefs
   const toRaw: typeof import('vue').toRaw
   const toRef: typeof import('vue').toRef
   const toRefs: typeof import('vue').toRefs
@@ -127,12 +130,14 @@ declare global {
   const useNuxtApp: typeof import('../../node_modules/nuxt/dist/app/nuxt').useNuxtApp
   const useNuxtData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').useNuxtData
   const useNuxtDevTools: typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools').useNuxtDevTools
+  const usePreferencesStore: typeof import('../../app/stores/preferences').usePreferencesStore
   const usePreviewMode: typeof import('../../node_modules/nuxt/dist/app/composables/preview').usePreviewMode
   const useRequestEvent: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useRequestEvent
   const useRequestFetch: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useRequestFetch
   const useRequestHeader: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useRequestHeader
   const useRequestHeaders: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useRequestHeaders
   const useRequestURL: typeof import('../../node_modules/nuxt/dist/app/composables/url').useRequestURL
+  const useRequestUiStore: typeof import('../../app/stores/requestUi').useRequestUiStore
   const useRequests: typeof import('../../app/composables/useRequests').useRequests
   const useResponseHeader: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useResponseHeader
   const useRoute: typeof import('../../node_modules/nuxt/dist/app/composables/router').useRoute
@@ -215,8 +220,14 @@ declare global {
   export type { PageMeta } from '../../node_modules/nuxt/dist/app/composables/pages'
   import('../../node_modules/nuxt/dist/app/composables/pages')
   // @ts-ignore
-  export type { RequestStatus, RequestPriority, RequestSortOrder, ListViewState, ListDensity, RequestCommentDto, RequestTimelineItemDto, RequestItemDto, RequestsMetricsDto, RequestsListResponseDto, RequestDetailResponseDto, UserDirectoryItemDto, CustomerDirectoryItemDto, CategoryDirectoryItemDto, WorkFlowRequest, NormalizedRequestsListResult } from '../../app/types/workflow'
+  export type { VueUnwrapStore, StoreRefs } from '../../app/utils/pinia'
+  import('../../app/utils/pinia')
+  // @ts-ignore
+  export type { RequestStatus, RequestPriority, RequestSortOrder, SortOrder, ListViewState, ListDensity, RequestCommentDto, RequestTimelineItemDto, RequestItemDto, RequestsMetricsDto, RequestsListResponseDto, RequestDetailResponseDto, UserDirectoryItemDto, CustomerDirectoryItemDto, CategoryDirectoryItemDto, RequestComment, RequestTimelineItem, WorkFlowRequest, NormalizedRequestsListResult, RequestsFilterQuery, UpdateRequestPayloadDto, UpdateRequestResponseDto, AddCommentPayloadDto, AddCommentResponseDto, CreateRequestPayloadDto, UndoMutationSnapshot, RollbackBannerState, FeedbackBannerState, UserPreferencesState } from '../../app/types/workflow'
   import('../../app/types/workflow')
+  // @ts-ignore
+  export type { OptimisticRequestOverride } from '../../app/stores/requestUi'
+  import('../../app/stores/requestUi')
 }
 // for vue template auto import
 import { UnwrapRef } from 'vue'
@@ -224,6 +235,7 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly $fetch: UnwrapRef<typeof import('../fetch')['$fetch']>
     readonly MOCK_REQUESTS: UnwrapRef<typeof import('../../app/utils/mockData')['MOCK_REQUESTS']>
+    readonly PRIORITY_DUE_DATES: UnwrapRef<typeof import('../../app/types/workflow')['PRIORITY_DUE_DATES']>
     readonly PRIORITY_LABELS: UnwrapRef<typeof import('../../app/types/workflow')['PRIORITY_LABELS']>
     readonly STATUS_LABELS: UnwrapRef<typeof import('../../app/types/workflow')['STATUS_LABELS']>
     readonly abortNavigation: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['abortNavigation']>
@@ -250,6 +262,7 @@ declare module 'vue' {
     readonly definePayloadPlugin: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['definePayloadPlugin']>
     readonly definePayloadReducer: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/payload')['definePayloadReducer']>
     readonly definePayloadReviver: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/payload')['definePayloadReviver']>
+    readonly defineStore: UnwrapRef<typeof import('../../app/utils/pinia')['defineStore']>
     readonly defineUseAsyncDataAddon: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/addons')['defineUseAsyncDataAddon']>
     readonly defineUseFetchAddon: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/addons')['defineUseFetchAddon']>
     readonly effect: UnwrapRef<typeof import('vue')['effect']>
@@ -317,6 +330,7 @@ declare module 'vue' {
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly showError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['showError']>
+    readonly storeToRefs: UnwrapRef<typeof import('../../app/utils/pinia')['storeToRefs']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
@@ -348,12 +362,14 @@ declare module 'vue' {
     readonly useNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['useNuxtApp']>
     readonly useNuxtData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useNuxtData']>
     readonly useNuxtDevTools: UnwrapRef<typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools')['useNuxtDevTools']>
+    readonly usePreferencesStore: UnwrapRef<typeof import('../../app/stores/preferences')['usePreferencesStore']>
     readonly usePreviewMode: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/preview')['usePreviewMode']>
     readonly useRequestEvent: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestEvent']>
     readonly useRequestFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestFetch']>
     readonly useRequestHeader: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestHeader']>
     readonly useRequestHeaders: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestHeaders']>
     readonly useRequestURL: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/url')['useRequestURL']>
+    readonly useRequestUiStore: UnwrapRef<typeof import('../../app/stores/requestUi')['useRequestUiStore']>
     readonly useRequests: UnwrapRef<typeof import('../../app/composables/useRequests')['useRequests']>
     readonly useResponseHeader: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useResponseHeader']>
     readonly useRoute: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['useRoute']>

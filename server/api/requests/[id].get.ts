@@ -41,6 +41,16 @@ export default defineEventHandler((event): RequestDetailResponseDto => {
     timeline: found.timeline ? [...found.timeline] : []
   }
 
+  // в карточке 1042 по макету 3 этапа статус в работе и полное имя исполнителя
+  if (itemCopy.id === '1042') {
+    if (itemCopy.status === 'new') {
+      itemCopy.status = 'in-progress'
+    }
+    if (!itemCopy.assignee || itemCopy.assignee === 'Не назначен' || itemCopy.assignee === 'Брунгильда Б.') {
+      itemCopy.assignee = 'Брунгильда Брунгильдовна'
+    }
+  }
+
   // режим проверки длинного названия и длинного имени исполнителя из макета
   if (longMode === '1' || longMode === 'true') {
     itemCopy.title =
@@ -49,7 +59,10 @@ export default defineEventHandler((event): RequestDetailResponseDto => {
     itemCopy.status = 'in-progress'
   }
 
+  const hasIncompleteData = !itemCopy.title?.trim() || !itemCopy.customer?.trim()
+
   return {
-    item: itemCopy
+    item: itemCopy,
+    hasIncompleteData
   }
 })

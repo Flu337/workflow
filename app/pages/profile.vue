@@ -1,13 +1,28 @@
 <script setup lang="ts">
 import type { ListDensity } from '~/types/workflow'
+import { usePreferencesStore } from '~/stores/preferences'
 
-const { userProfile } = useRequests()
+const preferencesStore = usePreferencesStore()
 const router = useRouter()
 
-const name = ref(userProfile.value.name)
-const email = ref(userProfile.value.email)
-const density = ref<ListDensity>(userProfile.value.density)
+const name = ref(preferencesStore.name)
+const email = ref(preferencesStore.email)
+const density = ref<ListDensity>(preferencesStore.density)
 const savedBanner = ref(false)
+
+onMounted(() => {
+  preferencesStore.initFromStorage()
+  name.value = preferencesStore.name
+  email.value = preferencesStore.email
+  density.value = preferencesStore.density
+})
+
+watch(
+  () => preferencesStore.density,
+  (val) => {
+    density.value = val
+  }
+)
 
 const densityOptions = [
   { label: 'Комфортная', value: 'comfortable' },
@@ -15,9 +30,13 @@ const densityOptions = [
 ]
 
 const handleSaveProfile = () => {
-  userProfile.value.name = name.value.trim() || 'Анна Кузнецова'
-  userProfile.value.email = email.value.trim() || '0000@mail.demo'
-  userProfile.value.density = density.value
+  preferencesStore.updateProfile({
+    name: name.value,
+    email: email.value,
+    density: density.value
+  })
+  name.value = preferencesStore.name
+  email.value = preferencesStore.email
   savedBanner.value = true
   setTimeout(() => {
     savedBanner.value = false
@@ -25,8 +44,9 @@ const handleSaveProfile = () => {
 }
 
 const handleDensityChange = (val: string) => {
-  density.value = val as ListDensity
-  userProfile.value.density = density.value
+  const nextDensity: ListDensity = val === 'compact' ? 'compact' : 'comfortable'
+  density.value = nextDensity
+  preferencesStore.setDensity(nextDensity)
 }
 
 const handleLogout = () => {
@@ -42,7 +62,7 @@ const handleLogout = () => {
     </p>
 
     <div class="dannye-profilia">
-      <OctagonAvatar :initials="userProfile.initials" />
+      <OctagonAvatar :initials="preferencesStore.initials" />
 
       <div class="wf-gpt-field">
         <WFGPTField
@@ -78,7 +98,7 @@ const handleLogout = () => {
           label23270="Плотность списка"
           type="select"
           :options="densityOptions"
-          value="Комфортная  ▾"
+          :value="density === 'compact' ? 'Компактная  ▾' : 'Комфортная  ▾'"
           @change="handleDensityChange"
         />
       </div>

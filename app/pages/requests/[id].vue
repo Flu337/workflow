@@ -1,18 +1,25 @@
 <script setup lang="ts">
-import type {
-  RequestPriority,
-  RequestDetailResponseDto,
-  UserDirectoryItemDto,
-  WorkFlowRequest
+import {
+  PRIORITY_LABELS,
+  type RequestPriority,
+  type RequestStatus,
+  type RequestDetailResponseDto,
+  type AddCommentResponseDto,
+  type UserDirectoryItemDto,
+  type WorkFlowRequest
 } from '~/types/workflow'
 import { normalizeRequestItem } from '~/utils/normalizeRequests'
+import { usePreferencesStore } from '~/stores/preferences'
+import { useRequestUiStore } from '~/stores/requestUi'
 
 const route = useRoute()
 const router = useRouter()
-const { userProfile } = useRequests()
+const preferencesStore = usePreferencesStore()
+const requestUiStore = useRequestUiStore()
 
 const requestId = computed(() => String(route.params.id || '1042').replace(/^#/, ''))
 
+// локальное состояние компонента local state
 const demoDetailState = ref<'ready' | 'loading' | 'error'>('ready')
 const simulatedErrorCode = ref<string>(
   typeof route.query.simulateError === 'string' ? route.query.simulateError : ''
@@ -20,6 +27,11 @@ const simulatedErrorCode = ref<string>(
 const isLongVariant = ref<boolean>(
   route.query.long === '1' || route.query.long === 'true'
 )
+
+const commentText = ref('')
+const isSubmittingComment = ref(false)
+const commentSendError = ref<string | null>(null)
+const simulateCommentError = ref(false)
 
 const detailQuery = computed(() => ({
   simulateError: simulatedErrorCode.value || undefined,
@@ -31,7 +43,7 @@ const { data: usersDirectory } = await useFetch<UserDirectoryItemDto[]>('/api/us
   default: () => []
 })
 
-// загрузка деталей заявки с сервера через useFetch
+// загрузка деталей заявки с сервера через usefetch server state
 const {
   data: rawDetailResponse,
   status: detailStatus,
@@ -66,10 +78,13 @@ watch(
   { immediate: true }
 )
 
-const requestItem = computed(() => localNormalized.value)
+// объединение серверных данных карточки с оптимистичными обновлениями из pinia
+const requestItem = computed<WorkFlowRequest | null>(() => {
+  if (!localNormalized.value) return null
+  return requestUiStore.applyOverridesToRequest(localNormalized.value)
+})
 
-const commentText = ref('')
-const selectedAssignee = ref('Не назначен')
+const selectedAssignee = ref('Брунгильда Брунгильдовна')
 const selectedPriority = ref<RequestPriority>('high')
 
 watch(
@@ -86,14 +101,15 @@ watch(
 const assigneeOptions = computed(() => {
   const base = [{ label: 'Не назначен', value: 'Не назначен' }]
   const fromApi = (usersDirectory.value || []).map(u => ({
-    label: u.shortName,
-    value: u.shortName
+    label: u.name,
+    value: u.name
   }))
   if (fromApi.length === 0) {
     return [
       ...base,
-      { label: 'Брунгильда Б.', value: 'Брунгильда Б.' },
-      { label: 'Олег С.', value: 'Олег С.' },
+      { label: 'Брунгильда Брунгильдовна', value: 'Брунгильда Брунгильдовна' },
+      { label: 'Олег Соколов', value: 'Олег Соколов' },
+      { label: 'Анна Кузнецова', value: 'Анна Кузнецова' },
       { label: 'Александра Константиновна Рождественская-Соколова', value: 'Александра Константиновна Рождественская-Соколова' }
     ]
   }
@@ -106,6 +122,11 @@ const priorityOptions = [
   { label: 'Обычный', value: 'normal' },
   { label: 'Низкий', value: 'low' }
 ]
+
+const priorityDisplayLabel = computed(() => {
+  if (!requestItem.value) return 'Высокий  ▾'
+  return `${PRIORITY_LABELS[requestItem.value.priority]}  ▾`
+})
 
 const effectiveDetailState = computed<'ready' | 'loading' | 'error'>(() => {
   if (demoDetailState.value !== 'ready') {
@@ -138,57 +159,153 @@ const errorSubtitle = computed(() => {
 
 const isCommentEmpty = computed(() => !commentText.value.trim())
 
-const actionButtonLabel = computed(() => {
-  if (isLongVariant.value || (requestItem.value && requestItem.value.status === 'in-progress')) {
-    return 'Изменить статус'
+const nextWorkflowStatus = (current: RequestStatus): RequestStatus => {
+  const order: Record<RequestStatus, RequestStatus> = {
+    'new': 'in-progress',
+    'assigned': 'in-progress',
+    'in-progress': 'resolved',
+    'waiting': 'in-progress',
+    'escalated': 'in-progress',
+    'resolved': 'closed',
+    'closed': 'in-progress'
   }
-  return 'Назначить исполнителя'
-})
-
-const handleSendComment = () => {
-  if (isCommentEmpty.value || !localNormalized.value) return
-  const now = new Date()
-  const hh = String(now.getHours()).padStart(2, '0')
-  const mm = String(now.getMinutes()).padStart(2, '0')
-  const timeStr = `${hh}:${mm}`
-
-  localNormalized.value.comments.push({
-    id: `c-${localNormalized.value.id}-${Date.now()}`,
-    author: userProfile.value.name,
-    time: timeStr,
-    text: commentText.value.trim()
-  })
-
-  localNormalized.value.timeline.push({
-    id: `t-${localNormalized.value.id}-${Date.now()}`,
-    time: timeStr,
-    text: `${userProfile.value.name.split(' ')[0]} добавил(а) комментарий`
-  })
-
-  commentText.value = ''
+  return order[current] || 'in-progress'
 }
 
-const handlePriorityChange = (val: string) => {
-  if (!localNormalized.value) return
-  localNormalized.value.priority = val as RequestPriority
+// отправка комментария на сервер с состояниями отправки и ошибки макеты 6txt 7txt 8txt 9txt
+const handleSendComment = async () => {
+  if (isCommentEmpty.value || !requestItem.value || isSubmittingComment.value) return
+  const textToSend = commentText.value.trim()
+  isSubmittingComment.value = true
+  commentSendError.value = null
+  requestUiStore.clearBanners()
+
+  try {
+    const response = await $fetch<AddCommentResponseDto>(
+      `/api/requests/${requestId.value}/comments`,
+      {
+        method: 'POST',
+        body: {
+          author: 'Брунгильда Брунгильдовна',
+          text: textToSend,
+          simulateError: simulateCommentError.value ? '500' : ''
+        }
+      }
+    )
+
+    if (response?.item) {
+      localNormalized.value = normalizeRequestItem(response.item)
+    }
+    commentText.value = ''
+    requestUiStore.showCommentSentBanner(requestId.value)
+  } catch {
+    commentSendError.value =
+      'Не удалось отправить комментарий. Текст сообщения сохранён — проверьте соединение и попробуйте снова.'
+  } finally {
+    isSubmittingComment.value = false
+  }
 }
 
-const handleAssignAction = () => {
-  if (!localNormalized.value) return
-  const targetAssignee =
-    selectedAssignee.value === 'Не назначен' ? 'Брунгильда Б.' : selectedAssignee.value
-  selectedAssignee.value = targetAssignee
-  localNormalized.value.assignee = targetAssignee
-  if (localNormalized.value.status === 'new') {
-    localNormalized.value.status = 'assigned'
-  } else if (localNormalized.value.status === 'in-progress') {
-    localNormalized.value.status = 'resolved'
+// оптимистичное изменение приоритета с поддержкой отката при 409 или 500 и отмены через undo макеты 2txt 3txt 5txt
+const handlePriorityChange = async (val: string) => {
+  if (!requestItem.value) return
+  const nextPriority = val as RequestPriority
+  commentSendError.value = null
+  selectedPriority.value = nextPriority
+
+  const ok = await requestUiStore.changePriorityOptimistic(
+    requestItem.value,
+    nextPriority,
+    preferencesStore.name
+  )
+
+  if (!ok && requestItem.value) {
+    selectedPriority.value = requestItem.value.priority
+  } else {
+    await refreshDetail()
   }
+}
+
+// изменение исполнителя через серверный patch
+const handleAssigneeChange = async (val: string) => {
+  if (!requestItem.value) return
+  commentSendError.value = null
+  selectedAssignee.value = val
+
+  const ok = await requestUiStore.changeAssignee(
+    requestItem.value,
+    val,
+    preferencesStore.name
+  )
+
+  if (!ok && requestItem.value) {
+    selectedAssignee.value = requestItem.value.assignee
+  } else {
+    await refreshDetail()
+  }
+}
+
+// изменение статуса заявки с поддержкой undo
+const handleStatusChangeAction = async () => {
+  if (!requestItem.value) return
+  commentSendError.value = null
+  const targetStatus = nextWorkflowStatus(requestItem.value.status)
+
+  const ok = await requestUiStore.changeStatus(
+    requestItem.value,
+    targetStatus,
+    preferencesStore.name
+  )
+
+  if (ok) {
+    await refreshDetail()
+  }
+}
+
+// отмена последнего изменения статуса или приоритета undo
+const handleUndoChange = async () => {
+  await requestUiStore.undoLastChange(preferencesStore.name)
+  await refreshDetail()
+  if (requestItem.value) {
+    selectedPriority.value = requestItem.value.priority
+    selectedAssignee.value = requestItem.value.assignee
+  }
+}
+
+const handleRefreshAfterRollback = async () => {
+  requestUiStore.clearBanners()
+  commentSendError.value = null
+  await refreshDetail()
+}
+
+const triggerDemoConflictOnCard = async () => {
+  if (!requestItem.value) return
+  commentSendError.value = null
+  await requestUiStore.changePriorityOptimistic(
+    requestItem.value,
+    'critical',
+    preferencesStore.name,
+    '409'
+  )
+  if (requestItem.value) {
+    selectedPriority.value = requestItem.value.priority
+  }
+}
+
+const triggerDemoCommentError = async () => {
+  if (!commentText.value.trim()) {
+    commentText.value = 'Уточнила детали заявки.'
+  }
+  simulateCommentError.value = true
+  await handleSendComment()
+  simulateCommentError.value = false
 }
 
 const setDetailDemoMode = async (
   mode: 'ready' | 'loading' | 'error' | 'long' | '429' | '500'
 ) => {
+  requestUiStore.clearBanners()
+  commentSendError.value = null
   if (mode === 'loading') {
     simulatedErrorCode.value = ''
     demoDetailState.value = 'loading'
@@ -243,10 +360,26 @@ const goBackToList = () => {
         <button
           type="button"
           class="demo-state-btn"
-          :class="{ 'is-active': effectiveDetailState === 'ready' && !isLongVariant && !simulatedErrorCode }"
+          :class="{ 'is-active': effectiveDetailState === 'ready' && !isLongVariant && !simulatedErrorCode && !requestUiStore.rollbackError && !commentSendError }"
           @click="setDetailDemoMode('ready')"
         >
           Карточка
+        </button>
+        <button
+          type="button"
+          class="demo-state-btn"
+          :class="{ 'is-active': Boolean(requestUiStore.rollbackError) }"
+          @click="triggerDemoConflictOnCard"
+        >
+          Конфликт 409 (откат)
+        </button>
+        <button
+          type="button"
+          class="demo-state-btn"
+          :class="{ 'is-active': Boolean(commentSendError) }"
+          @click="triggerDemoCommentError"
+        >
+          Ошибка комментария
         </button>
         <button
           type="button"
@@ -283,7 +416,7 @@ const goBackToList = () => {
       </div>
     </div>
 
-    <!-- состояние загрузки карточки заявки из макета 2.07 -->
+    <!-- состояние загрузки карточки заявки из макета 207 -->
     <template v-if="effectiveDetailState === 'loading'">
       <p class="zagruzhaem-zaiavku">Загружаем заявку…</p>
       <div class="detali-i-parametry">
@@ -322,7 +455,7 @@ const goBackToList = () => {
       </div>
     </template>
 
-    <!-- состояние ошибки загрузки карточки заявки из макета 2.08 -->
+    <!-- состояние ошибки загрузки карточки заявки из макета 208 -->
     <div v-else-if="effectiveDetailState === 'error'" class="sostoianie-spiska">
       <OctagonIconAlert />
       <p class="ne-udalos-zagruzit-zaiavku">Не удалось загрузить заявку</p>
@@ -344,6 +477,44 @@ const goBackToList = () => {
       </div>
 
       <p class="ne-rabotaet-dostup-k-crm">{{ requestItem.title }}</p>
+
+      <!-- плашка конфликта 409 или 500 и отката изменения из макета 5txt -->
+      <div v-if="requestUiStore.rollbackError" class="soobshchenie-ob-izmenenii">
+        <p class="izmenenie-ne-sokhraneno">{{ requestUiStore.rollbackError.title }}</p>
+        <p class="zaiavka-byla-izmenena-drugim">
+          {{ requestUiStore.rollbackError.description }}
+        </p>
+        <OctagonButton
+          variant="secondary"
+          label23251="Обновить заявку"
+          @click="handleRefreshAfterRollback"
+        />
+      </div>
+
+      <!-- плашка ошибки отправки комментария из макета 9txt -->
+      <div v-else-if="commentSendError" class="soobshchenie-ob-izmenenii">
+        <p class="izmenenie-ne-sokhraneno">Не удалось отправить комментарий</p>
+        <p class="zaiavka-byla-izmenena-drugim">{{ commentSendError }}</p>
+        <OctagonButton
+          variant="secondary"
+          label23251="Отправить повторно"
+          @click="handleSendComment"
+        />
+      </div>
+
+      <!-- плашка успешного изменения приоритета или статуса с кнопкой undo 3txt и отправки комментария 8txt -->
+      <div v-else-if="requestUiStore.feedbackBanner" class="soobshchenie-ob-izmenenii">
+        <p class="prioritet-izmenion-na-kriticheskii">
+          {{ requestUiStore.feedbackBanner.message }}
+        </p>
+        <OctagonButton
+          v-if="requestUiStore.feedbackBanner.canUndo && requestUiStore.lastUndoAction"
+          variant="secondary"
+          label23251="Отменить изменение"
+          @click="handleUndoChange"
+        />
+      </div>
+
       <p class="layer-1042-sozdana-5-oktiabria-09-14">
         {{ requestItem.code }} · {{ requestItem.createdAt }}
       </p>
@@ -385,12 +556,16 @@ const goBackToList = () => {
 
             <div class="octagon-button-2">
               <OctagonButton
-                :state="isCommentEmpty ? 'disabled' : 'default'"
-                :disabled="isCommentEmpty"
-                label23251="Отправить комментарий"
+                :state="isCommentEmpty || isSubmittingComment ? 'disabled' : 'default'"
+                :disabled="isCommentEmpty || isSubmittingComment"
+                :label23251="isSubmittingComment ? 'Отправляем…' : 'Отправить комментарий'"
                 @click="handleSendComment"
               />
             </div>
+
+            <p v-if="isSubmittingComment" class="otpravliaem-kommentarii">
+              Отправляем комментарий…
+            </p>
           </div>
 
           <div class="istoriia-izmenenii">
@@ -421,6 +596,7 @@ const goBackToList = () => {
               type="select"
               :options="assigneeOptions"
               :value="`${requestItem.assignee}  ▾`"
+              @change="handleAssigneeChange"
             />
           </div>
 
@@ -430,7 +606,7 @@ const goBackToList = () => {
               label23270="Приоритет"
               type="select"
               :options="priorityOptions"
-              value="Высокий  ▾"
+              :value="priorityDisplayLabel"
               @change="handlePriorityChange"
             />
           </div>
@@ -440,8 +616,8 @@ const goBackToList = () => {
 
           <div class="octagon-button-3">
             <OctagonButton
-              :label23251="actionButtonLabel"
-              @click="handleAssignAction"
+              label23251="Изменить статус"
+              @click="handleStatusChangeAction"
             />
           </div>
         </div>
@@ -533,13 +709,32 @@ const goBackToList = () => {
   border: 1px solid var(--color-border-default, #413E74);
 }
 
-.chast-dannykh-zaiavki-nedostupna-ostal {
+.chast-dannykh-zaiavki-nedostupna-ostal,
+.prioritet-izmenion-na-kriticheskii {
   align-self: stretch;
   color: var(--color-text-primary, #E8E7EC);
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
+}
+
+.izmenenie-ne-sokhraneno {
+  align-self: stretch;
+  color: var(--color-text-danger, #FF7994);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.zaiavka-byla-izmenena-drugim {
+  align-self: stretch;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
 }
 
 .zagruzhaem-zaiavku {
@@ -676,6 +871,15 @@ const goBackToList = () => {
   align-self: flex-start;
 }
 
+.otpravliaem-kommentarii {
+  align-self: stretch;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
 .layer-09-14-mariia-sozdala-zaiavku {
   align-self: stretch;
   color: var(--color-text-secondary, #B9B3D4);
@@ -746,7 +950,7 @@ const goBackToList = () => {
   width: 100%;
 }
 
-/* скелетоны карточки заявки из макета 2.07 */
+/* скелетоны карточки заявки из макета 207 */
 .skeleton-row-short {
   width: 200px;
   max-width: 100%;
@@ -764,7 +968,7 @@ const goBackToList = () => {
   background: var(--color-bg-subtle, #2F2A6A);
 }
 
-/* экран ошибки карточки заявки из макета 2.08 */
+/* экран ошибки карточки заявки из макета 208 */
 .sostoianie-spiska {
   align-self: stretch;
   width: 100%;

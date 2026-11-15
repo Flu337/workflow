@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { RequestsListResponseDto } from '~/types/workflow'
 import { normalizeRequestsListResponse } from '~/utils/normalizeRequests'
+import { usePreferencesStore } from '~/stores/preferences'
+import { useRequestUiStore } from '~/stores/requestUi'
 
-const { userProfile } = useRequests()
+const preferencesStore = usePreferencesStore()
+const requestUiStore = useRequestUiStore()
 const router = useRouter()
 
 const { data: rawDashboardResponse } = await useFetch<RequestsListResponseDto>('/api/requests', {
@@ -18,7 +21,9 @@ const normalizedDashboard = computed(() =>
   normalizeRequestsListResponse(rawDashboardResponse.value)
 )
 
-const latestRequests = computed(() => normalizedDashboard.value.items)
+const latestRequests = computed(() =>
+  normalizedDashboard.value.items.map(item => requestUiStore.applyOverridesToRequest(item))
+)
 
 const kpiItems = computed(() => [
   {
@@ -52,6 +57,11 @@ const goToAllRequests = () => {
   <div class="soderzhanie">
     <p class="obzor-2">Обзор</p>
     <p class="obzor-raboty-podderzhki">Обзор работы поддержки</p>
+
+    <!-- плашка компактной плотности списка из макета 10txt -->
+    <div v-if="preferencesStore.isCompact" class="soobshchenie-ob-izmenenii">
+      <p class="plotnost-spiska-kompaktnaia">Плотность списка: компактная</p>
+    </div>
 
     <WFGPTKpiCards :items="kpiItems" />
 
@@ -88,7 +98,7 @@ const goToAllRequests = () => {
           :assignee="req.assignee"
           :status="req.status"
           :priority="req.priority"
-          :compact="userProfile.density === 'compact'"
+          :compact="preferencesStore.isCompact"
         />
       </div>
     </div>
@@ -123,6 +133,29 @@ const goToAllRequests = () => {
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
+}
+
+.soobshchenie-ob-izmenenii {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+}
+
+.plotnost-spiska-kompaktnaia {
+  align-self: stretch;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
 }
 
 .zaiavki-zagolovok-i-fil-tr {

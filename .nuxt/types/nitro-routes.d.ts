@@ -11,9 +11,14 @@ declare module "nitropack/types" {
     }
     '/api/requests/:id': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/requests/[id].get').default>>>>
+      'patch': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/requests/[id].patch').default>>>>
+    }
+    '/api/requests/:id/comments': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/requests/[id]/comments.post').default>>>>
     }
     '/api/requests': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/requests/index.get').default>>>>
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/requests/index.post').default>>>>
     }
     '/api/users': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/users/index.get').default>>>>

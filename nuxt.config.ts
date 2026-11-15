@@ -5,6 +5,12 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
+  imports: {
+    dirs: ['stores']
+  },
+  alias: {
+    pinia: '~/utils/pinia'
+  },
   app: {
     head: {
       title: 'WorkFlow — система управления заявками',

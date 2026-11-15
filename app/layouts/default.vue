@@ -1,5 +1,8 @@
 <script setup lang="ts">
-const { userProfile, isCreateModalOpen } = useRequests()
+import { usePreferencesStore } from '~/stores/preferences'
+
+const preferencesStore = usePreferencesStore()
+const { isCreateModalOpen } = useRequests()
 const route = useRoute()
 
 const isMobileMenuOpen = ref(false)
@@ -38,6 +41,7 @@ const handleKeydown = (e: KeyboardEvent) => {
 }
 
 onMounted(() => {
+  preferencesStore.initFromStorage()
   window.addEventListener('keydown', handleKeydown)
 })
 
@@ -96,11 +100,11 @@ onBeforeUnmount(() => {
               class="avatar-link ui-icon-btn"
               aria-label="Профиль"
             >
-              <OctagonAvatar :initials="userProfile.initials" />
+              <OctagonAvatar :initials="preferencesStore.initials" />
             </NuxtLink>
 
             <NuxtLink to="/profile" class="operator">
-              {{ userProfile.role }}
+              {{ preferencesStore.role }}
             </NuxtLink>
 
             <button
@@ -142,7 +146,7 @@ onBeforeUnmount(() => {
             :class="{ 'is-active': route.path === '/profile' }"
             @click="closeMenus"
           >
-            Профиль ({{ userProfile.role }})
+            Профиль ({{ preferencesStore.role }})
           </NuxtLink>
         </nav>
 

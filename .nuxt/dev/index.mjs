@@ -3564,7 +3564,10 @@ async function getIslandContext(event) {
 const _lazy_Cvr8mT = () => Promise.resolve().then(function () { return index_get$7; });
 const _lazy_so7ACM = () => Promise.resolve().then(function () { return index_get$5; });
 const _lazy_AS0TF6 = () => Promise.resolve().then(function () { return _id__get$1; });
+const _lazy_pOdhJ0 = () => Promise.resolve().then(function () { return _id__patch$1; });
+const _lazy_yScGax = () => Promise.resolve().then(function () { return comments_post$1; });
 const _lazy_9idx5L = () => Promise.resolve().then(function () { return index_get$3; });
+const _lazy_9M_IWC = () => Promise.resolve().then(function () { return index_post$1; });
 const _lazy_6l1rV1 = () => Promise.resolve().then(function () { return index_get$1; });
 const _lazy_rtLnJk = () => Promise.resolve().then(function () { return renderer$1; });
 const _lazy_aSMA4L = () => Promise.resolve().then(function () { return errorChannel; });
@@ -3574,7 +3577,10 @@ const handlers = [
   { route: '/api/categories', handler: _lazy_Cvr8mT, lazy: true, middleware: false, method: "get" },
   { route: '/api/customers', handler: _lazy_so7ACM, lazy: true, middleware: false, method: "get" },
   { route: '/api/requests/:id', handler: _lazy_AS0TF6, lazy: true, middleware: false, method: "get" },
+  { route: '/api/requests/:id', handler: _lazy_pOdhJ0, lazy: true, middleware: false, method: "patch" },
+  { route: '/api/requests/:id/comments', handler: _lazy_yScGax, lazy: true, middleware: false, method: "post" },
   { route: '/api/requests', handler: _lazy_9idx5L, lazy: true, middleware: false, method: "get" },
+  { route: '/api/requests', handler: _lazy_9M_IWC, lazy: true, middleware: false, method: "post" },
   { route: '/api/users', handler: _lazy_6l1rV1, lazy: true, middleware: false, method: "get" },
   { route: '/__nuxt_error', handler: _lazy_rtLnJk, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_dev__/error/**', handler: _lazy_aSMA4L, lazy: true, middleware: false, method: undefined },
@@ -4708,6 +4714,7 @@ const index_get$5 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePropert
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const _id__get = defineEventHandler((event) => {
+  var _a, _b;
   const rawId = String(getRouterParam(event, "id") || "").replace(/^#/, "");
   const query = getQuery$1(event);
   const simulateError = String(query.simulateError || "").trim();
@@ -4741,19 +4748,205 @@ const _id__get = defineEventHandler((event) => {
     comments: found.comments ? [...found.comments] : [],
     timeline: found.timeline ? [...found.timeline] : []
   };
+  if (itemCopy.id === "1042") {
+    if (itemCopy.status === "new") {
+      itemCopy.status = "in-progress";
+    }
+    if (!itemCopy.assignee || itemCopy.assignee === "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D" || itemCopy.assignee === "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411.") {
+      itemCopy.assignee = "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0430";
+    }
+  }
   if (longMode === "1" || longMode === "true") {
     itemCopy.title = "\u041F\u043E\u0441\u043B\u0435 \u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F \u043A\u043E\u0440\u043F\u043E\u0440\u0430\u0442\u0438\u0432\u043D\u043E\u0439 CRM \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0438 \u043E\u0442\u0434\u0435\u043B\u0430 \u043F\u0440\u043E\u0434\u0430\u0436 \u043D\u0435 \u043C\u043E\u0433\u0443\u0442 \u0432\u043E\u0439\u0442\u0438 \u0432 \u0441\u0438\u0441\u0442\u0435\u043C\u0443 \u0438 \u043E\u0442\u043A\u0440\u044B\u0442\u044C \u043A\u0430\u0440\u0442\u043E\u0447\u043A\u0438 \u043A\u043B\u0438\u0435\u043D\u0442\u043E\u0432";
     itemCopy.assignee = "\u0410\u043B\u0435\u043A\u0441\u0430\u043D\u0434\u0440\u0430 \u041A\u043E\u043D\u0441\u0442\u0430\u043D\u0442\u0438\u043D\u043E\u0432\u043D\u0430 \u0420\u043E\u0436\u0434\u0435\u0441\u0442\u0432\u0435\u043D\u0441\u043A\u0430\u044F-\u0421\u043E\u043A\u043E\u043B\u043E\u0432\u0430";
     itemCopy.status = "in-progress";
   }
+  const hasIncompleteData = !((_a = itemCopy.title) == null ? void 0 : _a.trim()) || !((_b = itemCopy.customer) == null ? void 0 : _b.trim());
   return {
-    item: itemCopy
+    item: itemCopy,
+    hasIncompleteData
   };
 });
 
 const _id__get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: _id__get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const STATUS_LABELS = {
+  "new": "\u041D\u043E\u0432\u0430\u044F",
+  "assigned": "\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D\u0430",
+  "in-progress": "\u0412 \u0440\u0430\u0431\u043E\u0442\u0435",
+  "waiting": "\u041E\u0436\u0438\u0434\u0430\u043D\u0438\u0435",
+  "escalated": "\u042D\u0441\u043A\u0430\u043B\u0438\u0440\u043E\u0432\u0430\u043D\u0430",
+  "resolved": "\u0420\u0435\u0448\u0435\u043D\u0430",
+  "closed": "\u0417\u0430\u043A\u0440\u044B\u0442\u0430"
+};
+const PRIORITY_LABELS = {
+  critical: "\u041A\u0440\u0438\u0442\u0438\u0447\u0435\u0441\u043A\u0438\u0439",
+  high: "\u0412\u044B\u0441\u043E\u043A\u0438\u0439",
+  normal: "\u041E\u0431\u044B\u0447\u043D\u044B\u0439",
+  low: "\u041D\u0438\u0437\u043A\u0438\u0439"
+};
+const PRIORITY_DUE_DATES = {
+  critical: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 10:14",
+  high: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 13:14",
+  normal: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F, 18:00",
+  low: "\u0417\u0430\u0432\u0442\u0440\u0430, 12:00"
+};
+
+const _id__patch = defineEventHandler(async (event) => {
+  var _a;
+  const rawId = getRouterParam(event, "id") || "";
+  const cleanId = rawId.replace(/^#/, "");
+  const body = await readBody(event);
+  if ((body == null ? void 0 : body.simulateError) === "409") {
+    throw createError({
+      statusCode: 409,
+      statusMessage: "Conflict",
+      message: "\u0417\u0430\u044F\u0432\u043A\u0430 \u0431\u044B\u043B\u0430 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0430 \u0434\u0440\u0443\u0433\u0438\u043C \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u043C. \u041F\u0440\u0435\u0434\u044B\u0434\u0443\u0449\u0435\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u043E. \u041E\u0431\u043D\u043E\u0432\u0438\u0442\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 \u0438 \u043F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0441\u043D\u043E\u0432\u0430."
+    });
+  }
+  if ((body == null ? void 0 : body.simulateError) === "500") {
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal Server Error",
+      message: "\u0412\u0440\u0435\u043C\u0435\u043D\u043D\u0430\u044F \u043E\u0448\u0438\u0431\u043A\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0430 (500) \u043F\u0440\u0438 \u0441\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u0438\u0438 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0439."
+    });
+  }
+  const found = SERVER_REQUESTS_DB.find(
+    (item) => String(item.id) === cleanId || item.code === `#${cleanId}`
+  );
+  if (!found) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Not Found",
+      message: `\u0417\u0430\u044F\u0432\u043A\u0430 #${cleanId} \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430`
+    });
+  }
+  const now = /* @__PURE__ */ new Date();
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+  const timeStr = `${hh}:${mm}`;
+  const actor = ((_a = body == null ? void 0 : body.actorName) == null ? void 0 : _a.trim()) || "\u041E\u043F\u0435\u0440\u0430\u0442\u043E\u0440";
+  let updatedField = "priority";
+  let message = "\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u044F \u0441\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u044B";
+  if (!found.timeline) {
+    found.timeline = [];
+  }
+  if ((body == null ? void 0 : body.priority) && body.priority !== found.priority) {
+    found.priority = body.priority;
+    found.dueAt = body.dueAt || PRIORITY_DUE_DATES[body.priority];
+    updatedField = "priority";
+    message = `\u041F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\u0442 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB${PRIORITY_LABELS[body.priority]}\xBB`;
+    found.timeline.push({
+      id: `t-${cleanId}-${Date.now()}-p`,
+      time: timeStr,
+      text: `${actor} \u0438\u0437\u043C\u0435\u043D\u0438\u043B \u043F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\u0442 \u043D\u0430 \xAB${PRIORITY_LABELS[body.priority]}\xBB`
+    });
+  } else if (body == null ? void 0 : body.priority) {
+    found.priority = body.priority;
+    if (body.dueAt) {
+      found.dueAt = body.dueAt;
+    }
+    updatedField = "priority";
+    message = `\u041F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\u0442 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB${PRIORITY_LABELS[body.priority]}\xBB`;
+  }
+  if ((body == null ? void 0 : body.status) && body.status !== found.status) {
+    found.status = body.status;
+    updatedField = "status";
+    message = `\u0421\u0442\u0430\u0442\u0443\u0441 \u0438\u0437\u043C\u0435\u043D\u0451\u043D \u043D\u0430 \xAB${STATUS_LABELS[body.status]}\xBB`;
+    found.timeline.push({
+      id: `t-${cleanId}-${Date.now()}-s`,
+      time: timeStr,
+      text: `${actor} \u0438\u0437\u043C\u0435\u043D\u0438\u043B \u0441\u0442\u0430\u0442\u0443\u0441 \u043D\u0430 \xAB${STATUS_LABELS[body.status]}\xBB`
+    });
+  }
+  if (typeof (body == null ? void 0 : body.assignee) === "string" && body.assignee !== found.assignee) {
+    found.assignee = body.assignee;
+    updatedField = "assignee";
+    message = body.assignee === "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D" ? "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u0441\u043D\u044F\u0442 \u0441 \u0437\u0430\u044F\u0432\u043A\u0438" : `\u041D\u0430\u0437\u043D\u0430\u0447\u0435\u043D \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C ${body.assignee}`;
+    found.timeline.push({
+      id: `t-${cleanId}-${Date.now()}-a`,
+      time: timeStr,
+      text: body.assignee === "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D" ? `${actor} \u0441\u043D\u044F\u043B \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044F` : `${actor} \u043D\u0430\u0437\u043D\u0430\u0447\u0438\u043B \u0438\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044F: ${body.assignee}`
+    });
+  }
+  return {
+    item: found,
+    updatedField,
+    message
+  };
+});
+
+const _id__patch$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: _id__patch
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const comments_post = defineEventHandler(async (event) => {
+  const rawId = getRouterParam(event, "id") || "";
+  const cleanId = rawId.replace(/^#/, "");
+  const body = await readBody(event);
+  await new Promise((resolve) => setTimeout(resolve, 350));
+  if ((body == null ? void 0 : body.simulateError) === "500") {
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal Server Error",
+      message: "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u0438\u0437-\u0437\u0430 \u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E\u0439 \u043E\u0448\u0438\u0431\u043A\u0438 \u0441\u0435\u0440\u0432\u0435\u0440\u0430."
+    });
+  }
+  const found = SERVER_REQUESTS_DB.find(
+    (item) => String(item.id) === cleanId || item.code === `#${cleanId}`
+  );
+  if (!found) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Not Found",
+      message: `\u0417\u0430\u044F\u0432\u043A\u0430 #${cleanId} \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430`
+    });
+  }
+  const text = ((body == null ? void 0 : body.text) || "").trim();
+  if (!text) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad Request",
+      message: "\u0422\u0435\u043A\u0441\u0442 \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u044F \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u0431\u044B\u0442\u044C \u043F\u0443\u0441\u0442\u044B\u043C"
+    });
+  }
+  const author = ((body == null ? void 0 : body.author) || "").trim() || "\u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u0430 \u0411\u0440\u0443\u043D\u0433\u0438\u043B\u044C\u0434\u043E\u0432\u043D\u0430";
+  const now = /* @__PURE__ */ new Date();
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+  const timeStr = `${hh}:${mm}`;
+  const newComment = {
+    id: `c-${cleanId}-${Date.now()}`,
+    author,
+    time: timeStr,
+    text
+  };
+  if (!found.comments) {
+    found.comments = [];
+  }
+  found.comments.push(newComment);
+  if (!found.timeline) {
+    found.timeline = [];
+  }
+  found.timeline.push({
+    id: `t-${cleanId}-${Date.now()}-c`,
+    time: timeStr,
+    text: `${author.split(" ")[0]} \u0434\u043E\u0431\u0430\u0432\u0438\u043B(\u0430) \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439`
+  });
+  return {
+    item: found,
+    comment: newComment,
+    message: "\u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D"
+  };
+});
+
+const comments_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: comments_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const PRIORITY_RANK = {
@@ -4862,6 +5055,52 @@ const index_get$2 = defineEventHandler((event) => {
 const index_get$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: index_get$2
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_post = defineEventHandler(async (event) => {
+  var _a, _b, _c, _d;
+  const body = await readBody(event);
+  const maxId = SERVER_REQUESTS_DB.reduce(
+    (acc, item) => Math.max(acc, Number(item.id) || 1042),
+    1042
+  );
+  const nextId = String(maxId + 1);
+  const now = /* @__PURE__ */ new Date();
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+  const timeStr = `${hh}:${mm}`;
+  const authorFirst = ((body == null ? void 0 : body.authorName) || "\u0410\u043D\u043D\u0430").trim().split(" ")[0] || "\u0410\u043D\u043D\u0430";
+  const priority = (body == null ? void 0 : body.priority) || "normal";
+  const newItem = {
+    id: nextId,
+    code: `#${nextId}`,
+    title: ((_a = body == null ? void 0 : body.title) == null ? void 0 : _a.trim()) || "\u0411\u0435\u0437 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044F",
+    customer: ((_b = body == null ? void 0 : body.customer) == null ? void 0 : _b.trim()) || "\u041A\u043B\u0438\u0435\u043D\u0442 \u043D\u0435 \u0443\u043A\u0430\u0437\u0430\u043D",
+    assignee: "\u041D\u0435 \u043D\u0430\u0437\u043D\u0430\u0447\u0435\u043D",
+    status: "new",
+    priority,
+    category: ((_c = body == null ? void 0 : body.category) == null ? void 0 : _c.trim()) || "\u0414\u043E\u0441\u0442\u0443\u043F \u0438 \u0443\u0447\u0451\u0442\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438",
+    createdAt: `\u0421\u043E\u0437\u0434\u0430\u043D\u0430 \u0441\u0435\u0433\u043E\u0434\u043D\u044F, ${timeStr}`,
+    dueAt: PRIORITY_DUE_DATES[priority],
+    description: ((_d = body == null ? void 0 : body.description) == null ? void 0 : _d.trim()) || "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u044B \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E \u043F\u0440\u0438 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u0438 \u0437\u0430\u044F\u0432\u043A\u0438.",
+    comments: [],
+    timeline: [
+      {
+        id: `t-${nextId}-1`,
+        time: timeStr,
+        text: `${authorFirst} \u0441\u043E\u0437\u0434\u0430\u043B(\u0430) \u0437\u0430\u044F\u0432\u043A\u0443`
+      }
+    ]
+  };
+  SERVER_REQUESTS_DB.unshift(newItem);
+  return {
+    item: newItem
+  };
+});
+
+const index_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const index_get = defineEventHandler(() => {

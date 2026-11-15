@@ -98,6 +98,9 @@
       "#internal/nuxt/paths": [
         "../node_modules/@nuxt/nitro-server/dist/runtime/utils/paths"
       ],
+      "pinia": [
+        "./~/utils/pinia"
+      ],
       "nuxt/app": [
         "../node_modules/nuxt/dist/app"
       ],

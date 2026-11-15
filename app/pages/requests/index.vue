@@ -7,9 +7,14 @@ import type {
   CategoryDirectoryItemDto
 } from '~/types/workflow'
 import { normalizeRequestsListResponse } from '~/utils/normalizeRequests'
+import { useDebounce } from '~/composables/useDebounce'
+import { usePreferencesStore } from '~/stores/preferences'
+import { useRequestUiStore } from '~/stores/requestUi'
 
 const route = useRoute()
 const router = useRouter()
+const preferencesStore = usePreferencesStore()
+const requestUiStore = useRequestUiStore()
 
 const {
   searchQuery,
@@ -21,7 +26,6 @@ const {
   simulateError,
   pageSize,
   viewState,
-  userProfile,
   isCreateModalOpen,
   hasActiveFilters,
   initFiltersFromRoute,
@@ -35,7 +39,7 @@ initFiltersFromRoute(route.query as Record<string, string | (string | null)[] | 
 
 const debouncedSearch = useDebounce(searchQuery, 300)
 
-// загрузка справочников через useFetch
+// загрузка справочников через usefetch
 const { data: usersDirectory } = await useFetch<UserDirectoryItemDto[]>('/api/users', {
   key: 'wf-users-directory',
   default: () => []
@@ -74,10 +78,12 @@ const {
   watch: [apiQuery]
 })
 
-// единая нормализация ответа списка заявок
+// единая нормализация ответа списка заявок и наложение оптимистичных обновлений из pinia
 const normalizedList = computed(() => normalizeRequestsListResponse(rawRequestsResponse.value))
 
-const displayedRequests = computed(() => normalizedList.value.items)
+const displayedRequests = computed(() =>
+  normalizedList.value.items.map(item => requestUiStore.applyOverridesToRequest(item))
+)
 const totalFiltered = computed(() => normalizedList.value.total)
 const totalPages = computed(() => normalizedList.value.totalPages)
 const hasIncompleteData = computed(() => normalizedList.value.hasIncompleteData)
@@ -172,7 +178,6 @@ watch(
   }
 )
 
-// определение активного состояния списка
 const effectiveState = computed<ListViewState>(() => {
   if (viewState.value !== 'ready') {
     return viewState.value
@@ -187,6 +192,10 @@ const effectiveState = computed<ListViewState>(() => {
     return hasActiveFilters.value ? 'no-results' : 'empty'
   }
   return 'ready'
+})
+
+const isMutationBannerView = computed<boolean>(() => {
+  return Boolean(requestUiStore.rollbackError || requestUiStore.feedbackBanner)
 })
 
 const errorStatusCode = computed<number | null>(() => {
@@ -223,11 +232,45 @@ const openCreateModal = () => {
 }
 
 const setDemoState = async (state: ListViewState, errCode = '') => {
+  requestUiStore.clearBanners()
   simulateError.value = errCode
   viewState.value = state
   if (state === 'ready' || errCode) {
     await refreshRequests()
   }
+}
+
+// демонстрация баннера успешного изменения приоритета и кнопки отмены из макета 4txt
+const triggerDemoPriorityUndo = async () => {
+  simulateError.value = ''
+  viewState.value = 'ready'
+  const firstReq = displayedRequests.value[0]
+  if (!firstReq) return
+  await requestUiStore.changePriorityOptimistic(firstReq, 'high', preferencesStore.name)
+  await refreshRequests()
+}
+
+// демонстрация конфликта 409 и отката к предыдущему значению из макета 5txt
+const triggerDemoConflictRollback = async () => {
+  simulateError.value = ''
+  viewState.value = 'ready'
+  const firstReq = displayedRequests.value[0]
+  if (!firstReq) return
+  await requestUiStore.changePriorityOptimistic(firstReq, 'critical', preferencesStore.name, '409')
+}
+
+const toggleCompactDensityDemo = () => {
+  preferencesStore.setDensity(preferencesStore.isCompact ? 'comfortable' : 'compact')
+}
+
+const handleUndoFromList = async () => {
+  await requestUiStore.undoLastChange(preferencesStore.name)
+  await refreshRequests()
+}
+
+const handleRefreshAfterConflict = async () => {
+  requestUiStore.clearBanners()
+  await refreshRequests()
 }
 
 const handleRetryLoad = async () => {
@@ -247,13 +290,19 @@ const handleResetAllFilters = () => {
 
 <template>
   <div class="soderzhanie">
-    <template v-if="effectiveState === 'ready'">
+    <!-- при отображении баннера изменения или конфликта заголовок перестраивается как в макетах 4txt и 5txt -->
+    <template v-if="effectiveState === 'ready' && !isMutationBannerView">
       <p class="rabochii-den-pod-kontrolem">Рабочий день под контролем</p>
       <p class="zaiavki-kotorye-trebuiut-vashego">
         Заявки, которые требуют вашего внимания
       </p>
 
-      <!-- баннер результатов активного поиска из макета 2.02 -->
+      <!-- плашка компактного представления списка из макета 10txt -->
+      <div v-if="preferencesStore.isCompact" class="soobshchenie-ob-izmenenii">
+        <p class="plotnost-spiska-kompaktnaia">Плотность списка: компактная</p>
+      </div>
+
+      <!-- баннер результатов активного поиска из макета 202 -->
       <div v-if="debouncedSearch.trim()" class="soobshchenie-ob-izmenenii">
         <p class="po-zaprosu-crm-naideno-1">
           По запросу «{{ debouncedSearch.trim() }}» найдено: {{ totalFiltered }}
@@ -265,7 +314,7 @@ const handleResetAllFilters = () => {
         />
       </div>
 
-      <!-- предупреждающая плашка при неполных данных из макета 2.06 -->
+      <!-- предупреждающая плашка при неполных данных из макета 206 -->
       <div v-if="hasIncompleteData" class="soobshchenie-ob-izmenenii">
         <p class="chast-dannykh-zaiavki-nedostupna-ostal">
           Часть данных заявки недоступна. Остальные обращения отображаются.
@@ -282,6 +331,32 @@ const handleResetAllFilters = () => {
     <template v-else>
       <p class="zaiavki-state-heading">Заявки</p>
       <p class="vse-obrashcheniia-v-odnom-meste">Все обращения в одном месте</p>
+
+      <!-- плашка конфликта 409 500 и отката изменения из макета 5txt -->
+      <div v-if="requestUiStore.rollbackError" class="soobshchenie-ob-izmenenii">
+        <p class="izmenenie-ne-sokhraneno">{{ requestUiStore.rollbackError.title }}</p>
+        <p class="zaiavka-byla-izmenena-drugim">
+          {{ requestUiStore.rollbackError.description }}
+        </p>
+        <OctagonButton
+          variant="secondary"
+          label23251="Обновить заявку"
+          @click="handleRefreshAfterConflict"
+        />
+      </div>
+
+      <!-- плашка успешного изменения и кнопки отмены undo из макета 4txt -->
+      <div v-else-if="requestUiStore.feedbackBanner" class="soobshchenie-ob-izmenenii">
+        <p class="prioritet-izmenion-na-vysokii">
+          {{ requestUiStore.feedbackBanner.message }}
+        </p>
+        <OctagonButton
+          v-if="requestUiStore.feedbackBanner.canUndo && requestUiStore.lastUndoAction"
+          variant="secondary"
+          label23251="Отменить изменение"
+          @click="handleUndoFromList"
+        />
+      </div>
     </template>
 
     <div class="actions-and-demo-bar">
@@ -292,15 +367,39 @@ const handleResetAllFilters = () => {
         />
       </div>
 
-      <!-- переключатель состояний списка и симуляции ошибок api -->
+      <!-- переключатель состояний списка и сценариев 2 и 3 этапов -->
       <div class="demo-state-switcher" role="group" aria-label="Демонстрация состояний списка">
         <button
           type="button"
           class="demo-state-btn"
-          :class="{ 'is-active': effectiveState === 'ready' && !simulateError }"
+          :class="{ 'is-active': effectiveState === 'ready' && !simulateError && !isMutationBannerView }"
           @click="setDemoState('ready', '')"
         >
           Список
+        </button>
+        <button
+          type="button"
+          class="demo-state-btn"
+          :class="{ 'is-active': Boolean(requestUiStore.feedbackBanner) }"
+          @click="triggerDemoPriorityUndo"
+        >
+          Успех и Undo
+        </button>
+        <button
+          type="button"
+          class="demo-state-btn"
+          :class="{ 'is-active': Boolean(requestUiStore.rollbackError) }"
+          @click="triggerDemoConflictRollback"
+        >
+          Конфликт 409
+        </button>
+        <button
+          type="button"
+          class="demo-state-btn"
+          :class="{ 'is-active': preferencesStore.isCompact }"
+          @click="toggleCompactDensityDemo"
+        >
+          Компактно
         </button>
         <button
           type="button"
@@ -345,7 +444,7 @@ const handleResetAllFilters = () => {
       </div>
     </div>
 
-    <div class="fil-try" :class="{ 'is-state-compact': effectiveState !== 'ready' }">
+    <div class="fil-try" :class="{ 'is-state-compact': effectiveState !== 'ready' || isMutationBannerView }">
       <div class="wf-gpt-field search-field">
         <WFGPTField
           v-model="searchQuery"
@@ -375,7 +474,7 @@ const handleResetAllFilters = () => {
         />
       </div>
 
-      <div v-if="effectiveState === 'ready'" class="fil-tr-naznachenie filter-field">
+      <div v-if="effectiveState === 'ready' && !isMutationBannerView" class="fil-tr-naznachenie filter-field">
         <WFGPTField
           v-model="assigneeFilter"
           label23270="Назначение"
@@ -385,7 +484,7 @@ const handleResetAllFilters = () => {
         />
       </div>
 
-      <div v-if="effectiveState === 'ready'" class="sortirovka-zaiavok filter-field">
+      <div v-if="effectiveState === 'ready' && !isMutationBannerView" class="sortirovka-zaiavok filter-field">
         <WFGPTField
           v-model="sortOrder"
           label23270="Сортировка"
@@ -403,7 +502,7 @@ const handleResetAllFilters = () => {
       </div>
     </div>
 
-    <!-- экран пустого результата поиска и фильтрации из макета 2.04 -->
+    <!-- экран пустого результата поиска и фильтрации из макета 204 -->
     <div v-else-if="effectiveState === 'no-results'" class="sostoianie-spiska">
       <OctagonIconSearch />
       <p class="nichego-ne-naideno">Ничего не найдено</p>
@@ -464,7 +563,7 @@ const handleResetAllFilters = () => {
             :assignee="req.assignee"
             :status="req.status"
             :priority="req.priority"
-            :compact="userProfile.density === 'compact'"
+            :compact="preferencesStore.isCompact"
           />
         </div>
       </div>
@@ -546,13 +645,33 @@ const handleResetAllFilters = () => {
 }
 
 .po-zaprosu-crm-naideno-1,
-.chast-dannykh-zaiavki-nedostupna-ostal {
+.chast-dannykh-zaiavki-nedostupna-ostal,
+.prioritet-izmenion-na-vysokii,
+.plotnost-spiska-kompaktnaia {
   align-self: stretch;
   color: var(--color-text-primary, #E8E7EC);
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
+}
+
+.izmenenie-ne-sokhraneno {
+  align-self: stretch;
+  color: var(--color-text-danger, #FF7994);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.zaiavka-byla-izmenena-drugim {
+  align-self: stretch;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
 }
 
 .zaiavki-zagolovok-i-fil-tr {

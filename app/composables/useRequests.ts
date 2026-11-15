@@ -1,15 +1,18 @@
 import { computed } from 'vue'
 import { MOCK_REQUESTS } from '~/utils/mockData'
+import { usePreferencesStore } from '~/stores/preferences'
 import type {
   WorkFlowRequest,
   RequestStatus,
   RequestPriority,
   RequestSortOrder,
   ListViewState,
-  ListDensity
+  RequestItemDto
 } from '~/types/workflow'
 
 export const useRequests = () => {
+  const preferencesStore = usePreferencesStore()
+
   const requests = useState<WorkFlowRequest[]>('wf-requests', () =>
     MOCK_REQUESTS.map(item => ({
       ...item,
@@ -18,6 +21,7 @@ export const useRequests = () => {
     }))
   )
 
+  // состояние фильтров синхронизируемое с url url state
   const searchQuery = useState<string>('wf-filter-search', () => '')
   const statusFilter = useState<RequestStatus | 'all'>('wf-filter-status', () => 'all')
   const priorityFilter = useState<RequestPriority | 'all'>('wf-filter-priority', () => 'all')
@@ -27,18 +31,17 @@ export const useRequests = () => {
   const simulateError = useState<string>('wf-simulate-error', () => '')
   const pageSize = 12
 
-  // состояние отображения списка для демонстрации сценариев
   const viewState = useState<ListViewState>('wf-view-state', () => 'ready')
-
-  const userProfile = useState('wf-user-profile', () => ({
-    name: 'Анна Кузнецова',
-    email: '0000@mail.demo',
-    initials: 'АК',
-    role: 'Оператор',
-    density: 'comfortable' as ListDensity
-  }))
-
   const isCreateModalOpen = useState<boolean>('wf-create-modal-open', () => false)
+
+  // единый источник настроек пользователя через pinia store preferences
+  const userProfile = computed(() => ({
+    name: preferencesStore.name,
+    email: preferencesStore.email,
+    initials: preferencesStore.initials,
+    role: preferencesStore.role,
+    density: preferencesStore.density
+  }))
 
   // восстановление фильтров и пагинации из query параметров ссылки
   const initFiltersFromRoute = (query: Record<string, string | (string | null)[] | null | undefined>) => {
@@ -180,78 +183,13 @@ export const useRequests = () => {
     return requests.value.find(r => r.id === clean || r.code === `#${clean}`)
   }
 
-  const addComment = (requestId: string, text: string) => {
-    const target = getRequestById(requestId)
-    const trimmed = text.trim()
-    if (!target || !trimmed) return
-
-    const now = new Date()
-    const hh = String(now.getHours()).padStart(2, '0')
-    const mm = String(now.getMinutes()).padStart(2, '0')
-    const timeStr = `${hh}:${mm}`
-
-    target.comments.push({
-      id: `c-${target.id}-${Date.now()}`,
-      author: userProfile.value.name,
-      time: timeStr,
-      text: trimmed
-    })
-
-    target.timeline.push({
-      id: `t-${target.id}-${Date.now()}`,
-      time: timeStr,
-      text: `${userProfile.value.name.split(' ')[0]} добавил(а) комментарий`
-    })
-  }
-
-  const updateRequestParams = (
-    requestId: string,
-    payload: { assignee?: string; priority?: RequestPriority; status?: RequestStatus }
-  ) => {
-    const target = getRequestById(requestId)
-    if (!target) return
-
-    const now = new Date()
-    const hh = String(now.getHours()).padStart(2, '0')
-    const mm = String(now.getMinutes()).padStart(2, '0')
-    const timeStr = `${hh}:${mm}`
-
-    if (payload.assignee && payload.assignee !== target.assignee) {
-      target.assignee = payload.assignee
-      if (target.status === 'new' && payload.assignee !== 'Не назначен') {
-        target.status = 'assigned'
-      }
-      target.timeline.push({
-        id: `t-${target.id}-${Date.now()}-a`,
-        time: timeStr,
-        text:
-          payload.assignee === 'Не назначен'
-            ? 'Исполнитель снят'
-            : `Назначен исполнитель ${payload.assignee}`
-      })
-    }
-
-    if (payload.priority && payload.priority !== target.priority) {
-      target.priority = payload.priority
-      target.timeline.push({
-        id: `t-${target.id}-${Date.now()}-p`,
-        time: timeStr,
-        text: 'Изменён приоритет заявки'
-      })
-    }
-
-    if (payload.status && payload.status !== target.status) {
-      target.status = payload.status
-    }
-  }
-
-  const createNewRequest = (payload: {
+  const createNewRequest = async (payload: {
     title: string
     customer: string
     category: string
     priority: RequestPriority
     description: string
-  }) => {
+  }): Promise<WorkFlowRequest> => {
     const maxId = requests.value.reduce((acc, item) => Math.max(acc, Number(item.id)), 1042)
     const nextId = String(maxId + 1)
     const now = new Date()
@@ -276,13 +214,25 @@ export const useRequests = () => {
         {
           id: `t-${nextId}-1`,
           time: timeStr,
-          text: `${userProfile.value.name.split(' ')[0]} создал(а) заявку`
+          text: `${preferencesStore.name.split(' ')[0]} создал(а) заявку`
         }
       ],
       hasMissingData: !payload.title.trim() || !payload.customer.trim()
     }
 
     requests.value.unshift(newReq)
+    try {
+      await $fetch<{ item: RequestItemDto }>('/api/requests', {
+        method: 'POST',
+        body: {
+          ...payload,
+          authorName: preferencesStore.name
+        }
+      })
+    } catch {
+      // локальная запись уже добавлена
+    }
+
     viewState.value = 'ready'
     currentPage.value = 1
     return newReq
@@ -332,8 +282,6 @@ export const useRequests = () => {
     initFiltersFromRoute,
     buildRouteQuery,
     getRequestById,
-    addComment,
-    updateRequestParams,
     createNewRequest,
     resetSearch,
     resetFilters,
