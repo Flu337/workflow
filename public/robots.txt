@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Allow: /faq
+Allow: /help
+Allow: /articles
+Allow: /articles/
+Disallow: /dashboard
+Disallow: /requests
+Disallow: /profile
+Disallow: /api/
+
+Sitemap: https://workflow.octagon-students.ru/sitemap.xml

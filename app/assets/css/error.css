@@ -8,6 +8,7 @@
 }
 
 .layer-1-12-sistemnaia-oshibka {
+  position: relative;
   width: 100%;
   max-width: 1280px;
   min-height: 900px;
@@ -15,6 +16,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.error-public-header-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 
 .oshibka {
@@ -30,6 +39,7 @@
 
 .layer-404 {
   align-self: stretch;
+  margin: 0;
   color: var(--color-text-accent, #79CEE8);
   font-family: "Montserrat", sans-serif;
   font-size: 32px;
@@ -40,6 +50,7 @@
 
 .stranitsa-ne-naidena {
   align-self: stretch;
+  margin: 0;
   color: var(--color-text-primary, #E8E7EC);
   font-family: "Montserrat", sans-serif;
   font-size: 28px;
@@ -50,6 +61,7 @@
 
 .takoi-stranitsy-net-ili-ona-byla {
   align-self: stretch;
+  margin: 0;
   color: var(--color-text-secondary, #B9B3D4);
   font-family: "Montserrat", sans-serif;
   font-size: 14px;

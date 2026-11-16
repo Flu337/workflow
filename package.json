@@ -10,8 +10,8 @@
     "postinstall": "nuxt prepare",
     "typecheck": "vue-tsc --noEmit && tsc -p .nuxt/tsconfig.server.json --noEmit",
     "lint": "vue-tsc --noEmit && tsc -p .nuxt/tsconfig.server.json --noEmit",
-    "test": "jiti tests/unit/businessRules.test.ts && jiti tests/integration/regressionBugs.test.ts",
-    "test:unit": "jiti tests/unit/businessRules.test.ts",
+    "test": "jiti tests/unit/businessRules.test.ts && jiti tests/unit/seoAndSsr.test.ts && jiti tests/integration/regressionBugs.test.ts",
+    "test:unit": "jiti tests/unit/businessRules.test.ts && jiti tests/unit/seoAndSsr.test.ts",
     "test:integration": "jiti tests/integration/regressionBugs.test.ts",
     "test:e2e": "playwright test"
   },

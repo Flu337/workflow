@@ -1,7 +1,10 @@
 declare global {
   const ALLOWED_STATUS_TRANSITIONS: typeof import('../../shared/utils/statusTransitions').ALLOWED_STATUS_TRANSITIONS
+  const FAQ_ITEMS: typeof import('../../shared/utils/publicContent').FAQ_ITEMS
   const H3Error: typeof import('../../node_modules/h3/dist/index').H3Error
   const H3Event: typeof import('../../node_modules/h3/dist/index').H3Event
+  const KNOWLEDGE_ARTICLES: typeof import('../../shared/utils/publicContent').KNOWLEDGE_ARTICLES
+  const KNOWLEDGE_CATEGORIES: typeof import('../../shared/utils/publicContent').KNOWLEDGE_CATEGORIES
   const POSTGRES_SCHEMA_SQL: typeof import('../../server/utils/postgresSchema').POSTGRES_SCHEMA_SQL
   const PRIORITY_DUE_DATES: typeof import('../../shared/types/workflow').PRIORITY_DUE_DATES
   const PRIORITY_LABELS: typeof import('../../shared/types/workflow').PRIORITY_LABELS
@@ -66,6 +69,9 @@ declare global {
   const dynamicEventHandler: typeof import('../../node_modules/h3/dist/index').dynamicEventHandler
   const eventHandler: typeof import('../../node_modules/h3/dist/index').eventHandler
   const fetchWithEvent: typeof import('../../node_modules/h3/dist/index').fetchWithEvent
+  const filterFaqItems: typeof import('../../shared/utils/publicContent').filterFaqItems
+  const filterKnowledgeArticles: typeof import('../../shared/utils/publicContent').filterKnowledgeArticles
+  const findKnowledgeArticleBySlug: typeof import('../../shared/utils/publicContent').findKnowledgeArticleBySlug
   const fromNodeMiddleware: typeof import('../../node_modules/h3/dist/index').fromNodeMiddleware
   const fromPlainHandler: typeof import('../../node_modules/h3/dist/index').fromPlainHandler
   const fromWebHandler: typeof import('../../node_modules/h3/dist/index').fromWebHandler
@@ -172,6 +178,9 @@ declare global {
   export type { SearchRaceGuard, SubmissionLock } from '../../shared/utils/asyncGuards'
   import('../../shared/utils/asyncGuards')
   // @ts-ignore
+  export type { KnowledgeSection, KnowledgeArticle, KnowledgeCategory, FaqQuestionItem } from '../../shared/utils/publicContent'
+  import('../../shared/utils/publicContent')
+  // @ts-ignore
   export type { StatusTransitionValidationInput, StatusTransitionValidationResult } from '../../shared/utils/statusTransitions'
   import('../../shared/utils/statusTransitions')
   // @ts-ignore
@@ -204,6 +213,7 @@ export { defineAppConfig } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_module
 export { useAppConfig } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/nitro-server/dist/runtime/utils/app-config';
 export { createSearchRaceGuard, createSubmissionLock } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/asyncGuards';
 export { canUserAccessRequest, canUserAssignExecutor, canUserChangePriority, canUserCloseRequest, canUserResolveRequest, canUserCreateRequest, canUserAccessDashboard } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/permissions';
+export { KNOWLEDGE_CATEGORIES, KNOWLEDGE_ARTICLES, FAQ_ITEMS, findKnowledgeArticleBySlug, filterKnowledgeArticles, filterFaqItems } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/publicContent';
 export { ALLOWED_STATUS_TRANSITIONS, ROLE_ALLOWED_TARGET_STATUSES, getAllowedNextStatuses, validateStatusTransition } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/statusTransitions';
 export { loginInputSchema, registerInputSchema, createRequestInputSchema, updateRequestInputSchema, addCommentInputSchema } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/validation';
 export { ROLE_LABELS, STATUS_LABELS, PRIORITY_LABELS, PRIORITY_DUE_DATES } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/types/workflow';

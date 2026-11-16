@@ -1,0 +1,196 @@
+.layer-6-02-tsentr-pomoshchi {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding: 0px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: radial-gradient(40.82% 46.4% at 54.55% 50%, #201D47 0%, #17153A 100%);
+}
+
+.soderzhanie-stranitsy {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 64px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.tsentr-pomoshchi {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+}
+
+.naidite-otvet-ili-otprav-te-obrashchenie {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.wf-gpt-field {
+  align-self: stretch;
+  width: 100%;
+}
+
+.kategorii-pomoshchi {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  padding: 0px;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.help-category-card {
+  width: calc((100% - 48px) / 3);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+}
+
+.help-category-title {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.help-category-subtitle {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.populiarnye-instruktsii {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.article-list-card {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.article-list-card:hover {
+  border-color: var(--color-border-strong, #615B94);
+}
+
+.article-list-title {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.article-list-meta {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.octagon-button-5 {
+  align-self: flex-start;
+}
+
+@media (max-width: 1023px) {
+  .layer-6-02-tsentr-pomoshchi {
+    max-width: 768px;
+    background: radial-gradient(77.26% 24.51% at 54.55% 50%, #201D47 0%, #17153A 100%);
+  }
+
+  .soderzhanie-stranitsy {
+    padding: 64px 32px;
+  }
+
+  .kategorii-pomoshchi {
+    flex-wrap: wrap;
+  }
+
+  .help-category-card {
+    width: calc((100% - 24px) / 2);
+  }
+}
+
+@media (max-width: 639px) {
+  .layer-6-02-tsentr-pomoshchi {
+    max-width: 360px;
+    background: radial-gradient(189.47% 10% at 54.55% 50%, #201D47 0%, #17153A 100%);
+  }
+
+  .soderzhanie-stranitsy {
+    padding: 64px 16px;
+  }
+
+  .tsentr-pomoshchi {
+    font-size: 24px;
+    line-height: 31px;
+  }
+
+  .kategorii-pomoshchi {
+    flex-direction: column;
+  }
+
+  .help-category-card {
+    width: 100%;
+  }
+
+  .octagon-button-5,
+  .octagon-button-5 :deep(.octagon-btn) {
+    align-self: stretch;
+    width: 100%;
+  }
+}

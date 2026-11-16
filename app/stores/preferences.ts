@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { ListDensity, UserPreferencesState } from '~/types/workflow'
 
-const STORAGE_KEY = 'wf-user-preferences-v1'
+const STORAGE_KEY = 'wf-user-preferences-v2'
 
 // глобальное хранилище пользовательских настроек интерфейса с сохранением в localstorage
 export const usePreferencesStore = defineStore('preferences', () => {

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { usePreferencesStore } from '~/stores/preferences'
+import { defineAsyncComponent } from 'vue'
 import { useAuthStore } from '~/stores/auth'
+
+// ленивая подгрузка модального окна создания заявки только при его открытии
+const LazyCreateRequestModal = defineAsyncComponent(() => import('~/components/WFGPTCreateRequestModal.vue'))
 
 const preferencesStore = usePreferencesStore()
 const authStore = useAuthStore()
@@ -159,7 +163,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <WFGPTCreateRequestModal v-model="isCreateModalOpen" />
+    <LazyCreateRequestModal v-if="isCreateModalOpen" v-model="isCreateModalOpen" />
   </div>
 </template>
 

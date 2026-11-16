@@ -1,0 +1,124 @@
+.layer-6-04-stat-ia {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding: 0px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: radial-gradient(29.3% 64.65% at 54.55% 50%, #201D47 0%, #17153A 100%);
+}
+
+.soderzhanie-stranitsy {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 64px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.kak-sozdat-pervuiu-zaiavku {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+}
+
+.nachalo-raboty-obnovleno-5-oktiabria {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.stat-ia {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+}
+
+.article-section-heading {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.article-section-body {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.byla-li-stat-ia-polezna {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.otsenka-stat-i {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  padding: 0px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+@media (max-width: 1023px) {
+  .layer-6-04-stat-ia {
+    max-width: 768px;
+    background: radial-gradient(55.56% 34.09% at 54.55% 50%, #201D47 0%, #17153A 100%);
+  }
+
+  .soderzhanie-stranitsy {
+    padding: 64px 32px;
+  }
+}
+
+@media (max-width: 639px) {
+  .layer-6-04-stat-ia {
+    max-width: 360px;
+    background: radial-gradient(131.02% 14.46% at 54.55% 50%, #201D47 0%, #17153A 100%);
+  }
+
+  .soderzhanie-stranitsy {
+    padding: 64px 16px;
+  }
+
+  .kak-sozdat-pervuiu-zaiavku {
+    font-size: 24px;
+    line-height: 31px;
+  }
+}

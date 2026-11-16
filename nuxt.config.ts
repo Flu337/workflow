@@ -11,6 +11,20 @@ export default defineNuxtConfig({
   alias: {
     pinia: '~/utils/pinia'
   },
+  // выбор режима рендеринга для публичных и приватных маршрутов приложения
+  routeRules: {
+    '/': { ssr: true, prerender: true },
+    '/faq': { ssr: true, prerender: true },
+    '/help': { ssr: true, prerender: true },
+    '/articles': { ssr: true, prerender: true },
+    '/articles/**': { ssr: true, swr: 3600 },
+    '/login': { ssr: true },
+    '/register': { ssr: true },
+    '/dashboard': { ssr: true },
+    '/requests': { ssr: true },
+    '/requests/**': { ssr: true },
+    '/profile': { ssr: false }
+  },
   app: {
     head: {
       title: 'WorkFlow — система управления заявками',
@@ -20,7 +34,11 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'WorkFlow — от первого обращения до решения: управляйте заявками, назначайте исполнителей и держите сроки под контролем.' }
+        {
+          name: 'description',
+          content:
+            'WorkFlow — от первого обращения до решения: управляйте заявками, назначайте исполнителей и держите сроки под контролем.'
+        }
       ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },

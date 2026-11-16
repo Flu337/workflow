@@ -1,0 +1,186 @@
+.layer-6-03-stat-i {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding: 0px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: radial-gradient(38.74% 48.89% at 54.55% 50%, #201D47 0%, #17153A 100%);
+}
+
+.soderzhanie-stranitsy {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 64px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.stat-i-i-instruktsii {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+}
+
+.naidite-otvet-ili-otprav-te-obrashchenie {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.wf-gpt-field {
+  align-self: stretch;
+  width: 100%;
+}
+
+.kategorii-pomoshchi {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  padding: 0px;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.articles-category-card {
+  width: calc((100% - 48px) / 3);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+}
+
+.articles-category-title {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.articles-category-subtitle {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.vse-stat-i {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.article-list-card {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.article-list-card:hover {
+  border-color: var(--color-border-strong, #615B94);
+}
+
+.article-list-title {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.article-list-meta {
+  align-self: stretch;
+  margin: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+@media (max-width: 1023px) {
+  .layer-6-03-stat-i {
+    max-width: 768px;
+    background: radial-gradient(73.78% 25.67% at 54.55% 50%, #201D47 0%, #17153A 100%);
+  }
+
+  .soderzhanie-stranitsy {
+    padding: 64px 32px;
+  }
+
+  .kategorii-pomoshchi {
+    flex-wrap: wrap;
+  }
+
+  .articles-category-card {
+    width: calc((100% - 24px) / 2);
+  }
+}
+
+@media (max-width: 639px) {
+  .layer-6-03-stat-i {
+    max-width: 360px;
+    background: radial-gradient(182.06% 10.4% at 54.55% 50%, #201D47 0%, #17153A 100%);
+  }
+
+  .soderzhanie-stranitsy {
+    padding: 64px 16px;
+  }
+
+  .stat-i-i-instruktsii {
+    font-size: 24px;
+    line-height: 31px;
+  }
+
+  .kategorii-pomoshchi {
+    flex-direction: column;
+  }
+
+  .articles-category-card {
+    width: 100%;
+  }
+}

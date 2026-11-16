@@ -7,6 +7,9 @@ declare global {
   const createError: typeof import('h3')['createError']
   const setResponseStatus: typeof import('h3')['setResponseStatus']
   const ALLOWED_STATUS_TRANSITIONS: typeof import('../../shared/utils/statusTransitions').ALLOWED_STATUS_TRANSITIONS
+  const FAQ_ITEMS: typeof import('../../shared/utils/publicContent').FAQ_ITEMS
+  const KNOWLEDGE_ARTICLES: typeof import('../../shared/utils/publicContent').KNOWLEDGE_ARTICLES
+  const KNOWLEDGE_CATEGORIES: typeof import('../../shared/utils/publicContent').KNOWLEDGE_CATEGORIES
   const PRIORITY_DUE_DATES: typeof import('../../shared/types/workflow').PRIORITY_DUE_DATES
   const PRIORITY_LABELS: typeof import('../../shared/types/workflow').PRIORITY_LABELS
   const ROLE_ALLOWED_TARGET_STATUSES: typeof import('../../shared/utils/statusTransitions').ROLE_ALLOWED_TARGET_STATUSES
@@ -23,6 +26,9 @@ declare global {
   const createRequestInputSchema: typeof import('../../shared/utils/validation').createRequestInputSchema
   const createSearchRaceGuard: typeof import('../../shared/utils/asyncGuards').createSearchRaceGuard
   const createSubmissionLock: typeof import('../../shared/utils/asyncGuards').createSubmissionLock
+  const filterFaqItems: typeof import('../../shared/utils/publicContent').filterFaqItems
+  const filterKnowledgeArticles: typeof import('../../shared/utils/publicContent').filterKnowledgeArticles
+  const findKnowledgeArticleBySlug: typeof import('../../shared/utils/publicContent').findKnowledgeArticleBySlug
   const getAllowedNextStatuses: typeof import('../../shared/utils/statusTransitions').getAllowedNextStatuses
   const loginInputSchema: typeof import('../../shared/utils/validation').loginInputSchema
   const registerInputSchema: typeof import('../../shared/utils/validation').registerInputSchema
@@ -34,6 +40,9 @@ declare global {
   // @ts-ignore
   export type { SearchRaceGuard, SubmissionLock } from '../../shared/utils/asyncGuards'
   import('../../shared/utils/asyncGuards')
+  // @ts-ignore
+  export type { KnowledgeSection, KnowledgeArticle, KnowledgeCategory, FaqQuestionItem } from '../../shared/utils/publicContent'
+  import('../../shared/utils/publicContent')
   // @ts-ignore
   export type { StatusTransitionValidationInput, StatusTransitionValidationResult } from '../../shared/utils/statusTransitions'
   import('../../shared/utils/statusTransitions')

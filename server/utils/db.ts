@@ -182,8 +182,8 @@ export const SERVER_REQUESTS_DB: RequestItemDto[] = [
   {
     id: '1038',
     code: '#1038',
-    title: undefined,
-    customer: undefined,
+    title: 'Настроить резервное копирование',
+    customer: 'ООО «Сфера»',
     assignee: 'Олег С.',
     status: 'in-progress',
     priority: 'normal',

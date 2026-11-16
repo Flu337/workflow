@@ -58,11 +58,6 @@ const goToAllRequests = () => {
     <p class="obzor-2">Обзор</p>
     <p class="obzor-raboty-podderzhki">Обзор работы поддержки</p>
 
-    <!-- плашка компактной плотности списка из макета 10txt -->
-    <div v-if="preferencesStore.isCompact" class="soobshchenie-ob-izmenenii">
-      <p class="plotnost-spiska-kompaktnaia">Плотность списка: компактная</p>
-    </div>
-
     <WFGPTKpiCards :items="kpiItems" />
 
     <div class="zaiavki-zagolovok-i-fil-tr">

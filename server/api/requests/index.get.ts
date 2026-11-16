@@ -45,9 +45,16 @@ export default defineEventHandler((event): RequestsListResponseDto => {
   const page = Number.isFinite(pageRaw) && pageRaw >= 1 ? Math.floor(pageRaw) : 1
   const limit = Number.isFinite(limitRaw) && limitRaw >= 1 ? Math.floor(limitRaw) : 12
 
+  const simulateIncomplete =
+    String(query.incomplete || '') === '1' ||
+    String(query.partial || '') === '1' ||
+    simulateError === 'incomplete'
+
   // серверная фильтрация доступа по роли пользователя
   let accessibleItems: RequestItemDto[] = SERVER_REQUESTS_DB.map(item => ({
     ...item,
+    title: simulateIncomplete && String(item.id) === '1038' ? undefined : item.title,
+    customer: simulateIncomplete && String(item.id) === '1038' ? undefined : item.customer,
     comments: item.comments ? [...item.comments] : [],
     timeline: item.timeline ? [...item.timeline] : []
   }))

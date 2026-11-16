@@ -3,8 +3,8 @@ import { canUserAccessDashboard } from '../../shared/utils/permissions'
 
 // глобальный клиентский и серверный middleware проверки сессии и доступа к приватным маршрутам
 export default defineNuxtRouteMiddleware(async (to) => {
-  const publicPaths = ['/', '/login', '/register']
-  if (publicPaths.includes(to.path)) {
+  const publicPaths = ['/', '/login', '/register', '/faq', '/help', '/articles']
+  if (publicPaths.includes(to.path) || to.path.startsWith('/articles/')) {
     return
   }
 

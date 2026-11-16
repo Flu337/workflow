@@ -6,6 +6,9 @@ declare global {
   const DEFAULT_ASSIGNEE_NAME: typeof import('../../app/utils/normalizeRequests').DEFAULT_ASSIGNEE_NAME
   const DEFAULT_CUSTOMER_NAME: typeof import('../../app/utils/normalizeRequests').DEFAULT_CUSTOMER_NAME
   const DEFAULT_REQUEST_TITLE: typeof import('../../app/utils/normalizeRequests').DEFAULT_REQUEST_TITLE
+  const FAQ_ITEMS: typeof import('../../shared/utils/publicContent').FAQ_ITEMS
+  const KNOWLEDGE_ARTICLES: typeof import('../../shared/utils/publicContent').KNOWLEDGE_ARTICLES
+  const KNOWLEDGE_CATEGORIES: typeof import('../../shared/utils/publicContent').KNOWLEDGE_CATEGORIES
   const MOCK_REQUESTS: typeof import('../../app/utils/mockData').MOCK_REQUESTS
   const PRIORITY_DUE_DATES: typeof import('../../shared/types/workflow').PRIORITY_DUE_DATES
   const PRIORITY_LABELS: typeof import('../../shared/types/workflow').PRIORITY_LABELS
@@ -15,6 +18,7 @@ declare global {
   const abortNavigation: typeof import('../../node_modules/nuxt/dist/app/composables/router').abortNavigation
   const addCommentInputSchema: typeof import('../../shared/utils/validation').addCommentInputSchema
   const addRouteMiddleware: typeof import('../../node_modules/nuxt/dist/app/composables/router').addRouteMiddleware
+  const buildPublicSeoDescriptor: typeof import('../../app/composables/usePublicSeo').buildPublicSeoDescriptor
   const callOnce: typeof import('../../node_modules/nuxt/dist/app/composables/once').callOnce
   const canUserAccessDashboard: typeof import('../../shared/utils/permissions').canUserAccessDashboard
   const canUserAccessRequest: typeof import('../../shared/utils/permissions').canUserAccessRequest
@@ -52,6 +56,9 @@ declare global {
   const defineUseFetchAddon: typeof import('../../node_modules/nuxt/dist/app/composables/addons').defineUseFetchAddon
   const effect: typeof import('vue').effect
   const effectScope: typeof import('vue').effectScope
+  const filterFaqItems: typeof import('../../shared/utils/publicContent').filterFaqItems
+  const filterKnowledgeArticles: typeof import('../../shared/utils/publicContent').filterKnowledgeArticles
+  const findKnowledgeArticleBySlug: typeof import('../../shared/utils/publicContent').findKnowledgeArticleBySlug
   const getAllowedNextStatuses: typeof import('../../shared/utils/statusTransitions').getAllowedNextStatuses
   const getAppManifest: typeof import('../../node_modules/nuxt/dist/app/composables/manifest').getAppManifest
   const getCurrentInstance: typeof import('vue').getCurrentInstance
@@ -155,6 +162,7 @@ declare global {
   const useNuxtDevTools: typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools').useNuxtDevTools
   const usePreferencesStore: typeof import('../../app/stores/preferences').usePreferencesStore
   const usePreviewMode: typeof import('../../node_modules/nuxt/dist/app/composables/preview').usePreviewMode
+  const usePublicSeo: typeof import('../../app/composables/usePublicSeo').usePublicSeo
   const useRequestEvent: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useRequestEvent
   const useRequestFetch: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useRequestFetch
   const useRequestHeader: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useRequestHeader
@@ -244,11 +252,17 @@ declare global {
   export type { PageMeta } from '../../node_modules/nuxt/dist/app/composables/pages'
   import('../../node_modules/nuxt/dist/app/composables/pages')
   // @ts-ignore
+  export type { PublicSeoInput, ComputedSeoDescriptor } from '../../app/composables/usePublicSeo'
+  import('../../app/composables/usePublicSeo')
+  // @ts-ignore
   export type { VueUnwrapStore, StoreRefs } from '../../app/utils/pinia'
   import('../../app/utils/pinia')
   // @ts-ignore
   export type { SearchRaceGuard, SubmissionLock } from '../../shared/utils/asyncGuards'
   import('../../shared/utils/asyncGuards')
+  // @ts-ignore
+  export type { KnowledgeSection, KnowledgeArticle, KnowledgeCategory, FaqQuestionItem } from '../../shared/utils/publicContent'
+  import('../../shared/utils/publicContent')
   // @ts-ignore
   export type { StatusTransitionValidationInput, StatusTransitionValidationResult } from '../../shared/utils/statusTransitions'
   import('../../shared/utils/statusTransitions')
@@ -271,6 +285,9 @@ declare module 'vue' {
     readonly DEFAULT_ASSIGNEE_NAME: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['DEFAULT_ASSIGNEE_NAME']>
     readonly DEFAULT_CUSTOMER_NAME: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['DEFAULT_CUSTOMER_NAME']>
     readonly DEFAULT_REQUEST_TITLE: UnwrapRef<typeof import('../../app/utils/normalizeRequests')['DEFAULT_REQUEST_TITLE']>
+    readonly FAQ_ITEMS: UnwrapRef<typeof import('../../shared/utils/publicContent')['FAQ_ITEMS']>
+    readonly KNOWLEDGE_ARTICLES: UnwrapRef<typeof import('../../shared/utils/publicContent')['KNOWLEDGE_ARTICLES']>
+    readonly KNOWLEDGE_CATEGORIES: UnwrapRef<typeof import('../../shared/utils/publicContent')['KNOWLEDGE_CATEGORIES']>
     readonly MOCK_REQUESTS: UnwrapRef<typeof import('../../app/utils/mockData')['MOCK_REQUESTS']>
     readonly PRIORITY_DUE_DATES: UnwrapRef<typeof import('../../shared/types/workflow')['PRIORITY_DUE_DATES']>
     readonly PRIORITY_LABELS: UnwrapRef<typeof import('../../shared/types/workflow')['PRIORITY_LABELS']>
@@ -280,6 +297,7 @@ declare module 'vue' {
     readonly abortNavigation: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['abortNavigation']>
     readonly addCommentInputSchema: UnwrapRef<typeof import('../../shared/utils/validation')['addCommentInputSchema']>
     readonly addRouteMiddleware: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['addRouteMiddleware']>
+    readonly buildPublicSeoDescriptor: UnwrapRef<typeof import('../../app/composables/usePublicSeo')['buildPublicSeoDescriptor']>
     readonly callOnce: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/once')['callOnce']>
     readonly canUserAccessDashboard: UnwrapRef<typeof import('../../shared/utils/permissions')['canUserAccessDashboard']>
     readonly canUserAccessRequest: UnwrapRef<typeof import('../../shared/utils/permissions')['canUserAccessRequest']>
@@ -317,6 +335,9 @@ declare module 'vue' {
     readonly defineUseFetchAddon: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/addons')['defineUseFetchAddon']>
     readonly effect: UnwrapRef<typeof import('vue')['effect']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly filterFaqItems: UnwrapRef<typeof import('../../shared/utils/publicContent')['filterFaqItems']>
+    readonly filterKnowledgeArticles: UnwrapRef<typeof import('../../shared/utils/publicContent')['filterKnowledgeArticles']>
+    readonly findKnowledgeArticleBySlug: UnwrapRef<typeof import('../../shared/utils/publicContent')['findKnowledgeArticleBySlug']>
     readonly getAllowedNextStatuses: UnwrapRef<typeof import('../../shared/utils/statusTransitions')['getAllowedNextStatuses']>
     readonly getAppManifest: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/manifest')['getAppManifest']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
@@ -420,6 +441,7 @@ declare module 'vue' {
     readonly useNuxtDevTools: UnwrapRef<typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools')['useNuxtDevTools']>
     readonly usePreferencesStore: UnwrapRef<typeof import('../../app/stores/preferences')['usePreferencesStore']>
     readonly usePreviewMode: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/preview')['usePreviewMode']>
+    readonly usePublicSeo: UnwrapRef<typeof import('../../app/composables/usePublicSeo')['usePublicSeo']>
     readonly useRequestEvent: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestEvent']>
     readonly useRequestFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestFetch']>
     readonly useRequestHeader: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestHeader']>

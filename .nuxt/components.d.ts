@@ -27,6 +27,7 @@ export const OctagonStatusBadge: typeof import("../app/components/OctagonStatusB
 export const WFGPTCreateRequestModal: typeof import("../app/components/WFGPTCreateRequestModal.vue")['default']
 export const WFGPTField: typeof import("../app/components/WFGPTField.vue")['default']
 export const WFGPTKpiCards: typeof import("../app/components/WFGPTKpiCards.vue")['default']
+export const WFGPTPublicNav: typeof import("../app/components/WFGPTPublicNav.vue")['default']
 export const WFGPTRequestRow: typeof import("../app/components/WFGPTRequestRow.vue")['default']
 export const WFGPTTextarea: typeof import("../app/components/WFGPTTextarea.vue")['default']
 /**
@@ -136,6 +137,7 @@ export const LazyOctagonStatusBadge: LazyComponent<typeof import("../app/compone
 export const LazyWFGPTCreateRequestModal: LazyComponent<typeof import("../app/components/WFGPTCreateRequestModal.vue")['default']>
 export const LazyWFGPTField: LazyComponent<typeof import("../app/components/WFGPTField.vue")['default']>
 export const LazyWFGPTKpiCards: LazyComponent<typeof import("../app/components/WFGPTKpiCards.vue")['default']>
+export const LazyWFGPTPublicNav: LazyComponent<typeof import("../app/components/WFGPTPublicNav.vue")['default']>
 export const LazyWFGPTRequestRow: LazyComponent<typeof import("../app/components/WFGPTRequestRow.vue")['default']>
 export const LazyWFGPTTextarea: LazyComponent<typeof import("../app/components/WFGPTTextarea.vue")['default']>
 /**

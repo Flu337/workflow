@@ -27,6 +27,7 @@ interface _GlobalComponents {
   WFGPTCreateRequestModal: typeof import("../../app/components/WFGPTCreateRequestModal.vue")['default']
   WFGPTField: typeof import("../../app/components/WFGPTField.vue")['default']
   WFGPTKpiCards: typeof import("../../app/components/WFGPTKpiCards.vue")['default']
+  WFGPTPublicNav: typeof import("../../app/components/WFGPTPublicNav.vue")['default']
   WFGPTRequestRow: typeof import("../../app/components/WFGPTRequestRow.vue")['default']
   WFGPTTextarea: typeof import("../../app/components/WFGPTTextarea.vue")['default']
   /**
@@ -136,6 +137,7 @@ interface _GlobalComponents {
   LazyWFGPTCreateRequestModal: LazyComponent<typeof import("../../app/components/WFGPTCreateRequestModal.vue")['default']>
   LazyWFGPTField: LazyComponent<typeof import("../../app/components/WFGPTField.vue")['default']>
   LazyWFGPTKpiCards: LazyComponent<typeof import("../../app/components/WFGPTKpiCards.vue")['default']>
+  LazyWFGPTPublicNav: LazyComponent<typeof import("../../app/components/WFGPTPublicNav.vue")['default']>
   LazyWFGPTRequestRow: LazyComponent<typeof import("../../app/components/WFGPTRequestRow.vue")['default']>
   LazyWFGPTTextarea: LazyComponent<typeof import("../../app/components/WFGPTTextarea.vue")['default']>
   /**

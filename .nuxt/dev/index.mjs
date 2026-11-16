@@ -711,6 +711,48 @@ const _inlineRuntimeConfig = {
       "/__nuxt_error": {
         "cache": false
       },
+      "/": {
+        "ssr": true,
+        "prerender": true
+      },
+      "/faq": {
+        "ssr": true,
+        "prerender": true
+      },
+      "/help": {
+        "ssr": true,
+        "prerender": true
+      },
+      "/articles": {
+        "ssr": true,
+        "prerender": true
+      },
+      "/articles/**": {
+        "ssr": true,
+        "swr": 3600,
+        "cache": {
+          "swr": true,
+          "maxAge": 3600
+        }
+      },
+      "/login": {
+        "ssr": true
+      },
+      "/register": {
+        "ssr": true
+      },
+      "/dashboard": {
+        "ssr": true
+      },
+      "/requests": {
+        "ssr": true
+      },
+      "/requests/**": {
+        "ssr": true
+      },
+      "/profile": {
+        "ssr": false
+      },
       "/_nuxt/builds/meta/**": {
         "headers": {
           "cache-control": "public, max-age=31536000, immutable"
@@ -720,6 +762,22 @@ const _inlineRuntimeConfig = {
         "headers": {
           "cache-control": "public, max-age=1, immutable"
         }
+      },
+      "/_payload.json": {
+        "ssr": true,
+        "prerender": true
+      },
+      "/faq/_payload.json": {
+        "ssr": true,
+        "prerender": true
+      },
+      "/help/_payload.json": {
+        "ssr": true,
+        "prerender": true
+      },
+      "/articles/_payload.json": {
+        "ssr": true,
+        "prerender": true
       }
     }
   },
@@ -1327,7 +1385,8 @@ const renderSSRHeadOptions = {"omitLineBreaks":true};
 
 const NUXT_PRERENDER_NO_SSR_ROUTES = ["/index.html","/200.html","/404.html"];
 const NUXT_NO_SCRIPTS_PATTERNS = [];
-const NUXT_PAGE_PATTERNS = ["/requests/:id","/dashboard","/login","/profile","/register","/requests","/"];
+const NUXT_PAGE_PATTERNS = ["/articles/:slug","/requests/:id","/articles","/dashboard","/faq","/help","/login","/profile","/register","/requests","/"];
+const NUXT_PAYLOAD_INLINE = false;
 const NUXT_SSR_STREAMING = false;
 const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"name":"description","content":"WorkFlow — от первого обращения до решения: управляйте заявками, назначайте исполнителей и держите сроки под контролем."}],"link":[{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":""},{"rel":"stylesheet","href":"https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap"}],"style":[],"script":[],"noscript":[],"title":"WorkFlow — система управления заявками","htmlAttrs":{"lang":"ru"}};
 const appRootTag = "div";
@@ -2651,7 +2710,22 @@ _Z4Vm0BJMJeyU_KFYzGBgSOBoZ4JOQn4jYmko_KtDwU,
 _LB91z6Ht2T49ncvhFWMKIA26eT4mdBc7tIFl06yLKKs
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"42a78-DKJKHjW8/H8GQWHdyvNNOETHEuc\"",
+    "mtime": "2026-11-16T02:32:28.805Z",
+    "size": 273016,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"104e45-ZUshv/wV/NirXuZA/a07puJUO+U\"",
+    "mtime": "2026-11-16T02:32:28.814Z",
+    "size": 1068613,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -2926,8 +3000,8 @@ const SERVER_REQUESTS_DB = [
   {
     id: "1038",
     code: "#1038",
-    title: void 0,
-    customer: void 0,
+    title: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u043E\u0435 \u043A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435",
+    customer: "\u041E\u041E\u041E \xAB\u0421\u0444\u0435\u0440\u0430\xBB",
     assignee: "\u041E\u043B\u0435\u0433 \u0421.",
     status: "in-progress",
     priority: "normal",
@@ -4140,6 +4214,23 @@ function payloadRequestToRoute(path, filename = "_payload.json") {
 	payloadURL.searchParams.delete(PAYLOAD_BUILD_ID_PARAM);
 	return url + payloadURL.search;
 }
+const LEADING_SLASHES_RE = /^\/+/;
+/** Strip every trailing `/` from a path. */
+function withoutTrailingSlashes(path) {
+	let end = path.length;
+	while (end > 0 && path[end - 1] === "/") end--;
+	return path.slice(0, end);
+}
+/** The same-origin `_payload.json` (or `_payload.js`) URL for a page route, tagged with the build id. */
+function routeToPayloadURL(baseURL, path, buildId, filename = "_payload.json") {
+	const request = parseRequestPath(path);
+	const base = new URL(withoutTrailingSlashes(baseURL) + "/", "http://localhost");
+	const route = withoutTrailingSlashes(request.pathname.replace(LEADING_SLASHES_RE, "")) + "/";
+	const url = new URL("./" + (route === "/" ? "" : route) + filename, base);
+	url.search = request.search;
+	url.searchParams.set(PAYLOAD_BUILD_ID_PARAM, buildId);
+	return URL.canParse(baseURL) ? url.href : url.pathname + url.search;
+}
 /** `url` with its path and query replaced by those of the request path `path`, keeping its origin. */
 function withRequestPath(url, path) {
 	const request = parseRequestPath(path);
@@ -4557,6 +4648,9 @@ const handlers = [
   { route: '/__nuxt_error', handler: _lazy_rtLnJk, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_dev__/error/**', handler: _lazy_aSMA4L, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: handler$1, lazy: false, middleware: false, method: undefined },
+  { route: '/articles', handler: _lazy_rtLnJk, lazy: true, middleware: false, method: undefined },
+  { route: '/articles/_payload.json', handler: _lazy_rtLnJk, lazy: true, middleware: false, method: undefined },
+  { route: '/articles/**', handler: _lazy_rtLnJk, lazy: true, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_rtLnJk, lazy: true, middleware: false, method: undefined }
 ];
 
@@ -5858,8 +5952,11 @@ const index_get$2 = defineEventHandler((event) => {
   const limitRaw = Number(query.limit || 12);
   const page = Number.isFinite(pageRaw) && pageRaw >= 1 ? Math.floor(pageRaw) : 1;
   const limit = Number.isFinite(limitRaw) && limitRaw >= 1 ? Math.floor(limitRaw) : 12;
+  const simulateIncomplete = String(query.incomplete || "") === "1" || String(query.partial || "") === "1" || simulateError === "incomplete";
   let accessibleItems = SERVER_REQUESTS_DB.map((item) => ({
     ...item,
+    title: simulateIncomplete && String(item.id) === "1038" ? void 0 : item.title,
+    customer: simulateIncomplete && String(item.id) === "1038" ? void 0 : item.customer,
     comments: item.comments ? [...item.comments] : [],
     timeline: item.timeline ? [...item.timeline] : []
   }));
@@ -6172,13 +6269,15 @@ async function renderRoute(instance, event, ssrError) {
 	const routeOptions = runtime.getRouteRules(event);
 	const NO_SCRIPTS = !!routeOptions.noScripts;
 	if (routeOptions.ssr === false && true) ssrContext.noSSR = true;
-	!ssrContext.noSSR && !ssrError && false;
-	const isRenderingPayload = (routeOptions.prerender) && PAYLOAD_URL_RE.test(ssrContext.url);
+	const _PAYLOAD_EXTRACTION = !ssrContext.noSSR && !ssrError && !!((routeOptions.isr || routeOptions.cache));
+	const _PAYLOAD_INLINE = !_PAYLOAD_EXTRACTION || NUXT_PAYLOAD_INLINE;
+	const isRenderingPayload = (_PAYLOAD_EXTRACTION || routeOptions.prerender) && PAYLOAD_URL_RE.test(ssrContext.url);
 	if (isRenderingPayload) {
 		ssrContext.url = payloadRequestToRoute(ssrContext.url, PAYLOAD_FILENAME);
 		event.url = withRequestPath(event.url, ssrContext.url);
 		getPayloadCacheKey(ssrContext.url);
 	}
+	const payloadURL = _PAYLOAD_EXTRACTION ? buildPayloadURL(ssrContext) : void 0;
 	const renderer = await instance.getRenderer(ssrContext);
 	const canStream = NUXT_SSR_STREAMING;
 	const renderRouteContext = {
@@ -6210,6 +6309,12 @@ async function renderRoute(instance, event, ssrError) {
 	if (!ssrError && !ssrContext.error) runtime.onRenderSuccess?.(event);
 	const { styles, scripts } = getRequestDependencies(ssrContext, renderer.rendererContext);
 	pushNoScriptsHints(ssrContext, NO_SCRIPTS);
+	if (_PAYLOAD_EXTRACTION && !_PAYLOAD_INLINE && !NO_SCRIPTS) ssrContext.head.push({ link: [{
+		rel: "preload",
+		as: "fetch",
+		crossorigin: "anonymous",
+		href: payloadURL
+	} ] });
 	if (entryInlinedStyles.length) ssrContext.head.push({ style: entryInlinedStyles });
 	const link = [];
 	const inlinedHrefs = [];
@@ -6237,10 +6342,14 @@ async function renderRoute(instance, event, ssrError) {
 	for (const l of getPreloadLinks(ssrContext, renderer.rendererContext, dependencyOptions)) if (!excludeHrefs.has(l.href)) hints.push(l);
 	for (const l of getPrefetchLinks(ssrContext, renderer.rendererContext, dependencyOptions)) if (!excludeHrefs.has(l.href)) hints.push(l);
 	if (hints.length) ssrContext.head.push({ link: hints });
-	if (!NO_SCRIPTS) ssrContext.head.push({ script: renderPayloadJsonScript({
+	if (!NO_SCRIPTS) ssrContext.head.push({ script: _PAYLOAD_INLINE ? renderPayloadJsonScript({
 		ssrContext,
 		data: stripInlineOnlyPayloadFields(ssrContext.payload)
-	})   }, {
+	})  : renderPayloadJsonScript({
+		ssrContext,
+		data: splitPayload(ssrContext).initial,
+		src: payloadURL
+	})  }, {
 		tagPosition: "bodyClose",
 		tagPriority: "high"
 	});
@@ -6310,6 +6419,10 @@ function pushSpeculationRulesScript(ssrContext, patterns) {
 			prerender: rules
 		}
 	}] });
+}
+function buildPayloadURL(ssrContext) {
+	const baseURL = ssrContext.runtimeConfig.app.cdnURL || ssrContext.runtimeConfig.app.baseURL;
+	return routeToPayloadURL(baseURL, ssrContext.url, ssrContext.runtimeConfig.app.buildId, PAYLOAD_FILENAME);
 }
 function normalizeChunks(chunks) {
 	const result = [];

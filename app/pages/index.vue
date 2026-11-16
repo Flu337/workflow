@@ -1,13 +1,19 @@
 <script setup lang="ts">
+import { usePublicSeo } from '~/composables/usePublicSeo'
+
 definePageMeta({
   layout: 'public'
 })
 
-const router = useRouter()
+usePublicSeo({
+  title: 'WorkFlow — система управления сервисными заявками',
+  description:
+    'От первого обращения до решения — управляйте заявками, назначайте исполнителей и держите сроки SLA под контролем в единой системе WorkFlow.',
+  path: '/',
+  type: 'website'
+})
 
-const goToLogin = () => {
-  router.push('/login')
-}
+const router = useRouter()
 
 const goToStart = () => {
   router.push('/dashboard')
@@ -16,26 +22,15 @@ const goToStart = () => {
 
 <template>
   <div class="layer-1-01-glavnaia">
-    <header class="shapka">
-      <NuxtLink to="/" class="workflow">WorkFlow</NuxtLink>
-      <a href="#hero" class="glavnaia ui-nav-link">Главная</a>
-      <a href="#workflow-steps" class="stat-i ui-nav-link">Статьи</a>
-      <a href="#features" class="pomoshch ui-nav-link">Помощь</a>
-      <a href="#footer" class="faq ui-nav-link">FAQ</a>
-      <OctagonButton
-        variant="secondary"
-        label23251="Войти"
-        @click="goToLogin"
-      />
-    </header>
+    <WFGPTPublicNav />
 
     <section id="hero" class="pervyi-ekran">
       <div class="pervyi-ekran-tekst-i-grafika">
         <div class="tekst-i-deistvie">
           <p class="zaiavki-komanda-rezul-tat">ЗАЯВКИ · КОМАНДА · РЕЗУЛЬТАТ</p>
-          <p class="podderzhka-v-kotoroi-nichego-ne">
+          <h1 class="podderzhka-v-kotoroi-nichego-ne">
             Поддержка, в которой<br />ничего не теряется
-          </p>
+          </h1>
           <p class="ot-pervogo-obrashcheniia-do-resheniia">
             От первого обращения до решения — управляйте заявками, назначайте исполнителей и держите сроки под контролем.
           </p>
@@ -46,11 +41,20 @@ const goToStart = () => {
             />
           </div>
         </div>
-        <div
-          class="grafika-s-octagon-students-ru"
-          role="img"
-          aria-label="Иллюстрация рабочего процесса WorkFlow"
-        ></div>
+        <!-- оптимизированное изображение первого экрана с фиксированными размерами без сдвига макета cls -->
+        <picture class="grafika-s-octagon-students-ru">
+          <source media="(max-width: 639px)" srcset="/images/hero-360.png" />
+          <source media="(max-width: 1023px)" srcset="/images/hero-768.png" />
+          <img
+            src="/images/hero-1280.png"
+            alt="Иллюстрация рабочего процесса WorkFlow"
+            width="460"
+            height="460"
+            fetchpriority="high"
+            decoding="async"
+            class="hero-responsive-img"
+          />
+        </picture>
       </div>
 
       <div id="workflow-steps" class="primer-rabochego-protsessa">
@@ -67,7 +71,7 @@ const goToStart = () => {
     </section>
 
     <section id="features" class="vozmozhnosti">
-      <p class="odna-sistema-dlia-vsei-komandy">Одна система для всей команды</p>
+      <h2 class="odna-sistema-dlia-vsei-komandy">Одна система для всей команды</h2>
       <div class="preimushchestva">
         <div class="vse-obrashcheniia-riadom">
           <p class="vse-obrashcheniia-riadom-2">Все обращения рядом</p>
@@ -86,7 +90,11 @@ const goToStart = () => {
 
     <footer id="footer" class="podval">
       <p class="workflow-c-2026">WorkFlow © 2026</p>
-      <p class="pomoshch-faq">Помощь · FAQ</p>
+      <p class="pomoshch-faq">
+        <NuxtLink to="/help" class="footer-inline-link">Помощь</NuxtLink>
+        ·
+        <NuxtLink to="/faq" class="footer-inline-link">FAQ</NuxtLink>
+      </p>
     </footer>
   </div>
 </template>
