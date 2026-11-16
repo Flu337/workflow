@@ -15,13 +15,4 @@
   </span>
 </template>
 
-<style scoped>
-.octagon-icon-menu {
-  width: 20px;
-  height: 20px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-}
-</style>
+<style scoped src="~/assets/css/components/OctagonIconMenu.css"></style>

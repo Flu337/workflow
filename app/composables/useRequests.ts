@@ -1,6 +1,8 @@
 import { computed } from 'vue'
 import { MOCK_REQUESTS } from '~/utils/mockData'
+import { normalizeRequestItem } from '~/utils/normalizeRequests'
 import { usePreferencesStore } from '~/stores/preferences'
+import { useAuthStore } from '~/stores/auth'
 import type {
   WorkFlowRequest,
   RequestStatus,
@@ -8,7 +10,7 @@ import type {
   RequestSortOrder,
   ListViewState,
   RequestItemDto
-} from '~/types/workflow'
+} from '../../shared/types/workflow'
 
 export const useRequests = () => {
   const preferencesStore = usePreferencesStore()
@@ -183,63 +185,46 @@ export const useRequests = () => {
     return requests.value.find(r => r.id === clean || r.code === `#${clean}`)
   }
 
+  // создание новой заявки через серверный api с обработкой ошибок 401 409 и 500
   const createNewRequest = async (payload: {
     title: string
     customer: string
     category: string
     priority: RequestPriority
     description: string
+    simulateError?: '401' | '409' | '500' | ''
   }): Promise<WorkFlowRequest> => {
-    const maxId = requests.value.reduce((acc, item) => Math.max(acc, Number(item.id)), 1042)
-    const nextId = String(maxId + 1)
-    const now = new Date()
-    const hh = String(now.getHours()).padStart(2, '0')
-    const mm = String(now.getMinutes()).padStart(2, '0')
-    const timeStr = `${hh}:${mm}`
-
-    const newReq: WorkFlowRequest = {
-      id: nextId,
-      code: `#${nextId}`,
-      title: payload.title.trim() || 'Без названия',
-      customer: payload.customer.trim() || 'Клиент не указан',
-      assignee: 'Не назначен',
-      status: 'new',
-      priority: payload.priority,
-      category: payload.category.trim() || 'Доступ и учётные записи',
-      createdAt: `Создана сегодня, ${timeStr}`,
-      dueAt: 'Сегодня, 18:00',
-      description: payload.description.trim() || 'Описание проблемы добавлено при создании заявки.',
-      comments: [],
-      timeline: [
-        {
-          id: `t-${nextId}-1`,
-          time: timeStr,
-          text: `${preferencesStore.name.split(' ')[0]} создал(а) заявку`
-        }
-      ],
-      hasMissingData: !payload.title.trim() || !payload.customer.trim(),
-      resolutionSummary: '',
-      waitingReason: '',
-      closingReason: '' ,
-      attachments: []
-    }
-
-    requests.value.unshift(newReq)
     try {
-      await $fetch<{ item: RequestItemDto }>('/api/requests', {
+      const response = await $fetch<{ item: RequestItemDto }>('/api/requests', {
         method: 'POST',
         body: {
           ...payload,
-          authorName: preferencesStore.name
+          authorName: preferencesStore.name,
+          simulateError: payload.simulateError || (simulateError.value === '500' ? '500' : '')
         }
       })
-    } catch {
-      // локальная запись уже добавлена
-    }
 
-    viewState.value = 'ready'
-    currentPage.value = 1
-    return newReq
+      const normalized = normalizeRequestItem(response.item)
+      const existingIdx = requests.value.findIndex(r => r.id === normalized.id)
+      if (existingIdx >= 0) {
+        requests.value.splice(existingIdx, 1, normalized)
+      } else {
+        requests.value.unshift(normalized)
+      }
+
+      viewState.value = 'ready'
+      currentPage.value = 1
+      return normalized
+    } catch (err) {
+      const status =
+        (err as { statusCode?: number; status?: number })?.statusCode ||
+        (err as { statusCode?: number; status?: number })?.status
+      if (status === 401) {
+        const authStore = useAuthStore()
+        await authStore.handleUnauthorizedError()
+      }
+      throw err
+    }
   }
 
   const resetSearch = () => {

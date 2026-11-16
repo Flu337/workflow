@@ -8,7 +8,7 @@ import type {
   UserRole
 } from '../../shared/types/workflow'
 
-// локальный список seed аккаунтов для мгновенного резервного входа если dev сервер не перезапущен
+// локальный список seed аккаунтов для резервного входа
 const FALLBACK_USERS: SessionUserDto[] = [
   {
     id: 'u-1',
@@ -82,6 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
   })
   const authenticated = ref<boolean>(true)
   const expired = ref<boolean>(false)
+  const sessionRestored = ref<boolean>(false)
 
   const syncWithPreferences = (sessionUser: SessionUserDto | null) => {
     if (!sessionUser) return
@@ -97,15 +98,30 @@ export const useAuthStore = defineStore('auth', () => {
     authenticated.value = Boolean(res.authenticated && res.user)
     expired.value = Boolean(res.expired)
     user.value = res.user || null
+    sessionRestored.value = true
     syncWithPreferences(res.user || null)
+  }
+
+  const handleUnauthorizedError = async (): Promise<void> => {
+    authenticated.value = false
+    expired.value = true
+    user.value = null
+    sessionRestored.value = true
+    if (import.meta.client) {
+      await navigateTo('/login?expired=1', { replace: true })
+    }
   }
 
   const fetchSession = async (): Promise<AuthSessionResponseDto> => {
     try {
-      const res = await $fetch<AuthSessionResponseDto>('/api/auth/session')
+      const headers = import.meta.server ? useRequestHeaders(['cookie']) : undefined
+      const res = await $fetch<AuthSessionResponseDto>('/api/auth/session', {
+        headers
+      })
       applySessionResponse(res)
       return res
     } catch {
+      sessionRestored.value = true
       return {
         authenticated: authenticated.value,
         expired: expired.value,
@@ -182,6 +198,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // полный сброс сессии и состояния при выходе пользователя
   const logout = async (markExpired = false): Promise<void> => {
     try {
       const res = await $fetch<AuthSessionResponseDto>('/api/auth/logout', {
@@ -190,9 +207,16 @@ export const useAuthStore = defineStore('auth', () => {
       })
       applySessionResponse(res)
     } catch {
+      // очистка даже при недоступности сети
+    } finally {
       authenticated.value = false
       expired.value = markExpired
       user.value = null
+      sessionRestored.value = true
+      if (import.meta.client && typeof document !== 'undefined') {
+        document.cookie = `wf_session=${markExpired ? 'expired' : 'logged_out'}; path=/; max-age=86400; SameSite=Lax`
+        document.cookie = 'wf_role=; path=/; max-age=0; SameSite=Lax'
+      }
     }
   }
 
@@ -203,9 +227,11 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     authenticated,
     expired,
+    sessionRestored,
     currentRole,
     currentRoleLabel,
     applySessionResponse,
+    handleUnauthorizedError,
     fetchSession,
     login,
     register,

@@ -18,8 +18,12 @@ const description = ref(
   'После обновления не удаётся войти в CRM. При попытке входа появляется сообщение «Доступ запрещён». Проблема затрагивает отдел продаж.'
 )
 const priority = ref<RequestPriority>('high')
-const errorMessage = ref('')
+
+const titleError = ref('')
+const descriptionError = ref('')
+const saveError = ref('')
 const isSubmitting = ref(false)
+let submitLock = false
 
 const categoryOptions = [
   { label: 'Доступ и учётные записи', value: 'Доступ и учётные записи' },
@@ -37,19 +41,58 @@ const priorityOptions = [
   { label: 'Низкий', value: 'low' }
 ]
 
+watch(title, (val) => {
+  if (!val.trim()) {
+    titleError.value = 'Укажите название заявки.'
+  } else {
+    titleError.value = ''
+  }
+})
+
+watch(description, (val) => {
+  if (!val.trim()) {
+    descriptionError.value = 'Опишите проблему.'
+  } else {
+    descriptionError.value = ''
+  }
+})
+
+const hasValidationErrors = computed(
+  () => !title.value.trim() || !description.value.trim()
+)
+
+const isSubmitDisabled = computed(
+  () => isSubmitting.value || Boolean(titleError.value || descriptionError.value)
+)
+
+const primaryButtonLabel = computed(() => {
+  if (isSubmitting.value) return 'Создаём…'
+  if (saveError.value) return 'Повторить'
+  return 'Создать заявку'
+})
+
 const closeModal = () => {
-  errorMessage.value = ''
+  titleError.value = ''
+  descriptionError.value = ''
+  saveError.value = ''
+  isSubmitting.value = false
+  submitLock = false
   emit('update:modelValue', false)
 }
 
 const handleSubmit = async () => {
-  errorMessage.value = ''
-  if (!title.value.trim()) {
-    errorMessage.value = 'Укажите название заявки.'
+  if (submitLock || isSubmitting.value) return
+
+  titleError.value = !title.value.trim() ? 'Укажите название заявки.' : ''
+  descriptionError.value = !description.value.trim() ? 'Опишите проблему.' : ''
+  if (hasValidationErrors.value) {
     return
   }
 
+  submitLock = true
   isSubmitting.value = true
+  saveError.value = ''
+
   try {
     const created = await createNewRequest({
       title: title.value.trim(),
@@ -60,12 +103,12 @@ const handleSubmit = async () => {
     })
     emit('created', created.id)
     closeModal()
-  } catch (err) {
-    errorMessage.value =
-      (err as { data?: { message?: string }; message?: string })?.data?.message ||
-      'Не удалось создать заявку.'
+  } catch {
+    // при ошибке сохранения введённые данные остаются в полях а кнопка меняется на повторить
+    saveError.value = 'Не удалось сохранить изменения. Данные не потеряны. Повторите попытку.'
   } finally {
     isSubmitting.value = false
+    submitLock = false
   }
 }
 
@@ -109,8 +152,12 @@ onBeforeUnmount(() => {
           <WFGPTField
             v-model="title"
             label23270="Название"
-            value="Не работает доступ к CRM"
+            :value="title"
+            :state="titleError ? 'error' : 'default'"
           />
+          <p v-if="titleError" class="oshibka-polia-nazvanie">
+            {{ titleError }}
+          </p>
 
           <WFGPTField
             v-model="category"
@@ -124,7 +171,11 @@ onBeforeUnmount(() => {
             v-model="description"
             label23270="Описание"
             :value="description"
+            :state="descriptionError ? 'error' : 'default'"
           />
+          <p v-if="descriptionError" class="oshibka-polia-opisanie">
+            {{ descriptionError }}
+          </p>
 
           <WFGPTField
             v-model="priority"
@@ -134,7 +185,11 @@ onBeforeUnmount(() => {
             value="Высокий  ▾"
           />
 
-          <p v-if="errorMessage" class="modal-error-text">{{ errorMessage }}</p>
+          <div v-if="saveError" class="oshibka-sokhraneniia">
+            <p class="ne-udalos-sokhranit-izmeneniia-dannye">
+              {{ saveError }}
+            </p>
+          </div>
 
           <div class="deistviia">
             <OctagonButton
@@ -144,9 +199,9 @@ onBeforeUnmount(() => {
             />
             <OctagonButton
               type="submit"
-              :disabled="!title.trim() || isSubmitting"
-              :state="!title.trim() || isSubmitting ? 'disabled' : 'default'"
-              label23251="Создать заявку"
+              :disabled="isSubmitDisabled"
+              :state="isSubmitDisabled ? 'disabled' : 'default'"
+              :label23251="primaryButtonLabel"
             />
           </div>
         </form>
@@ -155,82 +210,4 @@ onBeforeUnmount(() => {
   </Teleport>
 </template>
 
-<style scoped>
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: rgba(23, 21, 58, 0.65);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-}
-
-.sozdanie-zaiavki {
-  width: 560px;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  background: radial-gradient(45.39% 41.73% at 54.55% 50%, #201D47 0%, #17153A 100%);
-}
-
-.novaia-zaiavka {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 24px;
-  justify-content: flex-start;
-  align-items: flex-start;
-  border-radius: 4px;
-  background: var(--color-bg-surface, #23204D);
-  border: 1px solid var(--color-border-default, #413E74);
-}
-
-.zagolovok-okna {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.novaia-zaiavka-2 {
-  flex: 1 1 0;
-  color: var(--color-text-primary, #E8E7EC);
-  font-family: "Montserrat", sans-serif;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 28px;
-}
-
-.opishite-problemu-operator-naznachit {
-  align-self: stretch;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-}
-
-.modal-error-text {
-  color: #FF80A3;
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 20px;
-}
-
-.deistviia {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-</style>
+<style scoped src="~/assets/css/components/WFGPTCreateRequestModal.css"></style>

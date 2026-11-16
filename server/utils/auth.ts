@@ -11,6 +11,19 @@ interface SessionRecord {
 // таблица активных серверных сессий пользователей
 const SERVER_SESSIONS = new Map<string, SessionRecord>()
 
+// множество обработанных ключей идемпотентности комментариев для предотвращения дублей
+const PROCESSED_COMMENT_KEYS = new Map<string, string>()
+
+export function isDuplicateCommentKey(key: string | undefined): string | null {
+  if (!key) return null
+  return PROCESSED_COMMENT_KEYS.get(key) || null
+}
+
+export function registerCommentKey(key: string | undefined, commentId: string): void {
+  if (!key) return
+  PROCESSED_COMMENT_KEYS.set(key, commentId)
+}
+
 export function toSessionUserDto(user: ServerUserRecord): SessionUserDto {
   return {
     id: user.id,
@@ -47,6 +60,7 @@ export function createServerSession(event: H3Event, user: ServerUserRecord): str
   return token
 }
 
+// полная очистка сессии и ролевой cookie при выходе пользователя
 export function clearServerSession(event: H3Event, markExpired = false): void {
   const currentCookie = getCookie(event, 'wf_session')
   if (currentCookie) {
@@ -57,6 +71,12 @@ export function clearServerSession(event: H3Event, markExpired = false): void {
     httpOnly: false,
     sameSite: 'lax',
     maxAge: 60 * 60 * 24
+  })
+  setCookie(event, 'wf_role', '', {
+    path: '/',
+    httpOnly: false,
+    sameSite: 'lax',
+    maxAge: 0
   })
 }
 
@@ -104,6 +124,22 @@ export function resolveSessionFromEvent(event: H3Event): {
     }
   }
 
+  // восстановление пользователя по токену вида sess_<userId>_<timestamp> после перезапуска или refresh
+  if (sessionCookie.startsWith('sess_')) {
+    const parts = sessionCookie.split('_')
+    const tokenUserId = parts[1]
+    if (tokenUserId) {
+      const foundByToken = SERVER_USERS_DB.find(u => u.id === tokenUserId && u.isActive)
+      if (foundByToken) {
+        return {
+          authenticated: true,
+          expired: false,
+          user: toSessionUserDto(foundByToken)
+        }
+      }
+    }
+  }
+
   if (roleCookie && ['Client', 'Operator', 'Agent', 'Admin'].includes(roleCookie)) {
     const byRole = SERVER_USERS_DB.find(u => u.role === roleCookie && u.isActive)
     if (byRole) {
@@ -115,7 +151,7 @@ export function resolveSessionFromEvent(event: H3Event): {
     }
   }
 
-  // по умолчанию для локальной разработки активна сессия оператора анны кузнецовой
+  // по умолчанию для первого запуска до явного logout активен оператор анна кузнецова
   const defaultOperator = SERVER_USERS_DB.find(u => u.role === 'Operator' && u.isActive) || SERVER_USERS_DB[0]
   if (defaultOperator) {
     return {
@@ -134,6 +170,16 @@ export function resolveSessionFromEvent(event: H3Event): {
 
 // обязательная серверная проверка авторизации для защищённых операций
 export function requireAuthUser(event: H3Event): SessionUserDto {
+  const query = getQuery(event)
+  if (String(query?.simulateError || '') === '401') {
+    clearServerSession(event, true)
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Unauthorized',
+      message: 'Сессия истекла. Войдите снова, чтобы продолжить работу.'
+    })
+  }
+
   const resolved = resolveSessionFromEvent(event)
   if (!resolved.authenticated || !resolved.user) {
     throw createError({

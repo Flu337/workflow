@@ -30,6 +30,8 @@ declare global {
   const computed: typeof import('vue').computed
   const createError: typeof import('../../node_modules/nuxt/dist/app/composables/error').createError
   const createRequestInputSchema: typeof import('../../shared/utils/validation').createRequestInputSchema
+  const createSearchRaceGuard: typeof import('../../shared/utils/asyncGuards').createSearchRaceGuard
+  const createSubmissionLock: typeof import('../../shared/utils/asyncGuards').createSubmissionLock
   const createUseAsyncData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').createUseAsyncData
   const createUseFetch: typeof import('../../node_modules/nuxt/dist/app/composables/fetch').createUseFetch
   const customRef: typeof import('vue').customRef
@@ -245,6 +247,9 @@ declare global {
   export type { VueUnwrapStore, StoreRefs } from '../../app/utils/pinia'
   import('../../app/utils/pinia')
   // @ts-ignore
+  export type { SearchRaceGuard, SubmissionLock } from '../../shared/utils/asyncGuards'
+  import('../../shared/utils/asyncGuards')
+  // @ts-ignore
   export type { StatusTransitionValidationInput, StatusTransitionValidationResult } from '../../shared/utils/statusTransitions'
   import('../../shared/utils/statusTransitions')
   // @ts-ignore
@@ -290,6 +295,8 @@ declare module 'vue' {
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['createError']>
     readonly createRequestInputSchema: UnwrapRef<typeof import('../../shared/utils/validation')['createRequestInputSchema']>
+    readonly createSearchRaceGuard: UnwrapRef<typeof import('../../shared/utils/asyncGuards')['createSearchRaceGuard']>
+    readonly createSubmissionLock: UnwrapRef<typeof import('../../shared/utils/asyncGuards')['createSubmissionLock']>
     readonly createUseAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['createUseAsyncData']>
     readonly createUseFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/fetch')['createUseFetch']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>

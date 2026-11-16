@@ -8,6 +8,7 @@ import type {
 } from '../../../shared/types/workflow'
 import { normalizeRequestsListResponse } from '~/utils/normalizeRequests'
 import { useDebounce } from '~/composables/useDebounce'
+import { createSearchRaceGuard } from '../../../shared/utils/asyncGuards'
 import { usePreferencesStore } from '~/stores/preferences'
 import { useRequestUiStore } from '~/stores/requestUi'
 import { useAuthStore } from '~/stores/auth'
@@ -39,6 +40,8 @@ const {
 initFiltersFromRoute(route.query as Record<string, string | (string | null)[] | null | undefined>)
 
 const debouncedSearch = useDebounce(searchQuery, 300)
+const searchRaceGuard = createSearchRaceGuard()
+const latestSearchData = ref<RequestsListResponseDto | null>(null)
 
 const { data: usersDirectory } = await useFetch<UserDirectoryItemDto[]>('/api/users', {
   key: 'wf-users-directory',
@@ -75,8 +78,53 @@ const {
 } = await useFetch<RequestsListResponseDto>('/api/requests', {
   key: 'wf-requests-list',
   query: apiQuery,
-  watch: [apiQuery]
+  watch: false
 })
+
+// защита от гонки поисковых запросов с отменой устаревших ответов через abortcontroller и requestid
+watch(
+  apiQuery,
+  async (nextQuery) => {
+    const { requestId, signal } = searchRaceGuard.nextRequest()
+    try {
+      const fresh = await $fetch<RequestsListResponseDto>('/api/requests', {
+        query: nextQuery,
+        signal
+      })
+      if (searchRaceGuard.isLatest(requestId)) {
+        rawRequestsResponse.value = fresh
+        latestSearchData.value = fresh
+      }
+    } catch (err) {
+      if ((err as { name?: string })?.name === 'AbortError') {
+        return
+      }
+      const code =
+        (err as { statusCode?: number; status?: number })?.statusCode ||
+        (err as { statusCode?: number; status?: number })?.status
+      if (code === 401) {
+        await authStore.handleUnauthorizedError()
+        return
+      }
+      if (searchRaceGuard.isLatest(requestId)) {
+        await refreshRequests()
+      }
+    }
+  }
+)
+
+watch(
+  fetchError,
+  async (err) => {
+    const code =
+      (err as { statusCode?: number; status?: number } | null)?.statusCode ||
+      (err as { statusCode?: number; status?: number } | null)?.status
+    if (code === 401) {
+      await authStore.handleUnauthorizedError()
+    }
+  },
+  { immediate: true }
+)
 
 const normalizedList = computed(() => normalizeRequestsListResponse(rawRequestsResponse.value))
 
@@ -502,397 +550,4 @@ const handleResetAllFilters = () => {
   </div>
 </template>
 
-<style scoped>
-.soderzhanie {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 24px 64px;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
-.rabochii-den-pod-kontrolem,
-.zaiavki-state-heading,
-.moi-zaiavki {
-  align-self: stretch;
-  color: var(--color-text-primary, #E8E7EC);
-  font-family: "Montserrat", sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 36px;
-}
-
-.zaiavki-kotorye-trebuiut-vashego,
-.vse-obrashcheniia-v-odnom-meste,
-.naznachennye-vam-obrashcheniia {
-  align-self: stretch;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-}
-
-.soobshchenie-ob-izmenenii {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 24px;
-  justify-content: flex-start;
-  align-items: flex-start;
-  border-radius: 4px;
-  background: var(--color-bg-surface, #23204D);
-  border: 1px solid var(--color-border-default, #413E74);
-}
-
-.po-zaprosu-crm-naideno-1,
-.chast-dannykh-zaiavki-nedostupna-ostal,
-.prioritet-izmenion-na-vysokii,
-.plotnost-spiska-kompaktnaia {
-  align-self: stretch;
-  color: var(--color-text-primary, #E8E7EC);
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-}
-
-.izmenenie-ne-sokhraneno {
-  align-self: stretch;
-  color: var(--color-text-danger, #FF7994);
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-}
-
-.zaiavka-byla-izmenena-drugim {
-  align-self: stretch;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-}
-
-.zaiavki-zagolovok-i-fil-tr {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  padding: 0px;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.zaiavki-2 {
-  flex: 1 1 0;
-  color: var(--color-text-primary, #E8E7EC);
-  font-family: "Montserrat", sans-serif;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 28px;
-}
-
-.actions-and-demo-bar {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-
-.fil-try {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  padding: 0px;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
-.search-field {
-  flex: 1 1 0;
-  min-width: 220px;
-}
-
-.filter-field {
-  width: 185px;
-  flex-shrink: 0;
-}
-
-.sostoianie-spiska {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 40px 24px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 4px;
-  background: var(--color-bg-surface, #23204D);
-  border: 1px solid var(--color-border-default, #413E74);
-}
-
-.zagruzhaem-zaiavki {
-  align-self: stretch;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  text-align: center;
-}
-
-.skeleton-row {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  padding: 16px;
-  justify-content: flex-start;
-  align-items: flex-start;
-  background: var(--color-bg-subtle, #2F2A6A);
-  border-radius: 2px;
-}
-
-.skeleton-text {
-  color: var(--color-text-disabled, #8E88A8);
-  font-family: "Montserrat", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  white-space: pre;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.nichego-ne-naideno,
-.zaiavok-poka-net,
-.ne-udalos-zagruzit-zaiavki {
-  align-self: stretch;
-  color: var(--color-text-primary, #E8E7EC);
-  font-family: "Montserrat", sans-serif;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 28px;
-  text-align: center;
-}
-
-.poprobuite-izmenit-zapros-ili-sbrosit,
-.obrashcheniia-poiaviatsia-zdes-posle,
-.servis-vremenno-nedostupen-poprobuite {
-  align-self: stretch;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  text-align: center;
-}
-
-.spisok-zaiavok {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
-  padding: 0px;
-  justify-content: flex-start;
-  align-items: flex-start;
-  border-radius: 4px;
-  background: var(--color-bg-surface, #23204D);
-  border: 1px solid var(--color-border-default, #413E74);
-  overflow: hidden;
-}
-
-.zagolovki-tablitsy {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  padding: 16px;
-  justify-content: flex-start;
-  align-items: flex-start;
-  background: var(--color-bg-subtle, #2F2A6A);
-}
-
-.nomer {
-  width: 62px;
-  flex-shrink: 0;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-}
-
-.zaiavka {
-  flex: 1 1 0;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-}
-
-.klient {
-  width: 140px;
-  flex-shrink: 0;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-}
-
-.ispolnitel {
-  width: 110px;
-  flex-shrink: 0;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-}
-
-.status {
-  width: 120px;
-  flex-shrink: 0;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-}
-
-.prioritet {
-  width: 130px;
-  flex-shrink: 0;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-}
-
-.wf-gpt-request-row {
-  align-self: stretch;
-  width: 100%;
-}
-
-.paginatsiia {
-  align-self: stretch;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  padding: 0px;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.pokazano-1-12-iz-24 {
-  flex: 1 1 0;
-  color: var(--color-text-secondary, #B9B3D4);
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 16px;
-}
-
-@media (max-width: 1023px) {
-  .soderzhanie {
-    padding: 24px 32px;
-  }
-
-  .fil-try {
-    flex-wrap: wrap;
-  }
-
-  .search-field {
-    width: calc(50% - 6px);
-    flex: 1 1 calc(50% - 6px);
-  }
-
-  .filter-field {
-    width: calc(50% - 6px);
-    flex: 1 1 calc(50% - 6px);
-  }
-
-  .klient,
-  .ispolnitel {
-    display: none;
-  }
-}
-
-@media (max-width: 639px) {
-  .soderzhanie {
-    padding: 24px 16px;
-  }
-
-  .rabochii-den-pod-kontrolem,
-  .zaiavki-state-heading,
-  .moi-zaiavki {
-    font-size: 24px;
-    line-height: 31px;
-  }
-
-  .actions-and-demo-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .octagon-button,
-  .octagon-button :deep(.octagon-btn) {
-    align-self: stretch;
-    width: 100%;
-  }
-
-  .fil-try {
-    flex-direction: column;
-  }
-
-  .search-field,
-  .filter-field {
-    width: 100%;
-    flex: 1 1 auto;
-  }
-
-  .zagolovki-tablitsy {
-    display: none;
-  }
-
-  .paginatsiia {
-    flex-wrap: wrap;
-  }
-
-  .pokazano-1-12-iz-24 {
-    width: 100%;
-    flex: 0 0 100%;
-  }
-
-  .sostoianie-spiska {
-    padding: 32px 16px;
-  }
-
-  .skeleton-text {
-    white-space: nowrap;
-  }
-}
-</style>
+<style scoped src="~/assets/css/pages/requests/index.css"></style>

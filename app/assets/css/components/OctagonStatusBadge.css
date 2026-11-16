@@ -1,0 +1,94 @@
+.octagon-status-badge {
+  display: inline-flex;
+  flex-direction: row;
+  gap: 6px;
+  padding: 4px 10px;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-text {
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.status-new {
+  background: var(--status-new-bg, #353060);
+}
+.status-new .dot {
+  background: var(--status-new-fg, #BBB6FF);
+}
+.status-new .status-text {
+  color: var(--status-new-fg, #BBB6FF);
+}
+
+.status-assigned {
+  background: var(--status-assigned-bg, #203F57);
+}
+.status-assigned .dot {
+  background: var(--status-assigned-fg, #79CEE8);
+}
+.status-assigned .status-text {
+  color: var(--status-assigned-fg, #79CEE8);
+}
+
+.status-in-progress {
+  background: var(--status-in-progress-bg, #443955);
+}
+.status-in-progress .dot {
+  background: var(--status-in-progress-fg, #FFD482);
+}
+.status-in-progress .status-text {
+  color: var(--status-in-progress-fg, #FFD482);
+}
+
+.status-waiting {
+  background: var(--status-waiting-bg, #37324E);
+}
+.status-waiting .dot {
+  background: var(--status-waiting-fg, #C8C3DE);
+}
+.status-waiting .status-text {
+  color: var(--status-waiting-fg, #C8C3DE);
+}
+
+.status-escalated {
+  background: var(--status-escalated-bg, #492940);
+}
+.status-escalated .dot {
+  background: var(--status-escalated-fg, #FF91AE);
+}
+.status-escalated .status-text {
+  color: var(--status-escalated-fg, #FF91AE);
+}
+
+.status-resolved {
+  background: var(--status-resolved-bg, #214544);
+}
+.status-resolved .dot {
+  background: var(--status-resolved-fg, #80E1B3);
+}
+.status-resolved .status-text {
+  color: var(--status-resolved-fg, #80E1B3);
+}
+
+.status-closed {
+  background: var(--status-closed-bg, #37324E);
+}
+.status-closed .dot {
+  background: var(--status-closed-fg, #BFB9D6);
+}
+.status-closed .status-text {
+  color: var(--status-closed-fg, #BFB9D6);
+}

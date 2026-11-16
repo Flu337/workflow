@@ -7,7 +7,13 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "typecheck": "vue-tsc --noEmit && tsc -p .nuxt/tsconfig.server.json --noEmit",
+    "lint": "vue-tsc --noEmit && tsc -p .nuxt/tsconfig.server.json --noEmit",
+    "test": "jiti tests/unit/businessRules.test.ts && jiti tests/integration/regressionBugs.test.ts",
+    "test:unit": "jiti tests/unit/businessRules.test.ts",
+    "test:integration": "jiti tests/integration/regressionBugs.test.ts",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "nuxt": "^4.0.0",

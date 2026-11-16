@@ -23,26 +23,4 @@ const emit = defineEmits<{
   </button>
 </template>
 
-<style scoped>
-.octagon-icon-x-btn {
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  border: 1px solid transparent;
-  background: transparent;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.octagon-icon-x-btn:hover {
-  background: var(--color-bg-subtle, #2F2A6A);
-}
-
-.octagon-icon-x-btn:focus-visible {
-  border-color: #635BFF;
-  outline: none;
-}
-</style>
+<style scoped src="~/assets/css/components/OctagonIconX.css"></style>

@@ -102,43 +102,4 @@ const label = computed(() => PRIORITY_LABELS[props.priority] || PRIORITY_LABELS.
   </div>
 </template>
 
-<style scoped>
-.octagon-priority-badge {
-  display: inline-flex;
-  flex-direction: row;
-  gap: 6px;
-  padding: 0;
-  justify-content: flex-start;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.priority-icon {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
-
-.priority-text {
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 16px;
-}
-
-.priority-critical .priority-text {
-  color: var(--priority-critical, #FF91AE);
-}
-
-.priority-high .priority-text {
-  color: var(--priority-high, #FFD482);
-}
-
-.priority-normal .priority-text {
-  color: var(--priority-normal, #BBB6FF);
-}
-
-.priority-low .priority-text {
-  color: var(--priority-low, #B9B3D4);
-}
-</style>
+<style scoped src="~/assets/css/components/OctagonPriorityBadge.css"></style>

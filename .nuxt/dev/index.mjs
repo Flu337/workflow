@@ -3,7 +3,7 @@ import { Server } from 'node:http';
 import { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { isMainThread, parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, createError, sendRedirect, proxyRequest, getRequestProtocol, getRequestHost, getRequestURL, readRawBody, getRequestHeader, isError, setResponseHeaders, setResponseStatus, send, setResponseHeader, appendResponseHeader, getResponseHeader, getRequestHeaders, removeResponseHeader, getCookie, setCookie, writeEarlyHints, getQuery as getQuery$1, getRequestWebStream, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, readBody, getRequestIP, toWebRequest } from 'file://C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/h3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, createError, sendRedirect, proxyRequest, getRequestProtocol, getRequestHost, getRequestURL, readRawBody, getRequestHeader, isError, setResponseHeaders, setResponseStatus, send, setResponseHeader, appendResponseHeader, getResponseHeader, getRequestHeaders, removeResponseHeader, getCookie, setCookie, getQuery as getQuery$1, writeEarlyHints, getRequestWebStream, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, readBody, getRequestIP, toWebRequest } from 'file://C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/h3/dist/index.mjs';
 import { escapeHtml } from 'file://C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@vue/shared/dist/shared.cjs.js';
 import viteNodeEntry_mjs from 'file:///C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/vite-builder/dist/vite-node-entry.mjs';
 import { viteNodeFetch } from 'file:///C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/vite-builder/dist/vite-node.mjs';
@@ -36,6 +36,7 @@ import { getContext } from 'file://C:/Users/5LU/Desktop/workflow-nuxt4/node_modu
 import { captureRawStackTrace, parseRawStackTrace } from 'file://C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/errx/dist/index.mjs';
 import { isRef, toValue, isVNode } from 'file://C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/vue/index.mjs';
 import _z2MKpHloqBkP_Kl12qLKcJZnogvzyAPQEro_a0utvr8 from 'file://C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/cli/runtime/dev-close-sockets.mjs';
+import dc from 'node:diagnostics_channel';
 import { formatWithOptions } from 'node:util';
 import _Z4Vm0BJMJeyU_KFYzGBgSOBoZ4JOQn4jYmko_KtDwU from 'file:///C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/vite-builder/dist/ssr-sourcemap.mjs';
 import _LB91z6Ht2T49ncvhFWMKIA26eT4mdBc7tIFl06yLKKs from 'file:///C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/vite-builder/dist/vite-node-warmup.mjs';
@@ -54,18 +55,18 @@ for (const asset of serverAssets) {
   assets$1.mount(asset.baseName, unstorage_47drivers_47fs({ base: asset.dir, ignore: (asset?.ignore || []) }));
 }
 
-const storage = createStorage({});
+const storage$1 = createStorage({});
 
-storage.mount('/assets', assets$1);
+storage$1.mount('/assets', assets$1);
 
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/5LU/Desktop/workflow-nuxt4","ignore":["**/node_modules","**/*.stories.js","**/*.stories.cts","**/*.stories.mts","**/*.stories.ts","**/*.stories.jsx","**/*.stories.tsx","**/*.spec.js","**/*.spec.cts","**/*.spec.mts","**/*.spec.ts","**/*.spec.jsx","**/*.spec.tsx","**/*.test.js","**/*.test.cts","**/*.test.mts","**/*.test.ts","**/*.test.jsx","**/*.test.tsx","**/*.d.cts","**/*.d.mts","**/*.d.ts","**/*.d.vue.cts","**/*.d.vue.mts","**/*.d.vue.ts","**/.pnpm-store","**/.vercel","**/.netlify","**/.wrangler","**/.output","**/.git","**/.cache","**/.data","**/.direnv","C:/Users/5LU/Desktop/workflow-nuxt4/vendor","**/node-compile-cache","**/test-results","**/*.sock","C:/Users/5LU/Desktop/workflow-nuxt4/.nuxt/analyze","**/.nuxt","**/-*.*"]}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/5LU/Desktop/workflow-nuxt4/server","ignore":["**/node_modules","**/*.stories.js","**/*.stories.cts","**/*.stories.mts","**/*.stories.ts","**/*.stories.jsx","**/*.stories.tsx","**/*.spec.js","**/*.spec.cts","**/*.spec.mts","**/*.spec.ts","**/*.spec.jsx","**/*.spec.tsx","**/*.test.js","**/*.test.cts","**/*.test.mts","**/*.test.ts","**/*.test.jsx","**/*.test.tsx","**/*.d.cts","**/*.d.mts","**/*.d.ts","**/*.d.vue.cts","**/*.d.vue.mts","**/*.d.vue.ts","**/.pnpm-store","**/.vercel","**/.netlify","**/.wrangler","**/.output","**/.git","**/.cache","**/.data","**/.direnv","**/node-compile-cache","**/test-results","**/*.sock","**/-*.*"]}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/5LU/Desktop/workflow-nuxt4/.nuxt"}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/5LU/Desktop/workflow-nuxt4/.nuxt/cache"}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"C:/Users/5LU/Desktop/workflow-nuxt4/.data/kv"}));
+storage$1.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/5LU/Desktop/workflow-nuxt4","ignore":["**/node_modules","**/*.stories.js","**/*.stories.cts","**/*.stories.mts","**/*.stories.ts","**/*.stories.jsx","**/*.stories.tsx","**/*.spec.js","**/*.spec.cts","**/*.spec.mts","**/*.spec.ts","**/*.spec.jsx","**/*.spec.tsx","**/*.test.js","**/*.test.cts","**/*.test.mts","**/*.test.ts","**/*.test.jsx","**/*.test.tsx","**/*.d.cts","**/*.d.mts","**/*.d.ts","**/*.d.vue.cts","**/*.d.vue.mts","**/*.d.vue.ts","**/.pnpm-store","**/.vercel","**/.netlify","**/.wrangler","**/.output","**/.git","**/.cache","**/.data","**/.direnv","C:/Users/5LU/Desktop/workflow-nuxt4/vendor","**/node-compile-cache","**/test-results","**/*.sock","C:/Users/5LU/Desktop/workflow-nuxt4/.nuxt/analyze","**/.nuxt","**/-*.*"]}));
+storage$1.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/5LU/Desktop/workflow-nuxt4/server","ignore":["**/node_modules","**/*.stories.js","**/*.stories.cts","**/*.stories.mts","**/*.stories.ts","**/*.stories.jsx","**/*.stories.tsx","**/*.spec.js","**/*.spec.cts","**/*.spec.mts","**/*.spec.ts","**/*.spec.jsx","**/*.spec.tsx","**/*.test.js","**/*.test.cts","**/*.test.mts","**/*.test.ts","**/*.test.jsx","**/*.test.tsx","**/*.d.cts","**/*.d.mts","**/*.d.ts","**/*.d.vue.cts","**/*.d.vue.mts","**/*.d.vue.ts","**/.pnpm-store","**/.vercel","**/.netlify","**/.wrangler","**/.output","**/.git","**/.cache","**/.data","**/.direnv","**/node-compile-cache","**/test-results","**/*.sock","**/-*.*"]}));
+storage$1.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/5LU/Desktop/workflow-nuxt4/.nuxt"}));
+storage$1.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/5LU/Desktop/workflow-nuxt4/.nuxt/cache"}));
+storage$1.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"C:/Users/5LU/Desktop/workflow-nuxt4/.data/kv"}));
 
 function useStorage(base = "") {
-  return base ? prefixStorage(storage, base) : storage;
+  return base ? prefixStorage(storage$1, base) : storage$1;
 }
 
 const Hasher = /* @__PURE__ */ (() => {
@@ -1326,7 +1327,7 @@ const renderSSRHeadOptions = {"omitLineBreaks":true};
 
 const NUXT_PRERENDER_NO_SSR_ROUTES = ["/index.html","/200.html","/404.html"];
 const NUXT_NO_SCRIPTS_PATTERNS = [];
-const NUXT_PAGE_PATTERNS = ["/requests/:id","/dashboard","/login","/profile","/requests","/"];
+const NUXT_PAGE_PATTERNS = ["/requests/:id","/dashboard","/login","/profile","/register","/requests","/"];
 const NUXT_SSR_STREAMING = false;
 const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"name":"description","content":"WorkFlow — от первого обращения до решения: управляйте заявками, назначайте исполнителей и держите сроки под контролем."}],"link":[{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":""},{"rel":"stylesheet","href":"https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap"}],"style":[],"script":[],"noscript":[],"title":"WorkFlow — система управления заявками","htmlAttrs":{"lang":"ru"}};
 const appRootTag = "div";
@@ -1884,6 +1885,313 @@ function onConsoleLog(callback) {
 	consola$1.wrapConsole();
 }
 
+/**
+ * Attribute the app's logs, and the spans it publishes on `diagnostics_channel`,
+ * to the request that caused them.
+ *
+ * Nitro runs the app in a worker thread, so the CLI's own request context cannot
+ * reach it: `AsyncLocalStorage` does not cross threads, and neither `globalThis`
+ * nor `process` is the same object either side. This runs on the app's side of
+ * that boundary, opening its own context around the handler and reporting from
+ * inside it. Only the request identity crosses, as a header, and only the
+ * finished log or span comes back, on a `BroadcastChannel`.
+ *
+ * Everything here is best-effort: a dev server must never fail because a log
+ * could not be attributed.
+ */
+const CHANNEL = 'nuxt:dev:log';
+const SPAN_CHANNEL = 'nuxt:dev:span';
+/** Left on the request: Nuxt reads it to attribute the error reports it publishes. */
+const HEADER = 'x-nuxt-dev-request-id';
+const LABEL_HEADER = 'x-nuxt-dev-request-label';
+
+const storage = new AsyncLocalStorage();
+
+let spanChannel;
+
+function _BFi6FyppE3pLu9FLkic7SsozW6uk6oK_Uc2o01Cz4 (nitroApp) {
+  try {
+    trackRequests(nitroApp);
+    reportLogs();
+    trackHooks(nitroApp);
+    subscribeSpans();
+  }
+  catch {}
+}
+
+function now() {
+  return performance.timeOrigin + performance.now()
+}
+
+function postSpan(request, kind, name, start, extra) {
+  try {
+    if (!spanChannel) {
+      spanChannel = new BroadcastChannel(SPAN_CHANNEL);
+      spanChannel.unref?.();
+    }
+    spanChannel.postMessage({ requestId: request.id, kind, name, start, duration: now() - start, ...extra });
+  }
+  catch {}
+}
+
+/** A module path as a reader would name it: from its package, or from the project. */
+function shortenPath(path) {
+  if (!path) {
+    return undefined
+  }
+  const file = String(path).replace(/^@(?=\/)/, '');
+  const packaged = file.lastIndexOf('/node_modules/');
+  if (packaged !== -1) {
+    return file.slice(packaged + '/node_modules/'.length)
+  }
+  const root = `${process$1.cwd()}/`;
+  return file.startsWith(root) ? file.slice(root.length) : file
+}
+
+function pathOf(url) {
+  try {
+    const { pathname, search } = new URL(url, 'http://localhost');
+    return `${pathname}${search}`
+  }
+  catch {
+    return String(url ?? '/')
+  }
+}
+
+/**
+ * `TracingChannel`s published by Nuxt, h3 and Nitro, and how each span is shown.
+ * All of them are published with `tracePromise`, so a span ends on `asyncEnd`
+ * or `error`.
+ */
+const TRACING_CHANNELS = {
+  'nuxt.plugin': context => ['plugin', context.plugin?.name || 'anonymous'],
+  'nuxt.data': context => ['data', context.functionName ? `${context.functionName}(${context.key})` : String(context.key)],
+  'nuxt.render': context => ['render', context.streaming ? 'stream' : 'renderToString'],
+  'nuxt.island': context => ['island', context.islandContext?.name || 'island'],
+  'nuxt.hook': context => ['hook', String(context.name ?? context.hook?.name)],
+  'nuxt.middleware': context => ['middleware', context.middleware?.name || shortenPath(context.middleware?.path) || 'anonymous'],
+  'h3.request': (context) => {
+    const request = context.event?.req ?? context.event?.node?.req;
+    const label = `${request?.method || 'GET'} ${pathOf(request?.url)}`;
+    return [context.type === 'middleware' ? 'middleware' : 'route', label]
+  },
+};
+
+/** Undici's fetch lifecycle, published as plain channels rather than a `TracingChannel`. */
+const UNDICI_CHANNELS = ['undici:request:create', 'undici:request:headers', 'undici:request:trailers', 'undici:request:error'];
+
+const SUBSCRIPTION = Symbol.for('nuxt:dev:span:subscription');
+const STARTED = Symbol('nuxt:dev:span:started');
+
+/**
+ * Report spans published while serving a request, against that request.
+ *
+ * Subscriptions are process-wide, so any left by an earlier copy of this module
+ * are dropped first.
+ */
+function subscribeSpans() {
+  globalThis[SUBSCRIPTION]?.();
+  const unsubscribers = [];
+
+  for (const [name, describe] of Object.entries(TRACING_CHANNELS)) {
+    const handlers = {
+      start(context) {
+        const request = storage.getStore();
+        if (request) {
+          context[STARTED] = { request, start: now() };
+        }
+      },
+      asyncEnd: context => finishTraced(context, describe),
+      error: context => finishTraced(context, describe, true),
+    };
+    const channel = dc.tracingChannel(name);
+    channel.subscribe(handlers);
+    unsubscribers.push(() => channel.unsubscribe(handlers));
+  }
+
+  const fetches = new WeakMap();
+  const onFetch = {
+    'undici:request:create': ({ request }) => {
+      const inflight = storage.getStore();
+      if (inflight) {
+        fetches.set(request, { request: inflight, start: now() });
+      }
+    },
+    'undici:request:headers': ({ request, response }) => {
+      const started = fetches.get(request);
+      if (started) {
+        started.status = response?.statusCode;
+      }
+    },
+    'undici:request:trailers': ({ request }) => finishFetch(fetches, request),
+    'undici:request:error': ({ request }) => finishFetch(fetches, request, true),
+  };
+  for (const name of UNDICI_CHANNELS) {
+    const listener = (message) => {
+      try {
+        onFetch[name](message);
+      }
+      catch {}
+    };
+    dc.subscribe(name, listener);
+    unsubscribers.push(() => dc.unsubscribe(name, listener));
+  }
+
+  globalThis[SUBSCRIPTION] = () => {
+    for (const unsubscribe of unsubscribers) {
+      unsubscribe();
+    }
+  };
+}
+
+function finishTraced(context, describe, error) {
+  const started = context[STARTED];
+  if (!started) {
+    return
+  }
+  context[STARTED] = undefined;
+  try {
+    const [kind, name] = describe(context);
+    const status = context.event?.res?.status ?? context.event?.node?.res?.statusCode;
+    postSpan(started.request, kind, name, started.start, {
+      ...kind === 'route' && typeof status === 'number' ? { status } : {},
+      ...error ? { error: true } : {},
+    });
+  }
+  catch {}
+}
+
+function finishFetch(fetches, request, error) {
+  const started = fetches.get(request);
+  if (!started) {
+    return
+  }
+  fetches.delete(request);
+  const url = `${request.origin ?? ''}${request.path ?? ''}`;
+  postSpan(started.request, 'fetch', `${request.method || 'GET'} ${url}`, started.start, {
+    ...typeof started.status === 'number' ? { status: started.status } : {},
+    ...error ? { error: true } : {},
+  });
+}
+
+/**
+ * Time the Nitro hooks the app has listeners for. Nitro publishes no channel for
+ * its hooks, so these are timed through hookable directly.
+ */
+function trackHooks(nitroApp) {
+  const hooks = nitroApp?.hooks;
+  if (typeof hooks?.beforeEach !== 'function' || typeof hooks?.afterEach !== 'function') {
+    return
+  }
+  hooks.beforeEach((event) => {
+    const request = storage.getStore();
+    if (request && event.context && hooks._hooks?.[event.name]?.length) {
+      event.context[STARTED] = { request, start: now() };
+    }
+  });
+  hooks.afterEach((event) => {
+    const started = event.context?.[STARTED];
+    if (started) {
+      postSpan(started.request, 'hook', event.name, started.start);
+    }
+  });
+}
+
+function parseRequest(id, label) {
+  if (!id) {
+    return undefined
+  }
+  let decoded = label || '';
+  try {
+    decoded = decodeURIComponent(decoded);
+  }
+  catch {}
+  return { id, label: decoded }
+}
+
+function withRequest(read, remove, serve) {
+  let request;
+  try {
+    request = parseRequest(read(HEADER), read(LABEL_HEADER));
+    if (request) {
+      remove(LABEL_HEADER);
+    }
+  }
+  catch {}
+  return request ? storage.run(request, serve) : serve()
+}
+
+function trackRequests(nitroApp) {
+  const h3App = nitroApp?.h3App;
+  if (typeof h3App?.handler === 'function') {
+    const handler = h3App.handler;
+    h3App.handler = Object.assign(function (event) {
+      const headers = event?.node?.req?.headers;
+      return withRequest(name => headers?.[name], name => delete headers[name], () => handler.call(this, event))
+    }, handler);
+    return
+  }
+
+  // Every nitro v3 entry, dev and deployed, serves through `nitroApp.fetch`.
+  if (typeof nitroApp?.fetch === 'function') {
+    const fetch = nitroApp.fetch.bind(nitroApp);
+    nitroApp.fetch = (req, ...args) => withRequest(name => req?.headers?.get?.(name), name => req.headers.delete(name), () => fetch(req, ...args));
+  }
+}
+
+/** `console` methods worth reporting, and the consola level each maps to. */
+const CONSOLE_LEVELS = { error: 0, warn: 1, log: 3, info: 3, debug: 4, trace: 5 };
+
+function reportLogs() {
+  const channel = new BroadcastChannel(CHANNEL);
+  channel.unref();
+
+  const post = (level, logType, tag, args) => {
+    try {
+      const request = storage.getStore();
+      channel.postMessage({
+        level,
+        logType,
+        tag: tag || undefined,
+        message: formatWithOptions({ colors: false }, ...args),
+        origin: request ? 'runtime' : 'build',
+        request: request?.label,
+        requestId: request?.id,
+      });
+    }
+    catch {}
+  };
+
+  consola$1.addReporter({
+    log(logObj) {
+      post(logObj.level, logObj.type, logObj.tag, logObj.args);
+    },
+  });
+
+  // `consola.wrapConsole()` replaces each console method with `raw` off the
+  // instance that wrapped it, so this says whether the app logs through the
+  // instance above. When it does not, the app's logs never reach the reporter
+  // and `console` is the only way to see them.
+  // eslint-disable-next-line no-console
+  if (console.log !== consola$1.log?.raw) {
+    wrapConsole(post);
+  }
+}
+
+/* eslint-disable no-console */
+function wrapConsole(post) {
+  for (const [type, level] of Object.entries(CONSOLE_LEVELS)) {
+    const original = console[type];
+    if (typeof original !== 'function') {
+      continue
+    }
+    console[type] = function (...args) {
+      post(level, type, undefined, args);
+      return original.apply(this, args)
+    };
+  }
+}
+
 // src/runtime/server/dev-error/index.ts
 /** Base path the dev server owning the channel serves it at. */
 const ERROR_CHANNEL_ENV$1 = "NUXT_DEV_ERROR_CHANNEL";
@@ -2337,27 +2645,13 @@ const plugins = [
 route_rules_default,
 dev_server_logs_default,
 _z2MKpHloqBkP_Kl12qLKcJZnogvzyAPQEro_a0utvr8,
+_BFi6FyppE3pLu9FLkic7SsozW6uk6oK_Uc2o01Cz4,
 dev_errors_default,
 _Z4Vm0BJMJeyU_KFYzGBgSOBoZ4JOQn4jYmko_KtDwU,
 _LB91z6Ht2T49ncvhFWMKIA26eT4mdBc7tIFl06yLKKs
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"3dd83-oKJOL157ttQnshuJ0ec5X5DnIxY\"",
-    "mtime": "2026-11-15T15:18:33.663Z",
-    "size": 253315,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"fb042-7yY2uwFpokW4BHK2ZSNdHyfSuq4\"",
-    "mtime": "2026-11-15T15:18:33.667Z",
-    "size": 1028162,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -3251,6 +3545,15 @@ const SERVER_CATEGORIES_DB = [
 ];
 
 const SERVER_SESSIONS = /* @__PURE__ */ new Map();
+const PROCESSED_COMMENT_KEYS = /* @__PURE__ */ new Map();
+function isDuplicateCommentKey(key) {
+  if (!key) return null;
+  return PROCESSED_COMMENT_KEYS.get(key) || null;
+}
+function registerCommentKey(key, commentId) {
+  if (!key) return;
+  PROCESSED_COMMENT_KEYS.set(key, commentId);
+}
 function toSessionUserDto(user) {
   return {
     id: user.id,
@@ -3296,6 +3599,12 @@ function clearServerSession(event, markExpired = false) {
     sameSite: "lax",
     maxAge: 60 * 60 * 24
   });
+  setCookie(event, "wf_role", "", {
+    path: "/",
+    httpOnly: false,
+    sameSite: "lax",
+    maxAge: 0
+  });
 }
 function resolveSessionFromEvent(event) {
   const sessionCookie = getCookie(event, "wf_session") || "";
@@ -3333,6 +3642,20 @@ function resolveSessionFromEvent(event) {
       };
     }
   }
+  if (sessionCookie.startsWith("sess_")) {
+    const parts = sessionCookie.split("_");
+    const tokenUserId = parts[1];
+    if (tokenUserId) {
+      const foundByToken = SERVER_USERS_DB.find((u) => u.id === tokenUserId && u.isActive);
+      if (foundByToken) {
+        return {
+          authenticated: true,
+          expired: false,
+          user: toSessionUserDto(foundByToken)
+        };
+      }
+    }
+  }
   if (roleCookie && ["Client", "Operator", "Agent", "Admin"].includes(roleCookie)) {
     const byRole = SERVER_USERS_DB.find((u) => u.role === roleCookie && u.isActive);
     if (byRole) {
@@ -3358,6 +3681,15 @@ function resolveSessionFromEvent(event) {
   };
 }
 function requireAuthUser(event) {
+  const query = getQuery$1(event);
+  if (String((query == null ? void 0 : query.simulateError) || "") === "401") {
+    clearServerSession(event, true);
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+      message: "\u0421\u0435\u0441\u0441\u0438\u044F \u0438\u0441\u0442\u0435\u043A\u043B\u0430. \u0412\u043E\u0439\u0434\u0438\u0442\u0435 \u0441\u043D\u043E\u0432\u0430, \u0447\u0442\u043E\u0431\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u0443."
+    });
+  }
   const resolved = resolveSessionFromEvent(event);
   if (!resolved.authenticated || !resolved.user) {
     throw createError({
@@ -3505,6 +3837,22 @@ function toInputValue(tag) {
 	if (tag.textContent !== void 0) value.textContent = tag.textContent;
 	for (const key of TAG_CONFIG_KEYS) if (tag[key] !== void 0) value[key] = tag[key];
 	return value;
+}
+
+// ../nuxt/src/app/internal/tracing.ts
+let _channels$1;
+function getChannel$1(name) {
+	_channels$1 ??= {};
+	if (name in _channels$1) return _channels$1[name];
+	const dc = globalThis.process?.getBuiltinModule?.("node:diagnostics_channel");
+	const channel = dc?.tracingChannel ? dc.tracingChannel(name) : null;
+	_channels$1[name] = channel;
+	return channel;
+}
+function traceAsync$1(name, context, fn) {
+	const channel = getChannel$1(name);
+	if (!channel || channel.hasSubscribers === false) return fn();
+	return channel.tracePromise(() => Promise.resolve(fn()), context);
 }
 
 function buildAssetsDir() {
@@ -3998,7 +4346,11 @@ async function renderIsland(event) {
 		url: islandContext.url
 	};
 	const renderer = await rendererInstance.getSSRRenderer();
-	const renderResult = await (renderer.renderToString(ssrContext)).catch(async (err) => {
+	const renderResult = await (traceAsync$1("nuxt.island", {
+		event,
+		ssrContext,
+		islandContext
+	}, () => renderer.renderToString(ssrContext)) ).catch(async (err) => {
 		if (ssrContext["~renderResponse"] && err?.message === "skipping render") return {};
 		await ssrContext.nuxt?.hooks.callHook("app:error", err);
 		throw err;
@@ -4665,6 +5017,9 @@ const createRequestInputSchema = createSchema((raw) => {
   if (!title) {
     issues.push({ field: "title", message: "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0437\u0430\u044F\u0432\u043A\u0438." });
   }
+  if (!description) {
+    issues.push({ field: "description", message: "\u041E\u043F\u0438\u0448\u0438\u0442\u0435 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0443." });
+  }
   if (!VALID_PRIORITIES.includes(priorityRaw)) {
     issues.push({ field: "priority", message: "\u041D\u0435\u043A\u043E\u0440\u0440\u0435\u043A\u0442\u043D\u044B\u0439 \u043F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\u0442 \u0437\u0430\u044F\u0432\u043A\u0438." });
   }
@@ -4675,8 +5030,9 @@ const createRequestInputSchema = createSchema((raw) => {
       customer,
       category,
       priority: priorityRaw,
-      description: description || "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u044B \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E \u043F\u0440\u0438 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u0438 \u0437\u0430\u044F\u0432\u043A\u0438.",
-      authorName
+      description,
+      authorName,
+      simulateError: raw.simulateError === "401" || raw.simulateError === "409" || raw.simulateError === "500" ? raw.simulateError : ""
     }
   };
 });
@@ -4719,6 +5075,7 @@ const addCommentInputSchema = createSchema((raw) => {
       requestId: typeof raw.requestId === "string" ? raw.requestId.trim() : void 0,
       author: typeof raw.author === "string" ? raw.author.trim() : void 0,
       text,
+      idempotencyKey: typeof raw.idempotencyKey === "string" && raw.idempotencyKey.trim() ? raw.idempotencyKey.trim() : void 0,
       simulateError: raw.simulateError === "500" ? "500" : ""
     }
   };
@@ -4926,9 +5283,17 @@ function canUserCreateRequest(role) {
 
 const index_post$2 = defineEventHandler(async (event) => {
   var _a;
-  const user = requireAuthUser(event);
   const rawBody = await readBody(event);
-  await new Promise((resolve) => setTimeout(resolve, 350));
+  if ((rawBody == null ? void 0 : rawBody.simulateError) === "401") {
+    clearServerSession(event, true);
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+      message: "\u0421\u0435\u0441\u0441\u0438\u044F \u0438\u0441\u0442\u0435\u043A\u043B\u0430. \u0412\u043E\u0439\u0434\u0438\u0442\u0435 \u0441\u043D\u043E\u0432\u0430, \u0447\u0442\u043E\u0431\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u0443."
+    });
+  }
+  const user = requireAuthUser(event);
+  await new Promise((resolve) => setTimeout(resolve, 250));
   if ((rawBody == null ? void 0 : rawBody.simulateError) === "500") {
     throw createError({
       statusCode: 500,
@@ -4962,6 +5327,17 @@ const index_post$2 = defineEventHandler(async (event) => {
       message: "\u0412\u044B \u043D\u0435 \u043C\u043E\u0436\u0435\u0442\u0435 \u043E\u0441\u0442\u0430\u0432\u043B\u044F\u0442\u044C \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0438 \u043A \u0447\u0443\u0436\u043E\u0439 \u0437\u0430\u044F\u0432\u043A\u0435."
     });
   }
+  const existingCommentId = isDuplicateCommentKey(parsed.data.idempotencyKey);
+  if (existingCommentId && found.comments) {
+    const existing = found.comments.find((c) => c.id === existingCommentId);
+    if (existing) {
+      return {
+        item: found,
+        comment: existing,
+        message: "\u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D"
+      };
+    }
+  }
   const author = ((_a = parsed.data.author) == null ? void 0 : _a.trim()) || user.name;
   const now = /* @__PURE__ */ new Date();
   const hh = String(now.getHours()).padStart(2, "0");
@@ -4975,6 +5351,7 @@ const index_post$2 = defineEventHandler(async (event) => {
     time: timeStr,
     text: parsed.data.text
   };
+  registerCommentKey(parsed.data.idempotencyKey, newComment.id);
   if (!found.comments) {
     found.comments = [];
   }
@@ -5354,11 +5731,19 @@ const _id__patch$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProper
 
 const comments_post = defineEventHandler(async (event) => {
   var _a;
+  const rawBody = await readBody(event);
+  if ((rawBody == null ? void 0 : rawBody.simulateError) === "401") {
+    clearServerSession(event, true);
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+      message: "\u0421\u0435\u0441\u0441\u0438\u044F \u0438\u0441\u0442\u0435\u043A\u043B\u0430. \u0412\u043E\u0439\u0434\u0438\u0442\u0435 \u0441\u043D\u043E\u0432\u0430, \u0447\u0442\u043E\u0431\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u0443."
+    });
+  }
   const user = requireAuthUser(event);
   const rawId = getRouterParam(event, "id") || "";
   const cleanId = rawId.replace(/^#/, "");
-  const rawBody = await readBody(event);
-  await new Promise((resolve) => setTimeout(resolve, 350));
+  await new Promise((resolve) => setTimeout(resolve, 250));
   if ((rawBody == null ? void 0 : rawBody.simulateError) === "500") {
     throw createError({
       statusCode: 500,
@@ -5391,6 +5776,17 @@ const comments_post = defineEventHandler(async (event) => {
       message: "\u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044E \u0447\u0443\u0436\u043E\u0439 \u0437\u0430\u044F\u0432\u043A\u0438."
     });
   }
+  const existingCommentId = isDuplicateCommentKey(parsed.data.idempotencyKey);
+  if (existingCommentId && found.comments) {
+    const existing = found.comments.find((c) => c.id === existingCommentId);
+    if (existing) {
+      return {
+        item: found,
+        comment: existing,
+        message: "\u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D"
+      };
+    }
+  }
   const author = ((_a = parsed.data.author) == null ? void 0 : _a.trim()) || user.name;
   const now = /* @__PURE__ */ new Date();
   const hh = String(now.getHours()).padStart(2, "0");
@@ -5404,6 +5800,7 @@ const comments_post = defineEventHandler(async (event) => {
     time: timeStr,
     text: parsed.data.text
   };
+  registerCommentKey(parsed.data.idempotencyKey, newComment.id);
   if (!found.comments) {
     found.comments = [];
   }
@@ -5543,6 +5940,16 @@ const index_get$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePropert
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const index_post = defineEventHandler(async (event) => {
+  const rawBody = await readBody(event);
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  if ((rawBody == null ? void 0 : rawBody.simulateError) === "401") {
+    clearServerSession(event, true);
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+      message: "\u0421\u0435\u0441\u0441\u0438\u044F \u0438\u0441\u0442\u0435\u043A\u043B\u0430. \u0412\u043E\u0439\u0434\u0438\u0442\u0435 \u0441\u043D\u043E\u0432\u0430, \u0447\u0442\u043E\u0431\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u0443."
+    });
+  }
   const user = requireAuthUser(event);
   if (!canUserCreateRequest(user.role)) {
     throw createError({
@@ -5551,13 +5958,23 @@ const index_post = defineEventHandler(async (event) => {
       message: "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u0441\u043E\u0437\u0434\u0430\u0432\u0430\u0442\u044C \u043D\u043E\u0432\u044B\u0435 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u0438\u0435 \u0437\u0430\u044F\u0432\u043A\u0438."
     });
   }
-  const rawBody = await readBody(event);
+  if ((rawBody == null ? void 0 : rawBody.simulateError) === "500" || (rawBody == null ? void 0 : rawBody.simulateError) === "409") {
+    const code = rawBody.simulateError === "409" ? 409 : 500;
+    throw createError({
+      statusCode: code,
+      statusMessage: code === 409 ? "Conflict" : "Internal Server Error",
+      message: "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0441\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u044F. \u0414\u0430\u043D\u043D\u044B\u0435 \u043D\u0435 \u043F\u043E\u0442\u0435\u0440\u044F\u043D\u044B. \u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u0435 \u043F\u043E\u043F\u044B\u0442\u043A\u0443."
+    });
+  }
   const parsed = createRequestInputSchema.safeParse(rawBody);
   if (!parsed.success) {
     throw createError({
       statusCode: 400,
       statusMessage: "Bad Request",
-      message: parsed.error.message
+      message: parsed.error.message,
+      data: {
+        issues: parsed.error.issues
+      }
     });
   }
   const body = parsed.data;
@@ -5614,6 +6031,22 @@ const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePropert
   __proto__: null,
   default: index_get
 }, Symbol.toStringTag, { value: 'Module' }));
+
+// src/app/internal/tracing.ts
+let _channels;
+function getChannel(name) {
+	_channels ??= {};
+	if (name in _channels) return _channels[name];
+	const dc = globalThis.process?.getBuiltinModule?.("node:diagnostics_channel");
+	const channel = dc?.tracingChannel ? dc.tracingChannel(name) : null;
+	_channels[name] = channel;
+	return channel;
+}
+function traceAsync(name, context, fn) {
+	const channel = getChannel(name);
+	if (!channel || channel.hasSubscribers === false) return fn();
+	return channel.tracePromise(() => Promise.resolve(fn()), context);
+}
 
 // src/runtime/server/renderer/payload.ts
 function renderPayloadResponse(ssrContext, event) {
@@ -5753,7 +6186,11 @@ async function renderRoute(instance, event, ssrError) {
 		prefersStream: false
 	};
 	await hooks.callHook("render:route", renderRouteContext, { event: hookEvent });
-	const _rendered = await (renderer.renderToString(ssrContext)).catch(async (error) => {
+	const _rendered = await (traceAsync("nuxt.render", {
+		event: hookEvent,
+		ssrContext,
+		streaming: false
+	}, () => renderer.renderToString(ssrContext)) ).catch(async (error) => {
 		if ((ssrContext["~renderResponse"] || ssrContext._renderResponse) && error.message === "skipping render") return {};
 		const _err = !ssrError && ssrContext.payload?.error || error;
 		await ssrContext.nuxt?.hooks.callHook("app:error", _err);

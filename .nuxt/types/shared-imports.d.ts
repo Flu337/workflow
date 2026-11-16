@@ -21,6 +21,8 @@ declare global {
   const canUserCreateRequest: typeof import('../../shared/utils/permissions').canUserCreateRequest
   const canUserResolveRequest: typeof import('../../shared/utils/permissions').canUserResolveRequest
   const createRequestInputSchema: typeof import('../../shared/utils/validation').createRequestInputSchema
+  const createSearchRaceGuard: typeof import('../../shared/utils/asyncGuards').createSearchRaceGuard
+  const createSubmissionLock: typeof import('../../shared/utils/asyncGuards').createSubmissionLock
   const getAllowedNextStatuses: typeof import('../../shared/utils/statusTransitions').getAllowedNextStatuses
   const loginInputSchema: typeof import('../../shared/utils/validation').loginInputSchema
   const registerInputSchema: typeof import('../../shared/utils/validation').registerInputSchema
@@ -29,6 +31,9 @@ declare global {
 }
 // for type re-export
 declare global {
+  // @ts-ignore
+  export type { SearchRaceGuard, SubmissionLock } from '../../shared/utils/asyncGuards'
+  import('../../shared/utils/asyncGuards')
   // @ts-ignore
   export type { StatusTransitionValidationInput, StatusTransitionValidationResult } from '../../shared/utils/statusTransitions'
   import('../../shared/utils/statusTransitions')

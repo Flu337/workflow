@@ -1,0 +1,110 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(23, 21, 58, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.sozdanie-zaiavki {
+  position: relative;
+  width: 560px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding: 0px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: radial-gradient(45.39% 41.73% at 54.55% 50%, #201D47 0%, #17153A 100%);
+}
+
+.novaia-zaiavka {
+  width: 560px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+}
+
+.zagolovok-okna {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  padding: 0px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.novaia-zaiavka-2 {
+  flex: 1 1 0;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.opishite-problemu-operator-naznachit {
+  align-self: stretch;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.oshibka-polia-nazvanie,
+.oshibka-polia-opisanie {
+  align-self: stretch;
+  color: #FF80A3;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.oshibka-sokhraneniia {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 4px;
+  background: #38213D;
+  border: 1px solid #DE5994;
+}
+
+.ne-udalos-sokhranit-izmeneniia-dannye {
+  align-self: stretch;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.deistviia {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  padding: 0px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}

@@ -42,7 +42,9 @@ declare global {
   const createEventStream: typeof import('../../node_modules/h3/dist/index').createEventStream
   const createRequestInputSchema: typeof import('../../shared/utils/validation').createRequestInputSchema
   const createRouter: typeof import('../../node_modules/h3/dist/index').createRouter
+  const createSearchRaceGuard: typeof import('../../shared/utils/asyncGuards').createSearchRaceGuard
   const createServerSession: typeof import('../../server/utils/auth').createServerSession
+  const createSubmissionLock: typeof import('../../shared/utils/asyncGuards').createSubmissionLock
   const defaultContentType: typeof import('../../node_modules/h3/dist/index').defaultContentType
   const defineAppConfig: typeof import('../../node_modules/@nuxt/nitro-server/dist/runtime/utils/config').defineAppConfig
   const defineCachedEventHandler: typeof import('../../node_modules/nitropack/dist/runtime/internal/cache').defineCachedEventHandler
@@ -97,6 +99,7 @@ declare global {
   const handleCacheHeaders: typeof import('../../node_modules/h3/dist/index').handleCacheHeaders
   const handleCors: typeof import('../../node_modules/h3/dist/index').handleCors
   const isCorsOriginAllowed: typeof import('../../node_modules/h3/dist/index').isCorsOriginAllowed
+  const isDuplicateCommentKey: typeof import('../../server/utils/auth').isDuplicateCommentKey
   const isError: typeof import('../../node_modules/h3/dist/index').isError
   const isEvent: typeof import('../../node_modules/h3/dist/index').isEvent
   const isEventHandler: typeof import('../../node_modules/h3/dist/index').isEventHandler
@@ -115,6 +118,7 @@ declare global {
   const readMultipartFormData: typeof import('../../node_modules/h3/dist/index').readMultipartFormData
   const readRawBody: typeof import('../../node_modules/h3/dist/index').readRawBody
   const readValidatedBody: typeof import('../../node_modules/h3/dist/index').readValidatedBody
+  const registerCommentKey: typeof import('../../server/utils/auth').registerCommentKey
   const registerInputSchema: typeof import('../../shared/utils/validation').registerInputSchema
   const removeResponseHeader: typeof import('../../node_modules/h3/dist/index').removeResponseHeader
   const requireAuthUser: typeof import('../../server/utils/auth').requireAuthUser
@@ -165,6 +169,9 @@ declare global {
   export type { EventHandler, EventHandlerRequest, EventHandlerResponse, EventHandlerObject, H3EventContext } from '../../node_modules/h3/dist/index'
   import('../../node_modules/h3/dist/index')
   // @ts-ignore
+  export type { SearchRaceGuard, SubmissionLock } from '../../shared/utils/asyncGuards'
+  import('../../shared/utils/asyncGuards')
+  // @ts-ignore
   export type { StatusTransitionValidationInput, StatusTransitionValidationResult } from '../../shared/utils/statusTransitions'
   import('../../shared/utils/statusTransitions')
   // @ts-ignore
@@ -173,6 +180,9 @@ declare global {
   // @ts-ignore
   export type { UserRole, RequestStatus, RequestPriority, RequestSortOrder, SortOrder, ListViewState, ListDensity, RequestCommentDto, RequestTimelineItemDto, RequestAttachmentDto, RequestItemDto, RequestsMetricsDto, RequestsListResponseDto, RequestDetailResponseDto, UserDirectoryItemDto, CustomerDirectoryItemDto, CategoryDirectoryItemDto, SessionUserDto, AuthSessionResponseDto, LoginPayloadDto, RegisterPayloadDto, RequestComment, RequestTimelineItem, WorkFlowRequest, NormalizedRequestsListResult, RequestsFilterQuery, UpdateRequestPayloadDto, UpdateRequestResponseDto, AddCommentPayloadDto, AddCommentResponseDto, CreateRequestPayloadDto, UndoMutationSnapshot, RollbackBannerState, FeedbackBannerState, UserPreferencesState } from '../../shared/types/workflow'
   import('../../shared/types/workflow')
+  // @ts-ignore
+  export type { ServerUserRecord } from '../../server/utils/db'
+  import('../../server/utils/db')
   // @ts-ignore
   export type { PostgresConnectionConfig } from '../../server/utils/postgresSchema'
   import('../../server/utils/postgresSchema')
@@ -192,10 +202,11 @@ export { defineNitroErrorHandler } from 'nitropack/runtime/internal/error/utils'
 export { buildAssetsURL as __buildAssetsURL, publicAssetsURL as __publicAssetsURL } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/nitro-server/dist/runtime/utils/paths';
 export { defineAppConfig } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/nitro-server/dist/runtime/utils/config';
 export { useAppConfig } from 'C:/Users/5LU/Desktop/workflow-nuxt4/node_modules/@nuxt/nitro-server/dist/runtime/utils/app-config';
+export { createSearchRaceGuard, createSubmissionLock } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/asyncGuards';
 export { canUserAccessRequest, canUserAssignExecutor, canUserChangePriority, canUserCloseRequest, canUserResolveRequest, canUserCreateRequest, canUserAccessDashboard } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/permissions';
 export { ALLOWED_STATUS_TRANSITIONS, ROLE_ALLOWED_TARGET_STATUSES, getAllowedNextStatuses, validateStatusTransition } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/statusTransitions';
 export { loginInputSchema, registerInputSchema, createRequestInputSchema, updateRequestInputSchema, addCommentInputSchema } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/utils/validation';
 export { ROLE_LABELS, STATUS_LABELS, PRIORITY_LABELS, PRIORITY_DUE_DATES } from 'C:/Users/5LU/Desktop/workflow-nuxt4/shared/types/workflow';
-export { toSessionUserDto, createServerSession, clearServerSession, resolveSessionFromEvent, requireAuthUser, requireRoles } from 'C:/Users/5LU/Desktop/workflow-nuxt4/server/utils/auth';
+export { isDuplicateCommentKey, registerCommentKey, toSessionUserDto, createServerSession, clearServerSession, resolveSessionFromEvent, requireAuthUser, requireRoles } from 'C:/Users/5LU/Desktop/workflow-nuxt4/server/utils/auth';
 export { SERVER_REQUESTS_DB, SERVER_USERS_DB, SERVER_CUSTOMERS_DB, SERVER_CATEGORIES_DB } from 'C:/Users/5LU/Desktop/workflow-nuxt4/server/utils/db';
 export { POSTGRES_SCHEMA_SQL, getPostgresConfig } from 'C:/Users/5LU/Desktop/workflow-nuxt4/server/utils/postgresSchema';

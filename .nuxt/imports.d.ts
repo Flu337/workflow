@@ -39,6 +39,7 @@ export { useRequests } from '../app/composables/useRequests';
 export { MOCK_REQUESTS } from '../app/utils/mockData';
 export { DEFAULT_REQUEST_TITLE, DEFAULT_CUSTOMER_NAME, DEFAULT_ASSIGNEE_NAME, normalizeRequestItem, normalizeRequestDetail, normalizeRequestsListResponse } from '../app/utils/normalizeRequests';
 export { defineStore, storeToRefs, VueUnwrapStore, StoreRefs } from '../app/utils/pinia';
+export { createSearchRaceGuard, createSubmissionLock, SearchRaceGuard, SubmissionLock } from '../shared/utils/asyncGuards';
 export { canUserAccessRequest, canUserAssignExecutor, canUserChangePriority, canUserCloseRequest, canUserResolveRequest, canUserCreateRequest, canUserAccessDashboard } from '../shared/utils/permissions';
 export { ALLOWED_STATUS_TRANSITIONS, ROLE_ALLOWED_TARGET_STATUSES, getAllowedNextStatuses, validateStatusTransition, StatusTransitionValidationInput, StatusTransitionValidationResult } from '../shared/utils/statusTransitions';
 export { loginInputSchema, registerInputSchema, createRequestInputSchema, updateRequestInputSchema, addCommentInputSchema, ValidationIssue, SafeParseResult, SchemaValidator } from '../shared/utils/validation';

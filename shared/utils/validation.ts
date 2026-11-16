@@ -117,6 +117,7 @@ export const createRequestInputSchema = createSchema<{
   priority: RequestPriority
   description: string
   authorName?: string
+  simulateError?: '401' | '409' | '500' | ''
 }>((raw) => {
   const issues: ValidationIssue[] = []
   const title = typeof raw.title === 'string' ? raw.title.trim() : ''
@@ -132,6 +133,9 @@ export const createRequestInputSchema = createSchema<{
   if (!title) {
     issues.push({ field: 'title', message: 'Укажите название заявки.' })
   }
+  if (!description) {
+    issues.push({ field: 'description', message: 'Опишите проблему.' })
+  }
   if (!VALID_PRIORITIES.includes(priorityRaw)) {
     issues.push({ field: 'priority', message: 'Некорректный приоритет заявки.' })
   }
@@ -143,8 +147,12 @@ export const createRequestInputSchema = createSchema<{
       customer,
       category,
       priority: priorityRaw,
-      description: description || 'Описание проблемы добавлено при создании заявки.',
-      authorName
+      description,
+      authorName,
+      simulateError:
+        raw.simulateError === '401' || raw.simulateError === '409' || raw.simulateError === '500'
+          ? raw.simulateError
+          : ''
     }
   }
 })
@@ -204,6 +212,7 @@ export const addCommentInputSchema = createSchema<{
   requestId?: string
   author?: string
   text: string
+  idempotencyKey?: string
   simulateError?: '500' | ''
 }>((raw) => {
   const issues: ValidationIssue[] = []
@@ -219,6 +228,10 @@ export const addCommentInputSchema = createSchema<{
       requestId: typeof raw.requestId === 'string' ? raw.requestId.trim() : undefined,
       author: typeof raw.author === 'string' ? raw.author.trim() : undefined,
       text,
+      idempotencyKey:
+        typeof raw.idempotencyKey === 'string' && raw.idempotencyKey.trim()
+          ? raw.idempotencyKey.trim()
+          : undefined,
       simulateError: raw.simulateError === '500' ? '500' : ''
     }
   }

@@ -1,0 +1,170 @@
+.wf-gpt-field-root {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.field-label {
+  align-self: stretch;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.input-box {
+  position: relative;
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 14px;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-default, #413E74);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  outline: none;
+}
+
+.input-box:hover:not(.is-disabled),
+.wf-gpt-field-root.state-hover .input-box {
+  border-color: var(--color-border-strong, #615B94);
+}
+
+.input-box:focus-within,
+.input-box:focus-visible,
+.input-box.is-open,
+.wf-gpt-field-root.state-focus .input-box {
+  border-color: #635BFF;
+  box-shadow: 0px 0px 0px 2px rgba(99, 91, 255, 0.35);
+}
+
+.wf-gpt-field-root.state-error .input-box {
+  border-color: #FF80A3;
+}
+
+.wf-gpt-field-root.is-disabled .input-box {
+  background: var(--color-bg-subtle, #2F2A6A);
+  border-color: var(--color-border-default, #413E74);
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.native-input {
+  flex: 1 1 0;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  outline: none;
+}
+
+.native-input::placeholder {
+  color: var(--color-text-secondary, #B9B3D4);
+  opacity: 1;
+}
+
+.native-input:disabled {
+  color: var(--color-text-disabled, #8E88A8);
+  cursor: not-allowed;
+}
+
+.static-value-text {
+  flex: 1 1 0;
+  width: 100%;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* перенос длинных фио исполнителей без поломки верстки */
+.select-value-text {
+  flex: 1 1 0;
+  min-width: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.strelka-raskrytiia {
+  flex-shrink: 0;
+  color: var(--color-text-secondary, #B9B3D4);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.select-box {
+  cursor: pointer;
+  user-select: none;
+}
+
+.select-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  list-style: none;
+  background: var(--color-bg-surface, #23204D);
+  border: 1px solid var(--color-border-strong, #615B94);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.select-option {
+  padding: 10px 14px;
+  color: var(--color-text-primary, #E8E7EC);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.select-option.is-active,
+.select-option:hover {
+  background: var(--color-bg-subtle, #2F2A6A);
+  color: #FFFFFF;
+}
+
+.select-option.is-selected {
+  color: var(--color-text-accent, #79CEE8);
+  font-weight: 600;
+}
+
+.field-error-text {
+  color: #FF80A3;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}

@@ -1,10 +1,24 @@
 import { SERVER_REQUESTS_DB } from '../../utils/db'
-import { requireAuthUser } from '../../utils/auth'
+import { requireAuthUser, clearServerSession } from '../../utils/auth'
 import { canUserCreateRequest } from '../../../shared/utils/permissions'
 import { createRequestInputSchema } from '../../../shared/utils/validation'
 import { PRIORITY_DUE_DATES, type RequestItemDto } from '../../../shared/types/workflow'
 
 export default defineEventHandler(async (event): Promise<{ item: RequestItemDto }> => {
+  const rawBody = await readBody<Record<string, unknown>>(event)
+
+  // небольшая пауза для отображения состояния «Создаём…» на кнопке отправки формы
+  await new Promise(resolve => setTimeout(resolve, 200))
+
+  if (rawBody?.simulateError === '401') {
+    clearServerSession(event, true)
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Unauthorized',
+      message: 'Сессия истекла. Войдите снова, чтобы продолжить работу.'
+    })
+  }
+
   const user = requireAuthUser(event)
 
   if (!canUserCreateRequest(user.role)) {
@@ -15,14 +29,25 @@ export default defineEventHandler(async (event): Promise<{ item: RequestItemDto 
     })
   }
 
-  const rawBody = await readBody<Record<string, unknown>>(event)
+  if (rawBody?.simulateError === '500' || rawBody?.simulateError === '409') {
+    const code = rawBody.simulateError === '409' ? 409 : 500
+    throw createError({
+      statusCode: code,
+      statusMessage: code === 409 ? 'Conflict' : 'Internal Server Error',
+      message: 'Не удалось сохранить изменения. Данные не потеряны. Повторите попытку.'
+    })
+  }
+
   const parsed = createRequestInputSchema.safeParse(rawBody)
 
   if (!parsed.success) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Bad Request',
-      message: parsed.error.message
+      message: parsed.error.message,
+      data: {
+        issues: parsed.error.issues
+      }
     })
   }
 

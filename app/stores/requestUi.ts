@@ -10,7 +10,8 @@ import {
   type FeedbackBannerState,
   type UpdateRequestResponseDto,
   type WorkFlowRequest
-} from '~/types/workflow'
+} from '../../shared/types/workflow'
+import { useAuthStore } from './auth'
 
 export interface OptimisticRequestOverride {
   priority?: RequestPriority
@@ -149,6 +150,12 @@ export const useRequestUiStore = defineStore('requestUi', () => {
       feedbackBanner.value = null
       lastUndoAction.value = null
 
+      if (statusCode === 401) {
+        const authStore = useAuthStore()
+        await authStore.handleUnauthorizedError()
+        return false
+      }
+
       const resolvedCode: 409 | 500 = statusCode === 409 ? 409 : 500
       rollbackError.value = {
         requestId: cleanId,
@@ -226,6 +233,12 @@ export const useRequestUiStore = defineStore('requestUi', () => {
       feedbackBanner.value = null
       lastUndoAction.value = null
 
+      if (statusCode === 401) {
+        const authStore = useAuthStore()
+        await authStore.handleUnauthorizedError()
+        return false
+      }
+
       const resolvedCode: 409 | 500 = statusCode === 409 ? 409 : 500
       rollbackError.value = {
         requestId: cleanId,
@@ -300,6 +313,12 @@ export const useRequestUiStore = defineStore('requestUi', () => {
         status: prevStatus
       })
       feedbackBanner.value = null
+
+      if (statusCode === 401) {
+        const authStore = useAuthStore()
+        await authStore.handleUnauthorizedError()
+        return false
+      }
 
       const resolvedCode: 409 | 500 = statusCode === 409 ? 409 : 500
       rollbackError.value = {

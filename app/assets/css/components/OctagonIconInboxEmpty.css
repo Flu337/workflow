@@ -1,0 +1,8 @@
+.octagon-icon-inbox-empty {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
